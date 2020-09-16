@@ -16,4 +16,7 @@ public class HomeController {
 	@GetMapping("/something_URL")
 	public String getThing() { return "I am returning a thing."; }
 	
+	@GetMapping("/another_URL")
+	public String getSomething() { return "I am an object."; }
+	
 }

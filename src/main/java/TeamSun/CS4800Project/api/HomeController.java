@@ -12,5 +12,8 @@ public class HomeController {
 	public String getPage() {
 		return "something simple";
 	}
+
+	@GetMapping("/something_URL")
+	public String getThing() { return "I am returning a thing."; }
 	
 }

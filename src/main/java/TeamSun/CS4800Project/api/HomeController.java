@@ -7,13 +7,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 @RestController
 public class HomeController {
-	
+
 	@GetMapping("/new_URL")
 	public String getPage() {
 		return "something simple";
 	}
 
 	@GetMapping("/something_URL")
-	public String getThing() { return "I am returning a thing."; }
-	
+	public String getThing() {
+		return "I am returning a thing.";
+	}
+
 }

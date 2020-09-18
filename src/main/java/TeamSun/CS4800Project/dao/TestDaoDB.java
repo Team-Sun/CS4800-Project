@@ -1,6 +1,9 @@
 package TeamSun.CS4800Project.dao;
 
-public class TestDaoDB {
+import org.springframework.stereotype.Repository;
+
+@Repository("TestDB")
+public class TestDaoDB implements TestDao {
 	//TODO implement
 
 }

@@ -15,16 +15,6 @@ public class HomeController {
 	
 	@Autowired
 	private TestRepo repo;
-
-	@GetMapping("/new_URL")
-	public String getPage() {
-		return "something simple";
-	}
-
-	@GetMapping("/something_URL")
-	public String getThing() {
-		return "I am returning a thing.";
-	}
 	
 	@PostMapping("/add")
 	public String addEntry() {

@@ -1,12 +1,13 @@
 package TeamSun.CS4800Project.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 //TODO look at @Document
 public class TestModel {
 	
-	@Id
-	long id; //TODO autogenerate incrementing IDs and reconsider userbase size.
+	@Id //Redundant.
+	ObjectId id; //XXX might be overkill.
 	String name;
 	
 	public TestModel() {
@@ -15,14 +16,6 @@ public class TestModel {
 	
 	public TestModel(String name) {
 		this.name = name;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getName() {

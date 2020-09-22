@@ -2,6 +2,7 @@ package TeamSun.CS4800Project.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +18,9 @@ public class HomeController {
 	private TestRepo repo;
 	
 	@PostMapping("/add")
-	public String addEntry() {
-		repo.save(new TestModel("randomname"));
-		return "works";
+	public String addEntry(@ModelAttribute("name") String name) {
+		repo.save(new TestModel(name));
+		return "inserting " + name;
 	}
 	
 	@GetMapping("/getall")

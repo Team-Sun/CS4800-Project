@@ -23,5 +23,8 @@ public class HomeController {
 
 	@GetMapping("/mai_URL")
 	public String getURL() { return "Return :D"; }
-	
+
+
+	@GetMapping("/nicky_URL")
+	public String getAnotherThing() { return "Hello world!"; }
 }

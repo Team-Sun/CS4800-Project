@@ -3,6 +3,7 @@ package TeamSun.CS4800Project.api;
 import java.util.Date;
 
 import com.google.common.base.Joiner;
+import org.apache.commons.math3.fraction.Fraction;
 import org.joda.time.DateTime;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,5 +25,11 @@ public class WebController {
 		Joiner joiner = Joiner.on(" and ").skipNulls();
 		return joiner.join("iPad", null, "iPhone", "Apple Watch");
 	}
-	
+
+	@GetMapping("/commons-math")
+	public Double mathIsFun()
+	{
+		Fraction f = new Fraction(1,2);
+		return f.doubleValue();
+	}
 }

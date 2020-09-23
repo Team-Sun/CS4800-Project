@@ -2,6 +2,7 @@ package TeamSun.CS4800Project.api;
 
 import java.util.Date;
 
+import com.google.common.base.Joiner;
 import org.joda.time.DateTime;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,12 @@ public class WebController {
 		// Got help from https://www.joda.org/joda-time/quickstart.html
 		DateTime time = new DateTime(new Date());
 		return time.monthOfYear().getAsText() + " " + time.getDayOfMonth() + " " + time.year().getAsText();
+	}
+
+	@GetMapping("/guava")
+	public String guava() {
+		Joiner joiner = Joiner.on(" and ").skipNulls();
+		return joiner.join("iPad", null, "iPhone", "Apple Watch");
 	}
 	
 }

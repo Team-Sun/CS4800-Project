@@ -36,5 +36,10 @@ public class PersonService {
 	public int size() {
 		return DB.size();
 	}
+	
+	@Override
+	public String toString() {
+		return DB.getAll().toString();
+	}
 
 }

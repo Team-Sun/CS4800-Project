@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import TeamSun.CS4800Project.model.TestModel;
-import TeamSun.CS4800Project.repositories.TestRepo;
+import TeamSun.CS4800Project.model.Person;
+import TeamSun.CS4800Project.service.PersonService;
 
 /**
  * For specifically viewing basic home elements. This includes: About, FAQ, TOS,
@@ -22,17 +22,17 @@ import TeamSun.CS4800Project.repositories.TestRepo;
 public class HomeController {
 
 	@Autowired
-	private TestRepo repo;
+	private PersonService personService;
 
 	@PostMapping("/add")
 	public String addEntry(@ModelAttribute("name") String name) {
-		repo.save(new TestModel(name));
+		personService.insert(new Person(name));
 		return "inserting " + name;
 	}
 
 	@GetMapping("/getall")
 	public String getAllEntries() {
-		return repo.findAll().toString();
+		return personService.toString();
 	}
 
 }

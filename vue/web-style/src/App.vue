@@ -5,10 +5,39 @@
         <router-link to="/"><img src="./assets/note-logo2.png" alt="Bronco Notes"></router-link>
       </div>
       <div id="nav">
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/donations">Donations</router-link>
-        <router-link to="/login">Sign in</router-link>
+        <router-link to="/">Home</router-link>
+        <router-link to="/search">Search</router-link>
+        <router-link to="/about">About</router-link>
+        <!-- <router-link to="/login">Sign in</router-link> -->
+      </div>
+      <!-- Log in button -->
+      <div>
+        <b-dropdown id="login-form" right text="Log in" ref="dropdown" class="m-2">
+          <b-dropdown-form>
+            <b-form-group label="Email" label-for="dropdown-form-email" @submit.stop.prevent>
+              <b-form-input
+                id="email"
+                size="sm"
+                placeholder="email@example.com"
+              ></b-form-input>
+            </b-form-group>
+
+            <b-form-group label="Password" label-for="dropdown-form-password">
+              <b-form-input
+                id="password"
+                type="password"
+                size="sm"
+                placeholder="Password"
+              ></b-form-input>
+            </b-form-group>
+
+            <b-form-checkbox class="mb-3">Remember me</b-form-checkbox>
+            <b-button variant="primary" size="sm" @click="onClick">Sign In</b-button>
+          </b-dropdown-form>
+          <b-dropdown-divider></b-dropdown-divider>
+          <b-dropdown-item-button>New around here? Sign up</b-dropdown-item-button>
+          <b-dropdown-item-button>Forgot Password?</b-dropdown-item-button>
+        </b-dropdown>
       </div>
     </div>
     <router-view/>
@@ -40,7 +69,7 @@
 #nav {
   padding: 25px;
   a {
-    margin-left: 120px;
+    margin-left: 80px;
     font-weight: 800;
     color: white;
     &.router-link-exact-active {

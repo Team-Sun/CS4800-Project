@@ -1,5 +1,7 @@
 package TeamSun.CS4800Project.service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
@@ -12,12 +14,14 @@ import TeamSun.CS4800Project.model.Person;
 
 @Service
 public class PersonService {
-	
+
 	@Autowired
 	@Qualifier("mongodb_person")
 	PersonMongoDB DB;
-	
+
 	public int insert(Person person) {
+		//TODO validate person.
+		person.setCreatedDate(new Date());
 		return DB.insert(person);
 	}
 
@@ -28,15 +32,19 @@ public class PersonService {
 		}
 		return temp.get();
 	}
-	
+
 	public int delete(Person person) {
-		return	 DB.delete(person);
+		return DB.delete(person);
 	}
-	
+
 	public int size() {
 		return DB.size();
 	}
-	
+
+	public List<Person> findByFirstName(String name) {
+		return DB.findByFirstName(name);
+	}
+
 	@Override
 	public String toString() {
 		return DB.getAll().toString();

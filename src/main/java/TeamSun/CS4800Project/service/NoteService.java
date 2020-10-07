@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import TeamSun.CS4800Project.dao.NoteMongoDB;
 import TeamSun.CS4800Project.model.Note;
 
-@Service
+@Service("noteService")
 public class NoteService {
 
 	@Autowired

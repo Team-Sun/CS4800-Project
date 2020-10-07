@@ -45,4 +45,10 @@ public class PersonMongoDB implements PersonDao {
 		return repo.findAll();
 	}
 
+	@Override
+	public List<Person> findByFirstName(String name) {
+		return repo.findByFirstName(name);
+	}
+	
+
 }

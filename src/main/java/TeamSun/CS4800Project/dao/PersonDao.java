@@ -24,5 +24,7 @@ public interface PersonDao {
 	 * @return a list of Persons
 	 */
 	List<Person> getAll();
+	
+	List<Person> findByFirstName(String name);
 
 }

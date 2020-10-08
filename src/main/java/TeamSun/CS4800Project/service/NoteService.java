@@ -1,5 +1,6 @@
 package TeamSun.CS4800Project.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
@@ -35,6 +36,10 @@ public class NoteService {
 	
 	public int size() {
 		return DB.size();
+	}
+
+	public List<Note> findByName(String name) {
+		return DB.findByName(name);
 	}
 	
 }

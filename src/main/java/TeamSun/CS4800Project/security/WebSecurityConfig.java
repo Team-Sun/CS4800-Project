@@ -16,18 +16,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import TeamSun.CS4800Project.jwt.AuthEntryPointJwt;
 import TeamSun.CS4800Project.jwt.AuthTokenFilter;
-import TeamSun.CS4800Project.services.UserDetailsServiceImpl;
+import TeamSun.CS4800Project.services.UserService;
 
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-		// securedEnabled = true,
+		// securedEnabled = true, //TODO why commented out?
 		// jsr250Enabled = true,
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
-	UserDetailsServiceImpl userDetailsService;
+	UserService userService;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder());
 	}
 
 	@Bean

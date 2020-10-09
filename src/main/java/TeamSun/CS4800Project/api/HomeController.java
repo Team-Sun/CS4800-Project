@@ -5,11 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import TeamSun.CS4800Project.model.Person;
-import TeamSun.CS4800Project.services.PersonService;
+import TeamSun.CS4800Project.model.User;
+import TeamSun.CS4800Project.services.UserService;
 
 /**
  * For specifically viewing basic home elements. This includes: About, FAQ, TOS,
@@ -23,16 +22,16 @@ import TeamSun.CS4800Project.services.PersonService;
 public class HomeController {
 
 	@Autowired
-	private PersonService personService;
+	private UserService userService;
 
-	@PostMapping("/add")
+	@PostMapping("/api/test/add")
 	public String addEntry(@ModelAttribute("name") String name) {
-		personService.insert(new Person(name));
+		userService.insert(new User(name));
 		return "inserting " + name;
 	}
 
-	@GetMapping("/getall")
+	@GetMapping("/api/test/getall")
 	public String getAllEntries() {
-		return personService.toString();
+		return userService.toString();
 	}
 }

@@ -15,8 +15,9 @@ public class TestController {
 		return "Public Content.";
 	}
 	
+	//TODO look into @Secured
 	@GetMapping("/user")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN')")
 	public String userAccess() {
 		return "User Content.";
 	}

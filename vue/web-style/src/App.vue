@@ -46,6 +46,11 @@
             {{ currentUser.username }}
           </router-link>
         </li>
+        <li>
+          <router-link to="/search" class="nav-link">
+            <font-awesome-icon icon="search-plus" />Search
+          </router-link>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href @click.prevent="logOut">
             <font-awesome-icon icon="sign-out-alt" />LogOut

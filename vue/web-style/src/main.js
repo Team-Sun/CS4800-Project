@@ -14,10 +14,11 @@ import {
   faUserPlus,
   faSignInAlt,
   faSignOutAlt,
-  faAddressCard
+  faAddressCard,
+  faSearchPlus
 } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faAddressCard)
+library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faAddressCard, faSearchPlus)
 
 Vue.config.productionTip = false
 

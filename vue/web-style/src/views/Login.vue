@@ -3,7 +3,7 @@
     <div class="card card-container">
       <img
         id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+        src="//cdn0.iconfinder.com/data/icons/user-pictures/100/malecostume-512.png"
         class="profile-img-card"
       />
       <form name="form" @submit.prevent="handleLogin">

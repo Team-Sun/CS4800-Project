@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import TeamSun.CS4800Project.model.Person;
-import TeamSun.CS4800Project.service.PersonService;
+import TeamSun.CS4800Project.services.PersonService;
 
 /**
  * For specifically viewing basic home elements. This includes: About, FAQ, TOS,

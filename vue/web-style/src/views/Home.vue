@@ -1,18 +1,33 @@
 <template>
-  <div class="home">
-    <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-    <Homepage msg="This is a Homepage"/>
+  <div class="container">
+    <header class="">
+      <h1>This is a home page (Anyone can see it)</h1>
+    </header>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import Homepage from '@/components/Homepage.vue'
+import UserService from '../services/user.service'
 
 export default {
   name: 'Home',
-  components: {
-    Homepage
+  data () {
+    return {
+      content: ''
+    }
+  },
+  mounted () {
+    UserService.getPublicContent().then(
+      response => {
+        this.content = response.data
+      },
+      error => {
+        this.content =
+          (error.response && error.response.data && error.response.data.message) ||
+          error.message ||
+          error.toString()
+      }
+    )
   }
 }
 </script>

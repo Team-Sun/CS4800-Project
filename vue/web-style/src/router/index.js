@@ -2,16 +2,29 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
-// import Login from '../views/Login.vue'
+import Login from '../views/Login.vue'
 import Search from '../views/Search.vue'
+import Register from '../views/Register.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home
+  },
+  {
+    path: '/home',
+    component: Home
+  },
+  {
+    path: '/login',
+    component: Login
+  },
+  {
+    path: '/register',
+    component: Register
   },
   {
     path: '/search',
@@ -22,12 +35,31 @@ const routes = [
     path: '/about',
     name: 'About',
     component: About
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    // lazy-loaded
+    component: () => import('../views/Profile.vue')
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    // lazy-loaded
+    component: () => import('../views/BoardAdmin.vue')
+  },
+  {
+    path: '/mod',
+    name: 'moderator',
+    // lazy-loaded
+    component: () => import('../views/BoardModerator.vue')
+  },
+  {
+    path: '/user',
+    name: 'user',
+    // lazy-loaded
+    component: () => import('../views/BoardUser.vue')
   }
-  // {
-  //   path: '/login',
-  //   name: 'Login',
-  //   component: Login
-  // }
 
 ]
 

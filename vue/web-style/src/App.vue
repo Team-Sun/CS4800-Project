@@ -1,80 +1,89 @@
 <template>
   <div id="app">
-    <div class="flex-header-container">
-      <div id="logo">
-        <router-link to="/"><img src="./assets/note-logo2.png" alt="Bronco Notes"></router-link>
+    <nav class="navbar navbar-expand navbar-dark" style="background-color: black">
+      <router-link to="/" class="navbar-brand">
+        <img src="./assets/note-logo2.png" height="40" alt="Bronco Notes">
+      </router-link>
+      <div class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <router-link to="/home" class="nav-link">
+            <font-awesome-icon icon="home" />Home
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/about" class="nav-link">
+            <font-awesome-icon icon="address-card" />About
+          </router-link>
+        </li>
+        <li v-if="showAdminBoard" class="nav-item">
+          <router-link to="/admin" class="nav-link">Admin Board</router-link>
+        </li>
+        <li v-if="showModeratorBoard" class="nav-item">
+          <router-link to="/mod" class="nav-link">Moderator Board</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link>
+        </li>
       </div>
-      <div id="nav">
-        <router-link to="/">Home</router-link>
-        <router-link to="/search">Search</router-link>
-        <router-link to="/about">About</router-link>
-        <!-- <router-link to="/login">Sign in</router-link> -->
-      </div>
-      <!-- Log in button -->
-      <div>
-        <b-dropdown id="login-form" right text="Log in" ref="dropdown" class="m-2">
-          <b-dropdown-form>
-            <b-form-group label="Email" label-for="dropdown-form-email" @submit.stop.prevent>
-              <b-form-input
-                id="email"
-                size="sm"
-                placeholder="email@example.com"
-              ></b-form-input>
-            </b-form-group>
 
-            <b-form-group label="Password" label-for="dropdown-form-password">
-              <b-form-input
-                id="password"
-                type="password"
-                size="sm"
-                placeholder="Password"
-              ></b-form-input>
-            </b-form-group>
-
-            <b-form-checkbox class="mb-3">Remember me</b-form-checkbox>
-            <b-button variant="primary" size="sm" @click="onClick">Sign In</b-button>
-          </b-dropdown-form>
-          <b-dropdown-divider></b-dropdown-divider>
-          <b-dropdown-item-button>New around here? Sign up</b-dropdown-item-button>
-          <b-dropdown-item-button>Forgot Password?</b-dropdown-item-button>
-        </b-dropdown>
+      <div v-if="!currentUser" class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <router-link to="/register" class="nav-link">
+            <font-awesome-icon icon="user-plus" />Sign Up
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/login" class="nav-link">
+            <font-awesome-icon icon="sign-in-alt" />Login
+          </router-link>
+        </li>
       </div>
+
+      <div v-if="currentUser" class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <router-link to="/profile" class="nav-link">
+            <font-awesome-icon icon="user" />
+            {{ currentUser.username }}
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href @click.prevent="logOut">
+            <font-awesome-icon icon="sign-out-alt" />LogOut
+          </a>
+        </li>
+      </div>
+    </nav>
+
+    <div class="container">
+      <router-view />
     </div>
-    <router-view/>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: "Comic Sans MS", cursive, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-.flex-header-container {
-  display: flex;
-  background-color: rgba(0, 0, 0, 0.8);
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-}
-#logo img {
-  display: block;
-  height: auto;
-  width: auto;
-  max-height: 60px;
-}
-#nav {
-  padding: 25px;
-  a {
-    margin-left: 80px;
-    font-weight: 800;
-    color: white;
-    &.router-link-exact-active {
-      color: #6495ED;
+<script>
+export default {
+  computed: {
+    currentUser () {
+      return this.$store.state.auth.user
+    },
+    showAdminBoard () {
+      if (this.currentUser && this.currentUser.roles) {
+        return this.currentUser.roles.includes('ROLE_ADMIN')
+      }
+      return false
+    },
+    showModeratorBoard () {
+      if (this.currentUser && this.currentUser.roles) {
+        return this.currentUser.roles.includes('ROLE_MODERATOR')
+      }
+      return false
+    }
+  },
+  methods: {
+    logOut () {
+      this.$store.dispatch('auth/logout')
+      this.$router.push('/login')
     }
   }
 }
-</style>
+</script>

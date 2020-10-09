@@ -4,15 +4,14 @@
         <button>Add Class</button>
         <button>Add Note</button>
 
-
     </div>
-    
+
 </template>
 
 <script>
 export default {
-    name: 'ClassNotePanel'
-    
+  name: 'ClassNotePanel'
+
 }
 </script>
 

@@ -10,9 +10,7 @@
 <script>
 // @ is an alias to /src
 // import Class from '@/components/Class.vue'
-
 export default {
   name: 'Search'
-
 }
 </script>

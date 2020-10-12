@@ -8,30 +8,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import TeamSun.CS4800Project.model.Person;
-import TeamSun.CS4800Project.service.PersonService;
+import TeamSun.CS4800Project.model.User;
+import TeamSun.CS4800Project.services.UserService;
 
 @RequestMapping("/admin")
 @RestController
 public class AdminController {
 
 	@Autowired
-	private PersonService personService;
+	private UserService userService;
 	
 	@PostMapping("/add")
 	public String addEntry(@ModelAttribute("name") String name) {
-		personService.insert(new Person(name));
+		userService.insert(new User(name));
 		return "inserting " + name;
 	}
 	
 	@GetMapping("/find")
-	public Person getAllEntries(@ModelAttribute("name") String name) {
-		return personService.findByFirstName(name).get(0);
+	public User getAllEntries(@ModelAttribute("name") String name) {
+		return userService.findByUsername(name).get(0);
 	}
 
 	@GetMapping("/getall")
 	public String getAllEntries() {
-		return personService.toString();
+		return userService.toString();
 	}
 	
 	/* 
@@ -49,8 +49,8 @@ public class AdminController {
 	 * 
 	 */
 	@PostMapping("/insert")
-	public Person insertEntry(@RequestBody Person person) {
-		personService.insert(person);
+	public User insertEntry(@RequestBody User person) {
+		userService.insert(person);
 		return person;
 	}
 	

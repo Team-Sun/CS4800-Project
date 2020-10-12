@@ -1,7 +1,5 @@
 package TeamSun.CS4800Project.api;
 
-import TeamSun.CS4800Project.model.Note;
-import TeamSun.CS4800Project.service.NoteService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.jupiter.api.Assertions.*;
+import TeamSun.CS4800Project.model.Note;
+import TeamSun.CS4800Project.services.NoteService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

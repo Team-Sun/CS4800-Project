@@ -40,14 +40,11 @@
   </template>
 
 <script>
-
 export default {
   name: 'Header',
   setup () {
     function displayQuery () {
-
     }
-
     return {
       displayQuery
     }
@@ -63,7 +60,6 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
-
 #nav{
   display: flex;
   align-items: center;
@@ -71,11 +67,9 @@ export default {
   color: white;
   padding: 10px 20px;
 }
-
 #nav.menu-items{
   padding: 10px 20px;
   text-align: center;
   display: flex;
 }
-
 </style>

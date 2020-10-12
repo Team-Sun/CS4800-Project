@@ -1,4 +1,4 @@
-package TeamSun.CS4800Project.service;
+package TeamSun.CS4800Project.services;
 
 import java.util.List;
 import java.util.Optional;

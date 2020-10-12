@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import TeamSun.CS4800Project.model.Person;
-import TeamSun.CS4800Project.service.PersonService;
+import TeamSun.CS4800Project.model.User;
+import TeamSun.CS4800Project.services.UserService;
 
 /*
  * https://stackoverflow.com/questions/39865596/difference-between-using-mockmvc-with-springboottest-and-using-webmvctest
@@ -27,14 +27,14 @@ class AdminControllerTest {
 	TestRestTemplate template;
 
 	@Autowired
-	PersonService personService;
+	UserService userService;
 
 	@Test
 	void testInsertEntry() throws Exception {
-		template.postForObject("/admin/insert", new Person("TestName"), String.class);
-		Assertions.assertTrue(personService.findByFirstName("TestName").size() == 1, "1 Person matching TestName?");
-		personService.delete(personService.findByFirstName("TestName").get(0));
-		Assertions.assertTrue(personService.findByFirstName("TestName").size() == 0, "Person TestName removed?");
+		template.postForObject("/admin/insert", new User("TestName"), String.class);
+		Assertions.assertTrue(userService.findByUsername("TestName").size() == 1, "1 Person matching TestName?");
+		userService.delete(userService.findByUsername("TestName").get(0));
+		Assertions.assertTrue(userService.findByUsername("TestName").size() == 0, "Person TestName removed?");
 	}
 
 

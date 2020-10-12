@@ -1,7 +1,7 @@
 package TeamSun.CS4800Project.api;
 
 import TeamSun.CS4800Project.model.Note;
-import TeamSun.CS4800Project.service.NoteService;
+import TeamSun.CS4800Project.services.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

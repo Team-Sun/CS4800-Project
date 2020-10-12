@@ -4,7 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 public class Note {
-	
+
 	@Id
 	private ObjectId id;
 	private String name;
@@ -15,4 +15,31 @@ public class Note {
 		
 	}
 
+	public Note(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public short getRating() {
+		return rating;
+	}
+
+	public void setRating(short rating) {
+		this.rating = rating;
+	}
 }

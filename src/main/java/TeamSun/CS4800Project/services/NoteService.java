@@ -1,5 +1,6 @@
 package TeamSun.CS4800Project.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import TeamSun.CS4800Project.dao.NoteMongoDB;
 import TeamSun.CS4800Project.model.Note;
 
-@Service
+@Service("noteService")
 public class NoteService {
 
 	@Autowired
@@ -35,6 +36,10 @@ public class NoteService {
 	
 	public int size() {
 		return DB.size();
+	}
+
+	public List<Note> findByName(String name) {
+		return DB.findByName(name);
 	}
 	
 }

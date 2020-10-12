@@ -5,6 +5,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import TeamSun.CS4800Project.model.Note;
 
+import java.util.List;
+
 public interface NoteRepo extends MongoRepository<Note, ObjectId> {
-	
+	List<Note> findByName(String name);
 }

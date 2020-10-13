@@ -11,12 +11,12 @@ import javax.validation.constraints.Size;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@SuppressWarnings("serial") // Pretty sure we don't need a serialVersionUID
 @Document(collection = "users")
 public class User implements UserDetails {
 	//TODO see if serialVersionUID necessary.
@@ -46,7 +46,7 @@ public class User implements UserDetails {
 	//DEBUG TODO remove
 	public User(String name) {
 		this.username = name;
-		//TEMP TODO actuall implement getter/setter
+		//TEMP TODO actually implement getter/setter
 		roles.add(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
@@ -90,6 +90,14 @@ public class User implements UserDetails {
 
 	public Set<SimpleGrantedAuthority> getRoles() {
 		return roles;
+	}
+	
+	public Set<String> getStringRoles() {
+		Set<String> result = new HashSet<>();
+		for (GrantedAuthority role : roles) {
+			result.add(role.toString());
+		}
+		return result;
 	}
 
 	public void setRoles(List<String> roles) {

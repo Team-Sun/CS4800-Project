@@ -17,9 +17,9 @@ public class NoteMongoDB implements NoteDao {
 	NoteRepo repo;
 
 	@Override
-	public int insert(Note note) {
+	public int save(Note note) {
 		//TODO handle exceptions.
-		repo.insert(note);
+		repo.save(note);
 		return 1; //TEMP
 	}
 

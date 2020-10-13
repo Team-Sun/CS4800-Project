@@ -19,7 +19,7 @@ public class NoteService {
 	NoteMongoDB DB;
 	
 	public int insert(Note note) {
-		return DB.insert(note);
+		return DB.save(note);
 	}
 
 	public Note findByID(ObjectId id) {
@@ -40,6 +40,15 @@ public class NoteService {
 
 	public List<Note> findByName(String name) {
 		return DB.findByName(name);
+	}
+	
+	public void remove(ObjectId id) {
+		Note temp = findByID(id);
+		if (temp != null) {
+			DB.delete(temp);
+		} else {
+			throw new IllegalArgumentException("No note with given ObjectID");
+		}
 	}
 	
 }

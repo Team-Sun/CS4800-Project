@@ -10,7 +10,7 @@ import TeamSun.CS4800Project.model.Note;
 public interface NoteDao {
 	// TODO javadocs
 
-	int insert(Note note);
+	int save(Note note);
 
 	Optional<Note> findByID(ObjectId id);
 

@@ -17,7 +17,7 @@ public class UserMongoDB implements UserDao {
 	private UserRepository repo;
 
 	@Override
-	public int insert(User user) {
+	public int save(User user) {
 		// TODO handle error.
 		repo.save(user);
 		return 1; //TEMP

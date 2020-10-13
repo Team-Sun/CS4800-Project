@@ -1,10 +1,5 @@
 package TeamSun.CS4800Project.api;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +22,7 @@ import TeamSun.CS4800Project.response.JwtResponse;
 import TeamSun.CS4800Project.response.MessageResponse;
 import TeamSun.CS4800Project.services.UserService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600) //TODO look into if this is actually needed.
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -37,9 +31,6 @@ public class AuthController {
 
 	@Autowired
 	UserService userService;
-
-	@Autowired
-	PasswordEncoder encoder;
 
 	@Autowired
 	JwtUtils jwtUtils;
@@ -55,34 +46,21 @@ public class AuthController {
 
 		User newUser = (User) authentication.getPrincipal();
 
-		// This works, seems unnecessary?
-		List<String> roles = newUser	.getAuthorities().stream().map(item -> item.getAuthority())
-												.collect(Collectors.toList());
-
-		return ResponseEntity.ok(new JwtResponse(jwt, newUser.getId(), newUser.getUsername(), newUser.getEmail(), roles));
+		return ResponseEntity.ok(new JwtResponse(jwt, newUser.getId(), newUser.getUsername(), newUser.getEmail(), newUser.getStringRoles()));
 	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+		// Check is username exists
 		if (userService.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
 		}
-
+		// Check is email already exists
 		if (userService.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
 		}
 
-		// Create new user's account
-		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
-				encoder.encode(signUpRequest.getPassword()));
-
-		Set<String> strRoles = signUpRequest.getRoles();
-		List<String> roles = new LinkedList<String>();
-
-		roles.add("ROLE_ADMIN"); // TODO change if needed? LOOKAT
-
-		user.setRoles(roles);
-		userService.insert(user);
+		userService.insert(signUpRequest);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}

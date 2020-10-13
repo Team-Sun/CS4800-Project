@@ -10,7 +10,7 @@ import TeamSun.CS4800Project.model.User;
 public interface UserDao {
 	// TODO javadocs
 
-	int insert(User user);
+	int save(User user);
 
 	Optional<User> findByID(ObjectId id);
 

@@ -1,6 +1,6 @@
 package TeamSun.CS4800Project.response;
 
-import java.util.List;
+import java.util.Set;
 
 import org.bson.types.ObjectId;
 
@@ -10,9 +10,9 @@ public class JwtResponse {
 	private ObjectId id;
 	private String username;
 	private String email;
-	private List<String> roles;
+	private Set<String> roles;
 
-	public JwtResponse(String accessToken, ObjectId id, String username, String email, List<String> roles) {
+	public JwtResponse(String accessToken, ObjectId id, String username, String email, Set<String> roles) {
 		this.token = accessToken;
 		this.id = id;
 		this.username = username;
@@ -60,7 +60,7 @@ public class JwtResponse {
 		this.username = username;
 	}
 
-	public List<String> getRoles() {
+	public Set<String> getRoles() {
 		return roles;
 	}
 }

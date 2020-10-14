@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
-// import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
+import Login from '../views/Login.vue'
 import Search from '../views/Search.vue'
 import UploadPage from '../views/Upload.vue'
 
@@ -15,6 +16,21 @@ const routes = [
     component: Home
   },
   {
+    path: '/about',
+    name: 'About',
+    component: About
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
     path: '/search',
     name: 'Search',
     component: Search
@@ -25,16 +41,26 @@ const routes = [
     component: UploadPage
   },
   {
-    path: '/about',
-    name: 'About',
-    component: About
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue')
+  },
+  // Temporary
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../views/BoardAdmin.vue')
+  },
+  {
+    path: '/moderator',
+    name: 'Moderator',
+    component: () => import('../views/BoardModerator.vue')
+  },
+  {
+    path: '/user',
+    name: 'User',
+    component: () => import('../views/BoardUser.vue')
   }
-  // {
-  //   path: '/login',
-  //   name: 'Login',
-  //   component: Login
-  // }
-
 ]
 
 const router = new VueRouter({

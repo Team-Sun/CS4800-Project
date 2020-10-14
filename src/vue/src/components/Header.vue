@@ -1,43 +1,49 @@
 <template>
   <div class="flex-header-container">
       <div id="nav">
-        <router-link to="/">Home</router-link>
-        <router-link to="/search">Search</router-link>
-        <router-link to="/about">About</router-link>
-        <router-link to="/uploadPage">Upload</router-link>
-        <!-- <router-link to="/login">Sign in</router-link> -->
-      </div>
-      <!-- Log in button -->
-      <div>
-        <b-dropdown id="login-form" right text="Log in" ref="dropdown" class="m-2">
-          <b-dropdown-form>
-            <b-form-group label="Email" label-for="dropdown-form-email" @submit.stop.prevent>
-              <b-form-input
-                id="email"
-                size="sm"
-                placeholder="email@example.com"
-              ></b-form-input>
-            </b-form-group>
+        <router-link to="/">
+          <img src="../assets/note-logo2.png" height="60" alt="Bronco Notes">
+        </router-link>
+        <router-link to="/">
+          <font-awesome-icon icon="home" />Home
+        </router-link>
+        <router-link to="/about">
+          <font-awesome-icon icon="address-card" />About
+        </router-link>
 
-            <b-form-group label="Password" label-for="dropdown-form-password">
-              <b-form-input
-                id="password"
-                type="password"
-                size="sm"
-                placeholder="Password"
-              ></b-form-input>
-            </b-form-group>
+        <div v-if="!currentUser">
+          <router-link to="/register">
+            <font-awesome-icon icon="user-plus" />Sign Up
+          </router-link>
+          <router-link to="/login">
+            <font-awesome-icon icon="sign-in-alt" />Login
+          </router-link>
+        </div>
 
-            <b-form-checkbox class="mb-3">Remember me</b-form-checkbox>
-            <b-button variant="primary" size="sm" @click="onClick">Sign In</b-button>
-          </b-dropdown-form>
-          <b-dropdown-divider></b-dropdown-divider>
-          <b-dropdown-item-button>New around here? Sign up</b-dropdown-item-button>
-          <b-dropdown-item-button>Forgot Password?</b-dropdown-item-button>
-        </b-dropdown>
+        <div v-if="currentUser">
+          <router-link to="/search">
+            <font-awesome-icon icon="search-plus" />Search
+          </router-link>
+          <router-link to="/uploadPage">
+            <font-awesome-icon icon="upload" />Upload
+          </router-link>
+          <router-link to="/profile">
+            <font-awesome-icon icon="user" />
+            {{ currentUser.username }}
+          </router-link>
+          <a href @click.prevent="logOut">
+            <font-awesome-icon icon="sign-out-alt" />LogOut
+          </a>
+        </div>
+
+        <!-- Temporary -->
+        <router-link v-if="showAdminBoard" to="/admin" class="nav-link">Admin</router-link>
+        <router-link v-if="showModeratorBoard" to="/mod" class="nav-link">Moderator</router-link>
+        <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link>
+
       </div>
     </div>
-  </template>
+</template>
 
 <script>
 export default {
@@ -47,6 +53,29 @@ export default {
     }
     return {
       displayQuery
+    }
+  },
+  computed: {
+    currentUser () {
+      return this.$store.state.auth.user
+    },
+    showAdminBoard () {
+      if (this.currentUser && this.currentUser.roles) {
+        return this.currentUser.roles.includes('ROLE_ADMIN')
+      }
+      return false
+    },
+    showModeratorBoard () {
+      if (this.currentUser && this.currentUser.roles) {
+        return this.currentUser.roles.includes('ROLE_MODERATOR')
+      }
+      return false
+    }
+  },
+  methods: {
+    logOut () {
+      this.$store.dispatch('auth/logout')
+      this.$router.push('/login')
     }
   }
 }
@@ -58,7 +87,7 @@ export default {
   background-color: #0d3103;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 #nav{
   display: flex;

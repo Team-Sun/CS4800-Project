@@ -27,16 +27,17 @@ export default {
   background-color: #0d3103;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
 }
+// Probably don't need it
 #logo img {
   display: block;
   height: auto;
   width: auto;
   max-height: 60px;
 }
+
 #nav {
-  padding: 25px;
   a {
     margin-left: 80px;
     font-weight: 800;

@@ -8,12 +8,12 @@
 
 <script>
 // @ is an alias to /src
-import UploadComponent from '@/components/UploadComponent.vue'
-
-export default {
-  name: 'Home',
-  components: {
-    UploadComponent
-  }
-}
+// import UploadComponent from '@/components/UploadComponent.vue'
+//
+// export default {
+//   name: 'Home',
+//   components: {
+//     UploadComponent
+//   }
+// }
 </script>

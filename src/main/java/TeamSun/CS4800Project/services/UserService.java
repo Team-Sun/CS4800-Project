@@ -28,6 +28,7 @@ public class UserService implements UserDetailsService {
 	PasswordEncoder encoder;
 
 	public int insert(User user) {
+		user.setPassword(encoder.encode(user.getPassword()));
 		return DB.save(user);
 	}
 

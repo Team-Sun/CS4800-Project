@@ -92,6 +92,10 @@ public class User implements UserDetails {
 		return roles;
 	}
 	
+	public void addRole(String role) {
+		this.roles.add(new SimpleGrantedAuthority(role));
+	}
+	
 	public Set<String> getStringRoles() {
 		Set<String> result = new HashSet<>();
 		for (GrantedAuthority role : roles) {

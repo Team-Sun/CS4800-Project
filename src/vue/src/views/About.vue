@@ -188,6 +188,7 @@ export default {
     text-align: center;
     background: beige;
     padding: 40px;
+    height: auto;
 }
 .mission p{
     text-transform: uppercase;

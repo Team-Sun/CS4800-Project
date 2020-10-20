@@ -12,9 +12,12 @@ public class Note {
 	private String name;
 	private String message;
 	private short rating;
+	private String className;
 
-	public Note() {
-		
+	public Note(String name, String message, String className) {
+		this.name = name;
+		this.message = message;
+		this.className = className;
 	}
 
 	public Note(String name) {
@@ -43,5 +46,13 @@ public class Note {
 
 	public void setRating(short rating) {
 		this.rating = rating;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
 	}
 }

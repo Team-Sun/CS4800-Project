@@ -1,5 +1,6 @@
 package TeamSun.CS4800Project.services;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,15 @@ public class NoteService {
 
 	public List<Note> findByName(String name) {
 		return DB.findByName(name);
+	}
+	
+	//TODO maybe implement differently. Brutal when getting class string over and over.
+	public List<String> getClasses() {
+		List<String> output = new LinkedList<String>();
+		for (Note note : DB.getAll()) {
+			output.add(note.getClassName());
+		}
+		return output;
 	}
 	
 	public void remove(ObjectId id) {

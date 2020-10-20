@@ -6,7 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
+import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.model.User;
+import TeamSun.CS4800Project.services.NoteService;
 import TeamSun.CS4800Project.services.UserService;
 
 @SpringBootApplication
@@ -14,6 +16,9 @@ public class Cs4800ProjectApplication {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	NoteService noteService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Cs4800ProjectApplication.class, args);
@@ -21,6 +26,16 @@ public class Cs4800ProjectApplication {
 	
 	//TODO WARN Remove for deployment!!!!
 	// https://stackoverflow.com/questions/27405713/running-code-after-spring-boot-starts
+	
+	@EventListener(ApplicationReadyEvent.class)
+	public void makeNote() {
+		for (Note note : noteService.findByName("testNoteName")) {
+			noteService.delete(note);
+		}
+		Note note = new Note("testNoteName", "testNoteMessage", "testNoteClassName");
+		noteService.insert(note);
+	}
+	
 	@EventListener(ApplicationReadyEvent.class)
 	public void makeAdmin() {
 		for (User user : userService.findByUsername("admin")) {

@@ -36,6 +36,8 @@ public class User implements UserDetails {
 	@NotBlank
 	@Size(max = 120)
 	private String password;
+	
+	private Set<ObjectId> notes = new HashSet<>();
 
 	//@DBRef
 	private Set<SimpleGrantedAuthority> roles = new HashSet<>();
@@ -86,6 +88,18 @@ public class User implements UserDetails {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Set<ObjectId> getNotes() {
+		return notes;
+	}
+	
+	public void addNote(ObjectId id) {
+		notes.add(id);
+	}
+
+	public void setNotes(Set<ObjectId> notes) {
+		this.notes = notes;
 	}
 
 	public Set<SimpleGrantedAuthority> getRoles() {

@@ -30,6 +30,6 @@ public interface UserDao {
 
 	Boolean existsByEmail(String email);
 	
-	List<User> findByUsername(String username);
+	User findByUsername(String username);
 
 }

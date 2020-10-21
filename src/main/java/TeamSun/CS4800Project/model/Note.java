@@ -3,16 +3,24 @@ package TeamSun.CS4800Project.model;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.web.multipart.MultipartFile;
 
 @Document(collection = "notes")
 public class Note {
 
 	@Id
 	private ObjectId id;
+
 	private String name;
 	private String message;
 	private short rating;
 	private String className;
+	private MultipartFile file;
+	private ObjectId owner;
+
+	public Note() {
+
+	}
 
 	public Note(String name, String message, String className) {
 		this.name = name;
@@ -20,8 +28,20 @@ public class Note {
 		this.className = className;
 	}
 
+	public Note(String name, String message, short rating, String className, MultipartFile file) {
+		this.name = name;
+		this.message = message;
+		this.rating = rating;
+		this.className = className;
+		this.file = file;
+	}
+
 	public Note(String name) {
 		this.name = name;
+	}
+
+	public ObjectId getId() {
+		return id;
 	}
 
 	public String getName() {
@@ -54,5 +74,21 @@ public class Note {
 
 	public void setClassName(String className) {
 		this.className = className;
+	}
+
+	public MultipartFile getFile() {
+		return file;
+	}
+
+	public void setFile(MultipartFile file) {
+		this.file = file;
+	}
+
+	public ObjectId getOwner() {
+		return owner;
+	}
+
+	public void setOwner(ObjectId owner) {
+		this.owner = owner;
 	}
 }

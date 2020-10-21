@@ -1,8 +1,9 @@
 package TeamSun.CS4800Project.services;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import TeamSun.CS4800Project.dao.UserMongoDB;
+import TeamSun.CS4800Project.jwt.JwtUtils;
 import TeamSun.CS4800Project.model.User;
 import TeamSun.CS4800Project.request.SignupRequest;
 
@@ -23,6 +25,9 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	@Qualifier("mongodb_user")
 	UserMongoDB DB;
+	
+	@Autowired
+	JwtUtils jwtUtils;
 
 	@Autowired
 	PasswordEncoder encoder;
@@ -34,18 +39,29 @@ public class UserService implements UserDetailsService {
 
 	public int insert(SignupRequest request) {
 		User user = new User(request.getUsername(), request.getEmail(), encoder.encode(request.getPassword()));	
-		List<String> roles = new LinkedList<String>();
-		roles.add("ROLE_USER"); // TODO change if needed? LOOKAT
+		user.addRole("ROLE_USER");
 		
 		return DB.save(user);
 	}
 
-	public User findByID(ObjectId id) {
+	public User find(ObjectId id) {
 		Optional<User> temp = DB.findByID(id);
 		if (temp.isEmpty()) {
 			return null;
 		}
 		return temp.get();
+	}
+	
+	public User find(String username) {
+		return DB.findByUsername(username);
+	}
+	
+	public User find(HttpServletRequest request) {
+		String token = jwtUtils.parseJwt(request);
+		if (jwtUtils.validateJwtToken(token)) {
+			return DB.findByUsername(jwtUtils.getUserNameFromJwtToken(token));
+		}
+		return null;
 	}
 
 	public int delete(User user) {
@@ -69,16 +85,9 @@ public class UserService implements UserDetailsService {
 		return DB.existsByEmail(email);
 	}
 
-	public List<User> findByUsername(String username) {
-		// TODO convert optional
-		return DB.findByUsername(username);
-	}
-
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO deal with. We can't allow duplicate usernames or whatnot.
-		List<User> users = DB.findByUsername(username);
-		return users.get(0);
+		return DB.findByUsername(username);
 	}
 
 }

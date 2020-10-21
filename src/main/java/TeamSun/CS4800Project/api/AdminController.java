@@ -1,6 +1,7 @@
 package TeamSun.CS4800Project.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import TeamSun.CS4800Project.model.User;
 import TeamSun.CS4800Project.services.UserService;
 
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/admin")
 @RestController
 public class AdminController {
@@ -25,8 +27,8 @@ public class AdminController {
 	}
 	
 	@GetMapping("/find")
-	public User getAllEntries(@ModelAttribute("name") String name) {
-		return userService.findByUsername(name).get(0);
+	public User find(@ModelAttribute("name") String name) {
+		return userService.find(name);
 	}
 
 	@GetMapping("/getall")

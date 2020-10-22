@@ -1,8 +1,10 @@
 package TeamSun.CS4800Project.api;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +24,7 @@ import TeamSun.CS4800Project.response.JwtResponse;
 import TeamSun.CS4800Project.response.MessageResponse;
 import TeamSun.CS4800Project.services.UserService;
 
-@CrossOrigin(origins = "*", maxAge = 3600) //TODO look into if this is actually needed.
+@CrossOrigin(origins = "*", maxAge = 3600) // TODO look into if this is actually needed.
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -38,15 +40,20 @@ public class AuthController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
+		// This will catch incorrect credentials without going into the AuthTokenFilter.
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+		// This will allow authTokenFilter to complete.
+		userService.setAuth(loginRequest.getUsername(), true);
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 
 		User newUser = (User) authentication.getPrincipal();
 
-		return ResponseEntity.ok(new JwtResponse(jwt, newUser.getId(), newUser.getUsername(), newUser.getEmail(), newUser.getStringRoles()));
+		return ResponseEntity.ok(
+				new JwtResponse(jwt, newUser.getId(), newUser.getUsername(), newUser.getEmail(), newUser.getStringRoles()));
 	}
 
 	@PostMapping("/signup")
@@ -64,4 +71,12 @@ public class AuthController {
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
+
+	@PostMapping("/logout")
+	public ResponseEntity<String> logoutUser(HttpServletRequest request) {
+		User clientUser = userService.find(request);
+		userService.setAuth(clientUser.getUsername(), false);
+		return new ResponseEntity<>("User logged out successfully!", HttpStatus.OK);
+	}
+
 }

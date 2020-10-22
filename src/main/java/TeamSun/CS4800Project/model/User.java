@@ -38,6 +38,8 @@ public class User implements UserDetails {
 	private String password;
 	
 	private Set<ObjectId> notes = new HashSet<>();
+	
+	private boolean authenticated;
 
 	//@DBRef
 	private Set<SimpleGrantedAuthority> roles = new HashSet<>();
@@ -56,6 +58,14 @@ public class User implements UserDetails {
 		this.username = username;
 		this.email = email;
 		this.password = password;
+	}
+	
+	public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 50) @Email String email,
+			@NotBlank @Size(max = 120) String password, Set<SimpleGrantedAuthority> roles) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
 	}
 
 	public ObjectId getId() {
@@ -102,6 +112,14 @@ public class User implements UserDetails {
 		this.notes = notes;
 	}
 
+	public boolean isAuthenticated() {
+		return authenticated;
+	}
+
+	public void setAuthenticated(boolean authenticated) {
+		this.authenticated = authenticated;
+	}
+
 	public Set<SimpleGrantedAuthority> getRoles() {
 		return roles;
 	}
@@ -123,7 +141,12 @@ public class User implements UserDetails {
 			this.roles.add(new SimpleGrantedAuthority(role));
 		}
 	}
-
+	
+	public boolean hasRole(String role) {
+		// Probably works?
+		return roles.contains(new SimpleGrantedAuthority(role));
+	}
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return roles;

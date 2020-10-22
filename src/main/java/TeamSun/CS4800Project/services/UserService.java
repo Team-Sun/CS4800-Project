@@ -1,6 +1,5 @@
 package TeamSun.CS4800Project.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +35,10 @@ public class UserService implements UserDetailsService {
 		user.setPassword(encoder.encode(user.getPassword()));
 		return DB.save(user);
 	}
+	
+	public int update(User user) {
+		return DB.save(user);
+	}
 
 	public int insert(SignupRequest request) {
 		User user = new User(request.getUsername(), request.getEmail(), encoder.encode(request.getPassword()));	
@@ -62,6 +65,12 @@ public class UserService implements UserDetailsService {
 			return DB.findByUsername(jwtUtils.getUserNameFromJwtToken(token));
 		}
 		return null;
+	}
+	
+	public void setAuth(String username, boolean authenticated) {
+		User temp = find(username);
+		temp.setAuthenticated(authenticated);
+		update(temp);
 	}
 
 	public int delete(User user) {

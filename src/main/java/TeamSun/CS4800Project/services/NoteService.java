@@ -52,7 +52,7 @@ public class NoteService {
 		return output;
 	}
 	
-	public void remove(ObjectId id) {
+	public void delete(ObjectId id) throws IllegalArgumentException {
 		Note temp = findByID(id);
 		if (temp != null) {
 			DB.delete(temp);

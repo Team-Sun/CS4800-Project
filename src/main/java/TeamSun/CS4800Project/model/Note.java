@@ -16,7 +16,7 @@ public class Note {
 	private short rating;
 	private String className;
 	private MultipartFile file;
-	private ObjectId owner;
+	private ObjectId owner; // Must be ObjectId because people can change their username.
 
 	public Note() {
 

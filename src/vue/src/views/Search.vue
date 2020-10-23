@@ -5,12 +5,33 @@
         <h1>
           Find Your Note Here
           <div class="form-box">
-            <input type="text" class="search-field note"
-            placeholder="Notes..">
-            <input type="text" class="search-field class" 
-            placeholder="Class">
-            <input type="text" class="search-field professor"
-            placeholder="Professor">
+            <div class="searchNote">
+              <input type="text" class="search-field note"
+                  placeholder="Notes.." v-model="searchNoteInput">
+              <ul>
+                  <li v-for="subject in queriedScienceSubjects" :key=subject>
+                    {{ subject }}
+                  </li>
+              </ul>
+            </div>
+            <div class="searchClass">
+              <input type="text" class="search-field class" v-model="searchClassInput"
+              placeholder="Class">
+              <ul>
+                <li v-for="subject in queriedClass" :key=subject>
+                  {{ subject }}
+                </li>
+              </ul>
+            </div>
+            <!-- <div class="searchProfessor">
+              <input type="text" class="search-field professor" v-model="searchProfessorInput"
+              placeholder="Professor">
+              <ul>
+                <li v-for="subject in queriedProfessor" :key=subject>
+                  {{ subject }}
+                </li>
+              </ul>
+            </div> -->
             <button class="search-btn"
             type="button">Search</button>
           </div>
@@ -33,7 +54,6 @@
     </div>
   </div>    
 </template>
-
 <script>
 export default {
   data: () => {
@@ -45,7 +65,13 @@ export default {
         },
         { title: '0-1 Knapsack', course: 'Design and Analysis Algorithm'},
         { title: 'SQL', course: 'Database'}
-      ]
+      ],
+      searchNoteInput: '',
+      scienceSubjects: ['Physics', 'Chemistry', 'Biology', 'Math', 'Computer Science'],
+      searchClassInput: '',
+      classSubjects: ['Database', 'Sofware Engineer', 'Data Structure', 'Computer Architecture'],
+      // searchProfessorInput: '',
+      // professorubjects: ['Josh Damon', 'Donnal Smith', 'Henry Tran', 'Michael Tam'],
     }
   }
 }
@@ -145,5 +171,11 @@ h1{
     font-weight: 300;
     text-align: left;
     padding: 5px;
+}
+.searchClass{
+    font-size: 15px;
+}
+.searchNote{
+   font-size: 15px;
 }
 </style>

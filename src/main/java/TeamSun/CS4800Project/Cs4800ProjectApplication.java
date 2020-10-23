@@ -29,7 +29,7 @@ public class Cs4800ProjectApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void makeNote() {
-		for (Note note : noteService.findByName("testNoteName")) {
+		for (Note note : noteService.findByTitle("testNoteName")) {
 			noteService.delete(note);
 		}
 		Note note = new Note("testNoteName", "testNoteMessage", "testNoteClassName");

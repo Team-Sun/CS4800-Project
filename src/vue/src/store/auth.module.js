@@ -6,6 +6,7 @@ const initialState = user
   : { status: { loggedIn: false }, user: null }
 
 export const auth = {
+  // See https://vuex.vuejs.org/guide/modules.html#namespacing.
   namespaced: true,
   state: initialState,
   actions: {

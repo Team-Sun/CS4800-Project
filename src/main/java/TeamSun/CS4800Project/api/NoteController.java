@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.model.User;
 import TeamSun.CS4800Project.request.SearchRequest;
+import TeamSun.CS4800Project.response.SearchResponse;
 import TeamSun.CS4800Project.services.NoteService;
 import TeamSun.CS4800Project.services.UserService;
 
@@ -29,6 +31,7 @@ import TeamSun.CS4800Project.services.UserService;
  * @author Andrew
  *
  */
+@CrossOrigin(origins = "*", maxAge = 3600) // THIS IS REQUIRED. DO NOT REMOVE
 @RequestMapping("/api/note")
 @RestController
 public class NoteController {
@@ -83,7 +86,7 @@ public class NoteController {
 		for (ObjectId id : userService.find(user.getUsername()).getNotes()) {
 			Note temp = noteService.findByID(id);
 			if (temp != null) {
-				notes.add(temp.getName());
+				notes.add(temp.getTitle());
 			}
 		}
 		if (notes.isEmpty()) {
@@ -92,14 +95,16 @@ public class NoteController {
 		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}
 	
+	// We use response objects because Spring turns the whole object (including methods) into JSON to be sent.
 	@PostMapping("/search")
-	public ResponseEntity<List<Note>> search(@RequestBody SearchRequest searchRequest) {
-		Note dummyNote1 = new Note("testName1", "testMessage1", (short) 2, "className1", null);
-		Note dummyNote2 = new Note("testName2", "testMessage2", (short) 3, "className2", null);
-		List<Note> dummyList = new LinkedList<>();
+	@PreAuthorize("permitAll()")
+	public ResponseEntity<List<SearchResponse>> search(@RequestBody SearchRequest searchRequest) {
+		SearchResponse dummyNote1 = new SearchResponse("testName1", "className1", "testContent1");
+		SearchResponse dummyNote2 = new SearchResponse("testName2", "className2", "testContent2");
+		List<SearchResponse> dummyList = new LinkedList<>();
 		dummyList.add(dummyNote1);
 		dummyList.add(dummyNote2);
-		return new ResponseEntity<>(dummyList, HttpStatus.OK);
+		return ResponseEntity.ok(dummyList);
 	}
 
 }

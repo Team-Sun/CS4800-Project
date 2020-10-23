@@ -25,6 +25,6 @@ public interface NoteDao {
 	 */
 	List<Note> getAll();
 
-	List<Note> findByName(String name);
+	List<Note> findByTitle(String title);
 
 }

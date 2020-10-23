@@ -2,16 +2,16 @@ package TeamSun.CS4800Project.request;
 
 public class SearchRequest {
 
-	private String noteName;
+	private String title;
 	private String professor;
-	private String className;
+	private String course;
 
-	public String getNote() {
-		return noteName;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setNote(String note) {
-		this.noteName = note;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getProfessor() {
@@ -22,12 +22,12 @@ public class SearchRequest {
 		this.professor = professor;
 	}
 
-	public String getClassName() {
-		return className;
+	public String getCourse() {
+		return course;
 	}
 
-	public void setClassName(String className) {
-		this.className = className;
+	public void setCourse(String course) {
+		this.course = course;
 	}
 
 }

@@ -46,7 +46,7 @@ public class NoteMongoDB implements NoteDao {
 	}
 
 	@Override
-	public List<Note> findByName(String name) {
-		return repo.findByName(name);
+	public List<Note> findByTitle(String title) {
+		return repo.findByTitle(title);
 	}
 }

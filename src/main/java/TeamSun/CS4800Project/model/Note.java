@@ -11,53 +11,54 @@ public class Note {
 	@Id
 	private ObjectId id;
 
-	private String name;
-	private String message;
+	private String title;
+	private String content;
 	private short rating;
-	private String className;
+	private String course;
 	private MultipartFile file;
 	private ObjectId owner; // Must be ObjectId because people can change their username.
+	private String professor;
 
 	public Note() {
 
 	}
 
 	public Note(String name, String message, String className) {
-		this.name = name;
-		this.message = message;
-		this.className = className;
+		this.title = name;
+		this.content = message;
+		this.course = className;
 	}
 
-	public Note(String name, String message, short rating, String className, MultipartFile file) {
-		this.name = name;
-		this.message = message;
+	public Note(String name, String message, short rating, String course, MultipartFile file) {
+		this.title = name;
+		this.content = message;
 		this.rating = rating;
-		this.className = className;
+		this.course = course;
 		this.file = file;
 	}
 
 	public Note(String name) {
-		this.name = name;
+		this.title = name;
 	}
 
 	public ObjectId getId() {
 		return id;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String name) {
+		this.title = name;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getContent() {
+		return content;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setContent(String message) {
+		this.content = message;
 	}
 
 	public short getRating() {
@@ -68,12 +69,12 @@ public class Note {
 		this.rating = rating;
 	}
 
-	public String getClassName() {
-		return className;
+	public String getCourse() {
+		return course;
 	}
 
-	public void setClassName(String className) {
-		this.className = className;
+	public void setCourse(String course) {
+		this.course = course;
 	}
 
 	public MultipartFile getFile() {
@@ -90,5 +91,13 @@ public class Note {
 
 	public void setOwner(ObjectId owner) {
 		this.owner = owner;
+	}
+
+	public String getProfessor() {
+		return professor;
+	}
+
+	public void setProfessor(String professor) {
+		this.professor = professor;
 	}
 }

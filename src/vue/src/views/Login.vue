@@ -39,6 +39,7 @@
         </div>
         <div class="form-group">
           <button class="btn btn-primary btn-block" :disabled="loading">
+            <!--Changing `this.loading` shows or hides this element on the spot.!-->
             <span v-show="loading" class="spinner-border spinner-border-sm"></span>
             <span>Login</span>
           </button>
@@ -52,6 +53,8 @@
 </template>
 
 <script>
+// Only required so that new User() can be called and program knows what fields of user can be populated.
+// Login and whatnot is done through the store auth.module.js.
 import User from '../models/user'
 
 export default {
@@ -84,6 +87,9 @@ export default {
 
         if (this.user.username && this.user.password) {
           this.$store.dispatch('auth/login', this.user).then(
+            // $store represents the store folder. The 'auth' part of auth/login is in the auth.module.js, where export const auth
+            // dispatch then calls the 'login' part of auth/login, and this.user passes the User to that function.
+            // See https://vuex.vuejs.org/guide/modules.html#namespacing.
             () => {
               this.$router.push('/profile')
             },

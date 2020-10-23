@@ -24,7 +24,7 @@ import TeamSun.CS4800Project.response.JwtResponse;
 import TeamSun.CS4800Project.response.MessageResponse;
 import TeamSun.CS4800Project.services.UserService;
 
-@CrossOrigin(origins = "*", maxAge = 3600) // TODO look into if this is actually needed.
+@CrossOrigin(origins = "*", maxAge = 3600) // THIS IS REQUIRED. DO NOT REMOVE
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

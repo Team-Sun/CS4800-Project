@@ -6,17 +6,17 @@
           Find Your Note Here
           <div class="form-box">
             <div class="searchNote">
-              <input type="text" class="search-field note"
-                  placeholder="Notes.." v-model="searchNoteInput">
+              <!--the v-model populates the noteModel object for the later post-request -->
+              <input type="text" class="search-field note" placeholder="Notes.." v-model="noteModel.name">
               <ul>
-                  <li v-for="subject in queriedScienceSubjects" :key=subject>
-                    {{ subject }}
-                  </li>
+                <li v-for="subject in queriedScienceSubjects" :key=subject>
+                  {{ subject }}
+                </li>
               </ul>
             </div>
             <div class="searchClass">
-              <input type="text" class="search-field class" v-model="searchClassInput"
-              placeholder="Class">
+              <!--the v-model populates the noteModel object for the later post-request -->
+              <input type="text" class="search-field class" v-model="noteModel.className" placeholder="Class">
               <ul>
                 <li v-for="subject in queriedClass" :key=subject>
                   {{ subject }}
@@ -32,8 +32,7 @@
                 </li>
               </ul>
             </div> -->
-            <button class="search-btn"
-            type="button">Search</button>
+            <button v-on:click="search" class="search-btn" type="button">Search</button>
           </div>
         </h1>
       </form>
@@ -52,19 +51,27 @@
         </div>
       </div>
     </div>
-  </div>    
+  </div>
 </template>
 <script>
+
+import Note from '../models/note'
+// TODO use a module instead, which can take care of errors and caching the response.
+import noteService from '../services/note.service'
+
 export default {
+  name: 'Search',
   data: () => {
     return {
       notes: [
-        { title: 'Unit Testing', course: 'Software Engineer', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"},
-        { title: 'Back Tracking', course: 'Design and Analysis Algorithm', 
+        { title: 'Unit Testing', course: 'Software Engineer', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum" },
+        {
+          title: 'Back Tracking',
+          course: 'Design and Analysis Algorithm',
           content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
         },
-        { title: '0-1 Knapsack', course: 'Design and Analysis Algorithm'},
-        { title: 'SQL', course: 'Database'}
+        { title: '0-1 Knapsack', course: 'Design and Analysis Algorithm' },
+        { title: 'SQL', course: 'Database' }
       ],
       searchNoteInput: '',
       scienceSubjects: ['Physics', 'Chemistry', 'Biology', 'Math', 'Computer Science'],
@@ -72,6 +79,16 @@ export default {
       classSubjects: ['Database', 'Sofware Engineer', 'Data Structure', 'Computer Architecture'],
       // searchProfessorInput: '',
       // professorubjects: ['Josh Damon', 'Donnal Smith', 'Henry Tran', 'Michael Tam'],
+      noteModel: new Note()
+    }
+  },
+  methods: {
+    // Thanks to https://vuejs.org/v2/guide/events.html#Method-Event-Handlers
+    search: function () {
+      noteService.search(this.noteModel).then(result => {
+        this.notes = result
+        console.log(this.notes)
+      })
     }
   }
 }
@@ -90,7 +107,7 @@ body{
     justify-content: center;
     align-items: top;
     color: lemonchiffon;
-}    
+}
 h1{
     color: darkgreen;
     font-size: 50px;

@@ -38,7 +38,9 @@ public class Cs4800ProjectApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void makeAdmin() {
-		userService.delete(userService.find("admin"));
+		if (userService.find("admin") != null) {
+			userService.delete(userService.find("admin"));
+		}
 		User user = new User("admin", "admin@admin.com", "admin");
 		user.addRole("ROLE_ADMIN");
 		userService.insert(user);
@@ -46,7 +48,9 @@ public class Cs4800ProjectApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void makeUser() {
-		userService.delete(userService.find("user"));
+		if (userService.find("user") != null) {
+			userService.delete(userService.find("user"));
+		}
 		User user = new User("user", "user@user.com", "user");
 		user.addRole("ROLE_USER");
 		userService.insert(user);
@@ -54,7 +58,10 @@ public class Cs4800ProjectApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void makeMod() {
-		userService.delete(userService.find("mod"));
+		if (userService.find("mod") != null) {
+			userService.delete(userService.find("mod"));
+		}
+		
 		User user = new User("mod", "mod@mod.com", "mod");
 		user.addRole("ROLE_MOD");
 		userService.insert(user);
@@ -62,7 +69,9 @@ public class Cs4800ProjectApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void makeTest() {
-		userService.delete(userService.find("test"));
+		if (userService.find("test") != null) {
+			userService.delete(userService.find("test"));
+		}
 		User user = new User("test", "test@test.com", "test");
 		user.addRole("ROLE_TEST");
 		userService.insert(user);

@@ -28,4 +28,5 @@ class NoteControllerTest {
         noteService.delete(noteService.findByTitle("TestNote").get(0));
         Assertions.assertTrue(noteService.findByTitle("TestNote").size() == 0 , "Note deleted");
     }
+
 }

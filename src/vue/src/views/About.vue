@@ -68,9 +68,9 @@
       <p>Our Goals</p>
       <span class="border2"></span>
       <h1>
-          As a students, we understand the potential of sharing notes among classmates and we 
+          As a students, we understand the potential of sharing notes among classmates and we
           have not seen any web application that focus particularly in note sharing.
-          Thus, we decide to create the Note Sharing Application for Cal Poly Pomona students to 
+          Thus, we decide to create the Note Sharing Application for Cal Poly Pomona students to
           search for notes, upload notes, and share notes among courses in Computer Science.
           <br>
           <br>

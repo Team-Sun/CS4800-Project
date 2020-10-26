@@ -8,5 +8,9 @@ import TeamSun.CS4800Project.model.Note;
 import java.util.List;
 
 public interface NoteRepo extends MongoRepository<Note, ObjectId> {
+
 	List<Note> findByTitle(String name);
+
+	//List<Note> findByName(String name);
+	//List<Note> findByPublished(boolean published);
 }

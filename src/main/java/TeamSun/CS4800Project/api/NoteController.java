@@ -94,8 +94,10 @@ public class NoteController {
 		}
 		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}
-	
-	// We use response objects because Spring turns the whole object (including methods) into JSON to be sent.
+
+	// We use response objects because Spring turns the whole object (including
+	// methods) into JSON to be sent, and we don't want the useless functions to be
+	// sent.
 	@PostMapping("/search")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<List<SearchResponse>> search(@RequestBody SearchRequest searchRequest) {

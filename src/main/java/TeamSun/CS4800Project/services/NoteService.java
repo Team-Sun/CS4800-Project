@@ -39,8 +39,8 @@ public class NoteService {
 		return DB.size();
 	}
 
-	public List<Note> findByTitle(String name) {
-		return DB.findByTitle(name);
+	public List<Note> findByTitle(String title) {
+		return DB.findByTitle(title);
 	}
 	
 	//TODO maybe implement differently. Brutal when getting class string over and over.

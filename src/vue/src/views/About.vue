@@ -37,7 +37,7 @@
           <span class="name">Andrew Day</span>
           <span class="border"></span>
           <p>
-              Backend Developer
+              Fullstack Developer
           </p>
           <div class="link">
             <a href="https://github.com/Andr3wD">GitHub</a>

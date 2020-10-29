@@ -96,7 +96,11 @@ public class UserService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return DB.findByUsername(username);
+		UserDetails user = DB.findByUsername(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("Couldn't find username: " + username + " in database.");
+		}
+		return user;
 	}
 
 }

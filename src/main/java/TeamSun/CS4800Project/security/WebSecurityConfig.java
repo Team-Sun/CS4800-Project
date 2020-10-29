@@ -19,11 +19,13 @@ import TeamSun.CS4800Project.jwt.AuthTokenFilter;
 import TeamSun.CS4800Project.services.UserService;
 
 
+/*
+ * https://stackoverflow.com/questions/43961625/rolesallowed-vs-preauthorize-vs-secured
+ * for why we only use prePostEnabled in @EnableGlobalMethodSecurity
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-		// securedEnabled = true, //TODO why commented out?
-		// jsr250Enabled = true,
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired

@@ -64,7 +64,7 @@ public class NoteService {
 	
 	//TODO maybe implement differently. Brutal when getting class string over and over.
 	public List<String> getClasses() {
-		List<String> output = new LinkedList<String>();
+		List<String> output = new LinkedList<String>(); // TODO CHANGE TO SET
 		for (Note note : DB.getAll()) {
 			output.add(note.getCourse());
 		}

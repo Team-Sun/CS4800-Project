@@ -42,8 +42,10 @@ export default {
   name: 'add-note',
   data () {
     return {
+      // Please use the note model I
       note: {
         id: null,
+        title: '', // This didn't exist before.
         class: '',
         description: '',
         published: false
@@ -53,12 +55,13 @@ export default {
   },
   methods: {
     saveNote () {
-      var data = {
+      // Please! why are you doing this instead of sending note directly.
+      /* var data = {
         class: this.note.class,
         description: this.note.description
-      }
+      } */
 
-      UserService.create(data)
+      UserService.create(this.note)
         .then(response => {
           this.notes.id = response.notes.id
           console.log(response.data)

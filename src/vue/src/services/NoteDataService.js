@@ -1,4 +1,8 @@
 import http from '../http-common'
+import axios from 'axios'
+import authHeader from './auth-header'
+
+const API_URL = 'http://localhost:8080/api'
 
 class NoteDataService {
   getAll () {
@@ -10,7 +14,7 @@ class NoteDataService {
   }
 
   create (data) {
-    return http.post('/uploadPage', data)
+    return axios.post(API_URL + '/uploadPage', data, { headers: authHeader(), 'Content-type': 'application/json' })
   }
 
   update (id, data) {

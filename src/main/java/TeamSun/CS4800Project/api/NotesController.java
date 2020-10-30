@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import TeamSun.CS4800Project.model.Notes;
+import TeamSun.CS4800Project.repositories.NoteRepo;
 import TeamSun.CS4800Project.repositories.NoteRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600) // THIS IS REQUIRED. DO NOT REMOVE
@@ -30,8 +31,12 @@ public class NotesController {
 	@Autowired
 	NoteRepository noteRepository;
 	
+	@Autowired
+	NoteRepo NoteRepo;
+	
 	@PostMapping("/uploadPage")
-	@PreAuthorize("permitAll()")
+	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	// We'll want a new class here to deal with the request. Will help when forwarding it back to user later.
 	public ResponseEntity<Notes> createNote(@RequestBody Notes note) {
 		System.out.println("Test");
 	  try {

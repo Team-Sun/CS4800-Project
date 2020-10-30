@@ -11,7 +11,13 @@ import org.springframework.stereotype.Service;
 
 import TeamSun.CS4800Project.dao.NoteMongoDB;
 import TeamSun.CS4800Project.model.Note;
+import TeamSun.CS4800Project.response.NoteResponse;
 
+/**
+ * Takes care of manipulating data and meshing with DAO.
+ * @author Andrew
+ *
+ */
 @Service("noteService")
 public class NoteService {
 
@@ -41,6 +47,19 @@ public class NoteService {
 
 	public List<Note> findByTitle(String title) {
 		return DB.findByTitle(title);
+	}
+	
+	public NoteResponse convertToResponse(Note note) {
+		NoteResponse response = new NoteResponse();
+		response.setContent(note.getContent());
+		response.setCourse(note.getCourse());
+		response.setFile(note.getFile());
+		response.setId(note.getId());
+		response.setOwner(note.getOwner());
+		response.setProfessor(note.getProfessor());
+		response.setTitle(note.getTitle());
+		response.setRating(note.getRating());
+		return response;
 	}
 	
 	//TODO maybe implement differently. Brutal when getting class string over and over.

@@ -7,6 +7,13 @@ import org.bson.types.ObjectId;
 
 import TeamSun.CS4800Project.model.Note;
 
+/**
+ * Any DB we want to use must implement this interface. This allows abstraction
+ * and separation of actual DB implementation and API/controller/service code.
+ * 
+ * @author Andrew
+ *
+ */
 public interface NoteDao {
 	// TODO javadocs
 

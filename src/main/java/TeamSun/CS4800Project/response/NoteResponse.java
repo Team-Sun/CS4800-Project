@@ -3,8 +3,17 @@ package TeamSun.CS4800Project.response;
 import org.bson.types.ObjectId;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * This is for specifically sending data back to the frontend from the backend.
+ * Allows methods currently in Note class to not be sent, saving resources and
+ * bandwidth.
+ * 
+ * @author Andrew
+ *
+ */
 public class NoteResponse {
 
+	private ObjectId id;
 	private String title;
 	private String content;
 	private short rating;
@@ -13,15 +22,12 @@ public class NoteResponse {
 	private ObjectId owner; // Must be ObjectId because people can change their username.
 	private String professor;
 
-	public NoteResponse(String title, String content, short rating, String course, MultipartFile file, ObjectId owner,
-			String professor) {
-		this.title = title;
-		this.content = content;
-		this.rating = rating;
-		this.course = course;
-		this.file = file;
-		this.owner = owner;
-		this.professor = professor;
+	public ObjectId getId() {
+		return id;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 	public String getTitle() {

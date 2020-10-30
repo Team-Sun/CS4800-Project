@@ -10,17 +10,25 @@ import org.springframework.stereotype.Repository;
 import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.repositories.NoteRepo;
 
+/**
+ * This is a specific implementation of the mongodb database. Any DB could be
+ * implemented and used as long as the NoteDao interface is implemented and the
+ * repository tag is changed in the appropriate files.
+ * 
+ * @author Andrew
+ *
+ */
 @Repository("mongodb_note")
 public class NoteMongoDB implements NoteDao {
-	
+
 	@Autowired
 	NoteRepo repo;
 
 	@Override
 	public int save(Note note) {
-		//TODO handle exceptions.
+		// TODO handle exceptions.
 		repo.save(note);
-		return 1; //TEMP
+		return 1; // TEMP
 	}
 
 	@Override
@@ -30,9 +38,9 @@ public class NoteMongoDB implements NoteDao {
 
 	@Override
 	public int delete(Note note) {
-		//TODO handle exceptions.
+		// TODO handle exceptions.
 		repo.delete(note);
-		return 1; //TEMP
+		return 1; // TEMP
 	}
 
 	@Override

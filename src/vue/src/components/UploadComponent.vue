@@ -1,22 +1,85 @@
 <template>
-    <div id="upload">
-        <textarea cols="50" rows="20">Copy/Paste Notes Here</textarea>
-        <br>
-        <button>Create Note</button>
-        <button>Upload From Computer</button>
+  <div class="submit-form">
+    <div v-if="!submitted">
+      <div class="form-group">
+        <label for="title"> Class Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          required
+          v-model="note.title"
+          name="title"
+        />
+      </div>
 
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea rows="20"
+          class="form-control"
+          id="description"
+          required
+          v-model="note.description"
+          name="description"
+        />
+        <!-- Copy/Paste Notes Here</textarea> -->
+      </div>
+
+      <button @click="saveNote" class="btn btn-success">Create Note</button>
     </div>
+
+    <div v-else>
+      <h4>You submitted successfully!</h4>
+      <button class="btn btn-success" @click="newNote">Add</button>
+    </div>
+  </div>
 </template>
+
 <script>
+import UserService from '../services/NoteDataService'
+
 export default {
-  name: 'Upload'
+  name: 'add-note',
+  data () {
+    return {
+      note: {
+        id: null,
+        class: '',
+        description: '',
+        published: false
+      },
+      submitted: false
+    }
+  },
+  methods: {
+    saveNote () {
+      var data = {
+        class: this.note.class,
+        description: this.note.description
+      }
+
+      UserService.create(data)
+        .then(response => {
+          this.notes.id = response.notes.id
+          console.log(response.data)
+          this.submitted = true
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    newNote () {
+      this.submitted = false
+      this.note = {}
+    }
+  }
 }
 </script>
 
 <style>
-#class-note-panel{
-    background: #eee;
-
+.submit-form {
+  max-width: 500px;
+  margin: auto;
 }
 
 </style>

@@ -1,7 +1,7 @@
 import axios from 'axios'
 // import authHeader from './auth-header'
 
-const API_URL = 'http://ec2-3-101-72-142.us-west-1.compute.amazonaws.com:8080/api/note/'
+const API_URL = 'http://localhost:8080/api/note/'
 
 // Thankyou https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index
 class NoteService {
@@ -13,6 +13,10 @@ class NoteService {
     }).then(response => {
       return Promise.resolve(response.data) // Seems to be the same thing as without the Promise.resolve()?
     })
+  }
+
+  create (data) {
+    return axios.post(API_URL + 'upload', data)
   }
 }
 

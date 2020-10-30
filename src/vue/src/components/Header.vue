@@ -31,6 +31,9 @@
             <font-awesome-icon icon="user" />
             {{ currentUser.username }}
           </router-link>
+          <router-link to="/notes">
+            Notes
+          </router-link>
           <a href @click.prevent="logOut">
             <font-awesome-icon icon="sign-out-alt" />LogOut
           </a>

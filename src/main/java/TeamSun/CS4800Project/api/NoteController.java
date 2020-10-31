@@ -1,5 +1,6 @@
 package TeamSun.CS4800Project.api;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,13 +14,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.model.User;
+import TeamSun.CS4800Project.repositories.NoteRepo;
 import TeamSun.CS4800Project.request.SearchRequest;
 import TeamSun.CS4800Project.response.SearchResponse;
 import TeamSun.CS4800Project.services.NoteService;
@@ -40,20 +44,50 @@ public class NoteController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private NoteRepo noteRepo;
 
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public Note addEntry(@RequestBody Note note, HttpServletRequest request) {
+	public ResponseEntity<Note> addEntry(@RequestBody Note note, HttpServletRequest request) {
 		User clientUser = userService.find(request);
 		noteService.insert(note);
-		clientUser.addNote(note.getId()); // ID is only created after it's inserted. WARN This might result in errors if
-														// DB runs concurrently.
-		return note;
+		clientUser.addNote(note.getId()); 		// ID is only created after it's inserted. WARN This might result in errors if
+						 						// DB runs concurrently.
+		return new ResponseEntity<> (note, HttpStatus.CREATED);
+		
+		//TODO May need to catch an exception
 	}
 
-	@DeleteMapping("/remove")
+	
+	// Testing
+	@GetMapping("/all")
+	@PreAuthorize("permitAll()")
+	public ResponseEntity<List<Note>> getAllNotes(@RequestParam(required = false) String title) {
+		try {
+			List<Note> note = new ArrayList<Note>();
+			
+			if (title == null)
+				noteRepo.findAll().forEach(note::add);
+			else
+				noteRepo.findByTitle(title).forEach(note::add);
+			
+		    if (note.isEmpty()) {
+		    	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+		    
+			return new ResponseEntity<>(note, HttpStatus.OK);
+			
+			} catch (Exception e) {
+			    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		
+	}
+	
+	@DeleteMapping("/remove/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<String> removeNote(ObjectId id, HttpServletRequest request) {
+	public ResponseEntity<String> removeNote(@PathVariable("id") ObjectId id, HttpServletRequest request) {
 		User clientUser = userService.find(request);
 		Note note = noteService.findByID(id);
 		// Make sure that the current clientUser matches the owner of the note that's

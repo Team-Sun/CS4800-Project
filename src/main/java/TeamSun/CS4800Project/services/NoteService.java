@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import TeamSun.CS4800Project.dao.NoteMongoDB;
+import TeamSun.CS4800Project.dao.NoteDao;
 import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.response.NoteResponse;
 
@@ -23,8 +23,9 @@ public class NoteService {
 
 	@Autowired
 	@Qualifier("mongodb_note")
-	NoteMongoDB DB;
+	NoteDao DB;
 	
+	//TODO change to 'save' instead so it's more intuitive.
 	public int insert(Note note) {
 		return DB.save(note);
 	}
@@ -54,7 +55,7 @@ public class NoteService {
 		response.setContent(note.getContent());
 		response.setCourse(note.getCourse());
 		response.setFile(note.getFile());
-		response.setId(note.getId());
+		response.setId(note.getId().toHexString());
 		response.setOwner(note.getOwner());
 		response.setProfessor(note.getProfessor());
 		response.setTitle(note.getTitle());

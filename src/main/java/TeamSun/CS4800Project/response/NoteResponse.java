@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public class NoteResponse {
 
-	private ObjectId id;
+	private String id;
 	private String title;
 	private String content;
 	private short rating;
@@ -22,11 +22,11 @@ public class NoteResponse {
 	private ObjectId owner; // Must be ObjectId because people can change their username.
 	private String professor;
 
-	public ObjectId getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(ObjectId id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

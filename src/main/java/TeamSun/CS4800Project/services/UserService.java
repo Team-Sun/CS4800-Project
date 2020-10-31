@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import TeamSun.CS4800Project.dao.UserMongoDB;
+import TeamSun.CS4800Project.dao.UserDao;
 import TeamSun.CS4800Project.jwt.JwtUtils;
 import TeamSun.CS4800Project.model.User;
 import TeamSun.CS4800Project.request.SignupRequest;
@@ -23,7 +23,7 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	@Qualifier("mongodb_user")
-	UserMongoDB DB;
+	UserDao DB;
 	
 	@Autowired
 	JwtUtils jwtUtils;

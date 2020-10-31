@@ -29,7 +29,7 @@ import TeamSun.CS4800Project.services.UserService;
 
 /**
  * For specifically dealing with notes. The controller will specifically handle
- * API REST calls and deal with sending the proper HttpStatus request back. All
+ * API REST calls and deal with sending the proper HttpStatus response back. All
  * data manipulation should be (usually) made in small 1-4 line calls to the
  * respective service. This includes searching, adding, updating, deleting,
  * finding users by request, etc... Allows for abstraction and faster coding
@@ -119,7 +119,7 @@ public class NoteController {
 	// We use response objects because Spring turns the whole object (including
 	// methods) into JSON to be sent, and we don't want the useless functions to be
 	// sent.
-	@PostMapping("/search")
+	@PostMapping("/search") //TODO see if needs to be GetMapping.
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<List<SearchResponse>> search(@RequestBody SearchRequest searchRequest) {
 		SearchResponse dummyNote1 = new SearchResponse("testName1", "className1", "testContent1");
@@ -127,6 +127,7 @@ public class NoteController {
 		List<SearchResponse> dummyList = new LinkedList<>();
 		dummyList.add(dummyNote1);
 		dummyList.add(dummyNote2);
+		dummyList.add(new SearchResponse(searchRequest.getTitle(), searchRequest.getCourse(), searchRequest.getProfessor()));
 		return ResponseEntity.ok(dummyList);
 	}
 

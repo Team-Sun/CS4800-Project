@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,6 +61,18 @@ public class NoteController {
 		//TODO May need to catch an exception
 	}
 
+	@GetMapping("find/{id}")
+	@PreAuthorize("permitAll()")
+	public ResponseEntity<Note> getNoteById(@PathVariable("id") ObjectId id) {
+		Note note = noteService.findByID(id);
+		
+		if (note == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(note, HttpStatus.OK);
+		}
+		
+	}
 	
 	// Testing
 	@GetMapping("/all")
@@ -85,11 +98,37 @@ public class NoteController {
 		
 	}
 	
+	@PutMapping("/update/{id}")
+	@PreAuthorize("permitAll()")
+	public ResponseEntity<Note> updateNote(@PathVariable("id") ObjectId id, @RequestBody Note note, HttpServletRequest request) {
+		User clientUser = userService.find(request);
+		Note _note = noteService.findByID(id);
+		
+		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(note.getOwner()))
+				|| clientUser.hasRole("ROLE_ADMIN")) {
+			if (_note == null) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			} else {
+				_note.setTitle(note.getTitle());
+				_note.setContent(note.getContent());
+				_note.setRating(note.getRating());
+				_note.setCourse(note.getCourse());
+				_note.setProfessor(note.getProfessor());
+				
+				return new ResponseEntity<>(noteRepo.save(_note), HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+	
+	
 	@DeleteMapping("/remove/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<String> removeNote(@PathVariable("id") ObjectId id, HttpServletRequest request) {
+//	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("permitAll()")
+	public ResponseEntity<Note> removeNote(@PathVariable("id") ObjectId id, HttpServletRequest request) {
 		User clientUser = userService.find(request);
 		Note note = noteService.findByID(id);
+		
 		// Make sure that the current clientUser matches the owner of the note that's
 		// attempting to be deleted. Or, make sure the user is admin.
 		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(note.getOwner()))
@@ -103,6 +142,7 @@ public class NoteController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	
 	@GetMapping("/classes")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<List<String>> getClasses() {

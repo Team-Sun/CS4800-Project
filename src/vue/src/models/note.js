@@ -1,7 +1,11 @@
 export default class Note {
-  constructor (title, course, professor) {
+  constructor (content, title, course, professor, semester, description, file) {
+    this.content = content
     this.title = title
     this.course = course
-    this.password = professor
+    this.professor = professor
+    this.semester = semester
+    this.description = description
+    this.file = file
   }
 }

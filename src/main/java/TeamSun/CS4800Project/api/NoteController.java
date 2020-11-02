@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.model.User;
-import TeamSun.CS4800Project.repositories.NoteRepo;
 import TeamSun.CS4800Project.request.SearchRequest;
 import TeamSun.CS4800Project.response.SearchResponse;
 import TeamSun.CS4800Project.services.NoteService;
@@ -45,15 +44,12 @@ public class NoteController {
 
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private NoteRepo noteRepo;
 
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<Note> addEntry(@RequestBody Note note, HttpServletRequest request) {
 		User clientUser = userService.find(request);
-		noteService.insert(note);
+		noteService.save(note);
 		clientUser.addNote(note.getId()); 		// ID is only created after it's inserted. WARN This might result in errors if
 						 						// DB runs concurrently.
 		return new ResponseEntity<> (note, HttpStatus.CREATED);
@@ -74,7 +70,7 @@ public class NoteController {
 		
 	}
 	
-	// Testing
+	// Testing. TODO remove for deployment.
 	@GetMapping("/all")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<List<Note>> getAllNotes(@RequestParam(required = false) String title) {
@@ -82,9 +78,9 @@ public class NoteController {
 			List<Note> note = new ArrayList<Note>();
 			
 			if (title == null)
-				noteRepo.findAll().forEach(note::add);
+				note = noteService.getAll();
 			else
-				noteRepo.findByTitle(title).forEach(note::add);
+				noteService.findByTitle(title).forEach(note::add);
 			
 		    if (note.isEmpty()) {
 		    	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -99,7 +95,7 @@ public class NoteController {
 	}
 	
 	@PutMapping("/update/{id}")
-	@PreAuthorize("permitAll()")
+	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<Note> updateNote(@PathVariable("id") ObjectId id, @RequestBody Note note, HttpServletRequest request) {
 		User clientUser = userService.find(request);
 		Note _note = noteService.findByID(id);
@@ -111,11 +107,13 @@ public class NoteController {
 			} else {
 				_note.setTitle(note.getTitle());
 				_note.setContent(note.getContent());
-				_note.setRating(note.getRating());
 				_note.setCourse(note.getCourse());
 				_note.setProfessor(note.getProfessor());
+				//TODO add the file or do it another way that just doesn't update certain parts.
+				// TODO LOOKAT possibly making NoteUpdateRequest instead.
 				
-				return new ResponseEntity<>(noteRepo.save(_note), HttpStatus.OK);
+				noteService.save(_note);
+				return new ResponseEntity<>(_note, HttpStatus.OK); // LOOKAT Might not want to send the note back. Might just take up unnecessary bandwidth.
 			}
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -123,8 +121,7 @@ public class NoteController {
 	
 	
 	@DeleteMapping("/remove/{id}")
-//	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	@PreAuthorize("permitAll()")
+	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<Note> removeNote(@PathVariable("id") ObjectId id, HttpServletRequest request) {
 		User clientUser = userService.find(request);
 		Note note = noteService.findByID(id);
@@ -153,7 +150,7 @@ public class NoteController {
 		return new ResponseEntity<>(classes, HttpStatus.OK);
 	}
 
-	@PostMapping("/getNameByUser")
+	@PostMapping("/getNoteByUser")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<List<String>> getNoteByUser(@RequestBody User user) {
 		List<String> notes = new LinkedList<String>();
@@ -169,7 +166,8 @@ public class NoteController {
 		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}
 	
-	// We use response objects because Spring turns the whole object (including methods) into JSON to be sent.
+	// We use response objects because Spring turns the whole object (including
+	// methods) into JSON to be sent.
 	@PostMapping("/search")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<List<SearchResponse>> search(@RequestBody SearchRequest searchRequest) {

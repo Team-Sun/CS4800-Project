@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import TeamSun.CS4800Project.dao.NoteMongoDB;
+import TeamSun.CS4800Project.dao.NoteDao;
 import TeamSun.CS4800Project.model.Note;
 
 @Service("noteService")
@@ -17,9 +17,9 @@ public class NoteService {
 
 	@Autowired
 	@Qualifier("mongodb_note")
-	NoteMongoDB DB;
-	
-	public int insert(Note note) {
+	NoteDao DB;
+
+	public int save(Note note) {
 		return DB.save(note);
 	}
 
@@ -30,11 +30,11 @@ public class NoteService {
 		}
 		return temp.get();
 	}
-	
+
 	public int delete(Note note) {
-		return	 DB.delete(note);
+		return DB.delete(note);
 	}
-	
+
 	public int size() {
 		return DB.size();
 	}
@@ -42,8 +42,13 @@ public class NoteService {
 	public List<Note> findByTitle(String name) {
 		return DB.findByTitle(name);
 	}
-	
-	//TODO maybe implement differently. Brutal when getting class string over and over.
+
+	public List<Note> getAll() {
+		return DB.getAll();
+	}
+
+	// TODO maybe implement differently. Brutal when getting class string over and
+	// over.
 	public List<String> getClasses() {
 		List<String> output = new LinkedList<String>();
 		for (Note note : DB.getAll()) {
@@ -51,7 +56,7 @@ public class NoteService {
 		}
 		return output;
 	}
-	
+
 	public void delete(ObjectId id) throws IllegalArgumentException {
 		Note temp = findByID(id);
 		if (temp != null) {
@@ -60,5 +65,5 @@ public class NoteService {
 			throw new IllegalArgumentException("No note with given ObjectID");
 		}
 	}
-	
+
 }

@@ -19,11 +19,13 @@ import TeamSun.CS4800Project.jwt.AuthTokenFilter;
 import TeamSun.CS4800Project.services.UserService;
 
 
+/*
+ * https://stackoverflow.com/questions/43961625/rolesallowed-vs-preauthorize-vs-secured
+ * for why we only use prePostEnabled in @EnableGlobalMethodSecurity
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-		// securedEnabled = true, //TODO why commented out?
-		// jsr250Enabled = true,
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
@@ -60,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests().antMatchers("/api/auth/**").permitAll()
 			.antMatchers("/api/test/**","/api/note/**","/admin/**").permitAll()
-			.antMatchers("/","/js/**","/css/**").anonymous()
+			.antMatchers("/","/js/**","/css/**", "/img/**", "/favicon.ico", "/*").anonymous() // TODO double check the "/*" doesn't give too much access.
 			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

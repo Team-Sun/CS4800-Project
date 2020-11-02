@@ -1,7 +1,7 @@
 import axios from 'axios'
 // import authHeader from './auth-header'
 
-const API_URL = 'http://localhost:8080/api/note/'
+const API_URL = '/api/note/'
 
 // Thankyou https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index
 class NoteService {

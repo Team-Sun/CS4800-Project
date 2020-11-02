@@ -39,10 +39,15 @@ public class AuthController {
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
+		
+		Authentication authentication;
+		try {
+			authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		} catch (Exception e) {
+			return new ResponseEntity<String>("Incorrect Username or Password.", HttpStatus.BAD_REQUEST);
+		}
 		// This will catch incorrect credentials without going into the AuthTokenFilter.
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
 		// This will allow authTokenFilter to complete.
 		userService.setAuth(loginRequest.getUsername(), true);

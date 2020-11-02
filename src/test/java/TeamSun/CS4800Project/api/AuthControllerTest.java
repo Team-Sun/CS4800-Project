@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import TeamSun.CS4800Project.model.User;
+import TeamSun.CS4800Project.request.LoginRequest;
 import TeamSun.CS4800Project.services.UserService;
 
 /*
@@ -21,7 +21,7 @@ import TeamSun.CS4800Project.services.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class AdminControllerTest {
+class AuthControllerTest {
 
 	@Autowired
 	TestRestTemplate template;
@@ -29,13 +29,25 @@ class AdminControllerTest {
 	@Autowired
 	UserService userService;
 
-//	@Test TODO change to authenticate first?
-//	void testInsertEntry() throws Exception {
-//		template.postForObject("/admin/insert", new User("TestName"), String.class);
-//		Assertions.assertTrue(userService.find("TestName") != null, "1 Person matching TestName?");
-//		userService.delete(userService.find("TestName"));
-//		Assertions.assertTrue(userService.find("TestName") == null, "Person TestName removed?");
-//	}
+	@Test
+	void testLoginAuthentication() throws Exception {
+		LoginRequest test = new LoginRequest();
+		test.setPassword("admin");
+		test.setUsername("admin");
+		Assertions.assertFalse(userService.find("admin").isAuthenticated(), "User admin isn't authenticated?");
+		template.postForObject("/api/auth/signin", test, String.class);
+		Assertions.assertTrue(userService.find("admin").isAuthenticated(), "User admin is authenticated?");
+	}
+	
+	@Test
+	void testFailAuthentication() throws Exception {
+		Assertions.assertTrue(userService.find("doesntexist1") == null, "User 'doesntexist' exists?");
+		LoginRequest test = new LoginRequest();
+		test.setPassword("doesntexist1");
+		test.setUsername("doesntexist1");
+		String response = template.postForObject("/api/auth/signin", test, String.class);
+		Assertions.assertTrue(response.equals("Incorrect Username or Password."), "User 'doesntexist' exists?");
+	}
 
 
 

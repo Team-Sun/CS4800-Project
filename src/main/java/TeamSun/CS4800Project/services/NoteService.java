@@ -9,16 +9,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import TeamSun.CS4800Project.dao.NoteMongoDB;
+import TeamSun.CS4800Project.dao.NoteDao;
 import TeamSun.CS4800Project.model.Note;
+import TeamSun.CS4800Project.response.NoteResponse;
 
+/**
+ * Takes care of manipulating data and meshing with DAO.
+ * @author Andrew
+ *
+ */
 @Service("noteService")
 public class NoteService {
 
 	@Autowired
 	@Qualifier("mongodb_note")
-	NoteMongoDB DB;
+	NoteDao DB;
 	
+	//TODO change to 'save' instead so it's more intuitive.
 	public int insert(Note note) {
 		return DB.save(note);
 	}
@@ -39,13 +46,26 @@ public class NoteService {
 		return DB.size();
 	}
 
-	public List<Note> findByTitle(String name) {
-		return DB.findByTitle(name);
+	public List<Note> findByTitle(String title) {
+		return DB.findByTitle(title);
+	}
+	
+	public NoteResponse convertToResponse(Note note) {
+		NoteResponse response = new NoteResponse();
+		response.setContent(note.getContent());
+		response.setCourse(note.getCourse());
+		response.setFile(note.getFile());
+		response.setId(note.getId().toHexString());
+		response.setOwner(note.getOwner());
+		response.setProfessor(note.getProfessor());
+		response.setTitle(note.getTitle());
+		response.setRating(note.getRating());
+		return response;
 	}
 	
 	//TODO maybe implement differently. Brutal when getting class string over and over.
 	public List<String> getClasses() {
-		List<String> output = new LinkedList<String>();
+		List<String> output = new LinkedList<String>(); // TODO CHANGE TO SET
 		for (Note note : DB.getAll()) {
 			output.add(note.getCourse());
 		}

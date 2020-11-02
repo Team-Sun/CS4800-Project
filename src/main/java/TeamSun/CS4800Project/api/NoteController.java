@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.model.User;
 import TeamSun.CS4800Project.request.SearchRequest;
+import TeamSun.CS4800Project.response.NoteResponse;
 import TeamSun.CS4800Project.response.SearchResponse;
 import TeamSun.CS4800Project.services.NoteService;
 import TeamSun.CS4800Project.services.UserService;
 
 /**
- * For specifically dealing with notes.
+ * For specifically dealing with notes. The controller will specifically handle
+ * API REST calls and deal with sending the proper HttpStatus response back. All
+ * data manipulation should be (usually) made in small 1-4 line calls to the
+ * respective service. This includes searching, adding, updating, deleting,
+ * finding users by request, etc... Allows for abstraction and faster coding
+ * times.
  * 
  * @author Andrew
  *
@@ -41,6 +48,7 @@ public class NoteController {
 	@Autowired
 	private UserService userService;
 
+	// TODO Should probably change response to NoteResponse instead.
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public Note addEntry(@RequestBody Note note, HttpServletRequest request) {
@@ -94,9 +102,24 @@ public class NoteController {
 		}
 		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}
-	
-	// We use response objects because Spring turns the whole object (including methods) into JSON to be sent.
-	@PostMapping("/search")
+
+	// Example converted from NotesController.
+	@GetMapping("/find/{id}")
+	@PreAuthorize("permitAll()")
+	public ResponseEntity<NoteResponse> getNoteById(@PathVariable("id") ObjectId id) {
+		Note note = noteService.findByID(id);
+
+		if (note != null) {
+			return new ResponseEntity<NoteResponse>(noteService.convertToResponse(note), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<NoteResponse>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	// We use response objects because Spring turns the whole object (including
+	// methods) into JSON to be sent, and we don't want the useless functions to be
+	// sent.
+	@PostMapping("/search") //TODO see if needs to be GetMapping.
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<List<SearchResponse>> search(@RequestBody SearchRequest searchRequest) {
 		SearchResponse dummyNote1 = new SearchResponse("testName1", "className1", "testContent1");
@@ -104,6 +127,7 @@ public class NoteController {
 		List<SearchResponse> dummyList = new LinkedList<>();
 		dummyList.add(dummyNote1);
 		dummyList.add(dummyNote2);
+		dummyList.add(new SearchResponse(searchRequest.getTitle(), searchRequest.getCourse(), searchRequest.getProfessor()));
 		return ResponseEntity.ok(dummyList);
 	}
 

@@ -94,11 +94,11 @@ public class NoteController {
 		
 	}
 	
-	@PutMapping("/update/{id}")
+	@PutMapping("/update")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<Note> updateNote(@PathVariable("id") ObjectId id, @RequestBody Note note, HttpServletRequest request) {
+	public ResponseEntity<Note> updateNote(@RequestBody Note note, HttpServletRequest request) {
 		User clientUser = userService.find(request);
-		Note _note = noteService.findByID(id);
+		Note _note = noteService.findByID(note.getId());
 		
 		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(note.getOwner()))
 				|| clientUser.hasRole("ROLE_ADMIN")) {
@@ -120,9 +120,9 @@ public class NoteController {
 	}
 	
 	
-	@DeleteMapping("/remove/{id}")
+	@DeleteMapping("/remove")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<Note> removeNote(@PathVariable("id") ObjectId id, HttpServletRequest request) {
+	public ResponseEntity<Note> removeNote(@RequestBody ObjectId id, HttpServletRequest request) {
 		User clientUser = userService.find(request);
 		Note note = noteService.findByID(id);
 		

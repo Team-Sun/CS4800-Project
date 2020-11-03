@@ -26,7 +26,7 @@ public class NoteService {
 	NoteDao DB;
 	
 	//TODO change to 'save' instead so it's more intuitive.
-	public int insert(Note note) {
+	public int save(Note note) {
 		return DB.save(note);
 	}
 
@@ -44,6 +44,10 @@ public class NoteService {
 	
 	public int size() {
 		return DB.size();
+	}
+	
+	public List<Note> getAll() {
+		return DB.getAll();
 	}
 
 	public List<Note> findByTitle(String title) {

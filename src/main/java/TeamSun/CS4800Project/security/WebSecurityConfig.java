@@ -61,8 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests().antMatchers("/api/auth/**").permitAll()
-			.antMatchers("/api/test/**","/api/note/**","/admin/**").permitAll()
-			.antMatchers("/","/js/**","/css/**", "/img/**", "/favicon.ico", "/*").anonymous() // TODO double check the "/*" doesn't give too much access.
+			.antMatchers("/api/test/**","/api/note/**","/api/notes/**","/admin/**","/**", "/api/**").permitAll()
+			.antMatchers("/","/js/**","/css/**", "/img/**", "/favicon.ico").anonymous()
 			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

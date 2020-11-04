@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import TeamSun.CS4800Project.response.UserResponse;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,7 +37,7 @@ public class UserService implements UserDetailsService {
 		return DB.save(user);
 	}
 	
-	public int update(User user) {
+	public int update(User user) { //TODO determine if needed (insert might work better)
 		return DB.save(user);
 	}
 
@@ -79,6 +80,10 @@ public class UserService implements UserDetailsService {
 
 	public int size() {
 		return DB.size();
+	}
+
+	public UserResponse convertToResponse(User user) {
+		return new UserResponse(user.getUsername(), user.getNotes(), user.getEmail());
 	}
 
 	@Override

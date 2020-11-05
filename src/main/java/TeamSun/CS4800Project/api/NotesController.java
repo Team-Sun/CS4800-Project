@@ -34,7 +34,7 @@ public class NotesController {
 	@Autowired
 	NoteRepo NoteRepo;
 	
-	@PostMapping("/uploadPage")
+	@PostMapping("/")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	// We'll want a new class here to deal with the request. Will help when forwarding it back to user later.
 	public ResponseEntity<Notes> createNote(@RequestBody Notes note) {

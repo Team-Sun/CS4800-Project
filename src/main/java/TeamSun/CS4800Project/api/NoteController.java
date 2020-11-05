@@ -37,7 +37,7 @@ import TeamSun.CS4800Project.services.UserService;
  *
  */
 @CrossOrigin(origins = "*", maxAge = 3600) // THIS IS REQUIRED. DO NOT REMOVE
-@RequestMapping("/api/note")
+@RequestMapping("/api")
 @RestController
 public class NoteController {
 	@Autowired
@@ -49,8 +49,9 @@ public class NoteController {
 	@Autowired
 	private NoteRepo noteRepo;
 
-	@PostMapping("/add")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PostMapping("/note")
+	@PreAuthorize("permitAll()")
+//	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<Note> addEntry(@RequestBody Note note, HttpServletRequest request) {
 		User clientUser = userService.find(request);
 		noteService.insert(note);
@@ -61,7 +62,7 @@ public class NoteController {
 		//TODO May need to catch an exception
 	}
 
-	@GetMapping("find/{id}")
+	@GetMapping("note/{id}")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<Note> getNoteById(@PathVariable("id") ObjectId id) {
 		Note note = noteService.findByID(id);
@@ -74,8 +75,7 @@ public class NoteController {
 		
 	}
 	
-	// Testing
-	@GetMapping("/all")
+	@GetMapping("/note")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<List<Note>> getAllNotes(@RequestParam(required = false) String title) {
 		try {
@@ -98,7 +98,7 @@ public class NoteController {
 		
 	}
 	
-	@PutMapping("/update/{id}")
+	@PutMapping("note/{id}")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<Note> updateNote(@PathVariable("id") ObjectId id, @RequestBody Note note, HttpServletRequest request) {
 		User clientUser = userService.find(request);
@@ -122,7 +122,7 @@ public class NoteController {
 	}
 	
 	
-	@DeleteMapping("/remove/{id}")
+	@DeleteMapping("note/{id}")
 //	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<Note> removeNote(@PathVariable("id") ObjectId id, HttpServletRequest request) {

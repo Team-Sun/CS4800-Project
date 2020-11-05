@@ -31,18 +31,18 @@
             <font-awesome-icon icon="user" />
             {{ currentUser.username }}
           </router-link>
-          <router-link to="/notes">
+          <!-- <router-link to="/notes">
             Notes
-          </router-link>
+          </router-link> -->
           <a href @click.prevent="logOut">
             <font-awesome-icon icon="sign-out-alt" />LogOut
           </a>
         </div>
 
         <!-- Temporary -->
-        <router-link v-if="showAdminBoard" to="/admin" class="nav-link">Admin</router-link>
+        <!-- <router-link v-if="showAdminBoard" to="/admin" class="nav-link">Admin</router-link>
         <router-link v-if="showModeratorBoard" to="/mod" class="nav-link">Moderator</router-link>
-        <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link>
+        <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link> -->
 
       </div>
     </div>

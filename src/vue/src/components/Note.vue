@@ -10,7 +10,12 @@
       </div>
       <div class="form-group">
         <label for="description">Description</label>
-        <input type="text" class="form-control" id="description"
+        <textarea
+          rows="20"
+          columns="50"
+          type="text"
+          class="form-control"
+          id="description"
           v-model="currentNote.description"
         />
       </div>
@@ -109,7 +114,7 @@ export default {
       NoteDataService.delete(this.currentNote.id)
         .then(response => {
           console.log(response.data)
-          this.$router.push({ name: 'notes' })
+          this.$router.push({ name: 'Search' })
         })
         .catch(e => {
           console.log(e)
@@ -125,7 +130,7 @@ export default {
 
 <style>
 .edit-form {
-  max-width: 300px;
+  max-width: 500px;
   margin: auto;
 }
 </style>

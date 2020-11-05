@@ -56,10 +56,10 @@ export default {
   methods: {
     saveNote () {
       // Please! why are you doing this instead of sending note directly.
-      /* var data = {
-        class: this.note.class,
-        description: this.note.description
-      } */
+      // var data = {
+      //   class: this.note.class,
+      //   description: this.note.description
+      // }
 
       UserService.create(this.note)
         .then(response => {

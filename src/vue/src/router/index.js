@@ -61,11 +61,11 @@ const routes = [
     name: 'User',
     component: () => import('../views/BoardUser.vue')
   },
-  {
-    path: '/notes',
-    name: 'notes',
-    component: () => import('../components/NotesList')
-  },
+  // {
+  //   path: '/notes',
+  //   name: 'notes',
+  //   component: () => import('../components/NotesList')
+  // },
   {
     path: '/notes/:id',
     name: 'note-details',

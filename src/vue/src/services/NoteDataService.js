@@ -14,7 +14,7 @@ class NoteDataService {
   }
 
   create (data) {
-    return axios.post(API_URL + '/uploadPage', data, { headers: authHeader(), 'Content-type': 'application/json' })
+    return axios.post(API_URL + '/notes', data, { headers: authHeader(), 'Content-type': 'application/json' })
   }
 
   update (id, data) {
@@ -30,7 +30,7 @@ class NoteDataService {
   }
 
   findByTitle (title) {
-    return http.get(`/notes?title=${title}`)
+    return http.get(`/note?title=${title}`)
   }
 }
 

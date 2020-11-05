@@ -33,7 +33,7 @@ public class Cs4800ProjectApplication {
 			noteService.delete(note);
 		}
 		Note note = new Note("testNoteName", "testNoteMessage", "testNoteClassName");
-		noteService.insert(note);
+		noteService.save(note);
 	}
 
 	@EventListener(ApplicationReadyEvent.class)

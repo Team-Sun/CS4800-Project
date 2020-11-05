@@ -46,7 +46,7 @@
               </div>
 
               <a class="badge badge-warning"
-                :href="'/notes/' + currentNote.id"
+                :href="'/note/' + currentNote.id"
               >
                 Edit
               </a>

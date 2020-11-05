@@ -24,14 +24,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.model.User;
-import TeamSun.CS4800Project.repositories.NoteRepo;
 import TeamSun.CS4800Project.request.SearchRequest;
+import TeamSun.CS4800Project.response.NoteResponse;
 import TeamSun.CS4800Project.response.SearchResponse;
 import TeamSun.CS4800Project.services.NoteService;
 import TeamSun.CS4800Project.services.UserService;
 
 /**
- * For specifically dealing with notes.
+ * For specifically dealing with notes. The controller will specifically handle
+ * API REST calls and deal with sending the proper HttpStatus response back. All
+ * data manipulation should be (usually) made in small 1-4 line calls to the
+ * respective service. This includes searching, adding, updating, deleting,
+ * finding users by request, etc... Allows for abstraction and faster coding
+ * times.
  * 
  * @author Andrew
  *
@@ -45,65 +50,69 @@ public class NoteController {
 
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private NoteRepo noteRepo;
 
 	@PostMapping("/note")
-	@PreAuthorize("permitAll()")
-//	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<Note> addEntry(@RequestBody Note note, HttpServletRequest request) {
 		User clientUser = userService.find(request);
-		noteService.insert(note);
-		clientUser.addNote(note.getId()); 		// ID is only created after it's inserted. WARN This might result in errors if
-						 						// DB runs concurrently.
-		return new ResponseEntity<> (note, HttpStatus.CREATED);
-		
-		//TODO May need to catch an exception
+		noteService.save(note);
+		clientUser.addNote(note.getId()); // ID is only created after it's inserted. WARN This might result in errors if
+														// DB runs concurrently.
+		return new ResponseEntity<>(note, HttpStatus.CREATED);
+
+		// TODO May need to catch an exception
 	}
 
-	@GetMapping("note/{id}")
+	@GetMapping("/note/{id}")
 	@PreAuthorize("permitAll()")
-	public ResponseEntity<Note> getNoteById(@PathVariable("id") ObjectId id) {
+	public ResponseEntity<NoteResponse> getNoteById(@PathVariable("id") ObjectId id) {
+		System.out.println("getting: " + id);
 		Note note = noteService.findByID(id);
-		
+
 		if (note == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(note, HttpStatus.OK);
+			return new ResponseEntity<>(noteService.convertToResponse(note), HttpStatus.OK);
 		}
-		
+
 	}
-	
+
+	// Testing. TODO remove for deployment.
 	@GetMapping("/note")
 	@PreAuthorize("permitAll()")
-	public ResponseEntity<List<Note>> getAllNotes(@RequestParam(required = false) String title) {
+	public ResponseEntity<List<NoteResponse>> getAllNotes(@RequestParam(required = false) String title) {
 		try {
-			List<Note> note = new ArrayList<Note>();
-			
+			List<NoteResponse> note = new ArrayList<NoteResponse>();
+
 			if (title == null)
-				noteRepo.findAll().forEach(note::add);
+				for (Note n : noteService.getAll()) {
+					note.add(noteService.convertToResponse(n));
+				}
 			else
-				noteRepo.findByTitle(title).forEach(note::add);
-			
-		    if (note.isEmpty()) {
-		    	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				for (Note n : noteService.findByTitleContaining(title)) {
+					note.add(noteService.convertToResponse(n));
+				}
+				
+
+			if (note.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
-		    
+
 			return new ResponseEntity<>(note, HttpStatus.OK);
-			
-			} catch (Exception e) {
-			    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-		
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
 	}
-	
-	@PutMapping("note/{id}")
-	@PreAuthorize("permitAll()")
-	public ResponseEntity<Note> updateNote(@PathVariable("id") ObjectId id, @RequestBody Note note, HttpServletRequest request) {
+
+	@PutMapping("/note/{id}")
+	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	public ResponseEntity<Note> updateNote(@PathVariable("id") ObjectId id, @RequestBody Note note,
+			HttpServletRequest request) {
 		User clientUser = userService.find(request);
 		Note _note = noteService.findByID(id);
-		
+
 		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(note.getOwner()))
 				|| clientUser.hasRole("ROLE_ADMIN")) {
 			if (_note == null) {
@@ -111,24 +120,26 @@ public class NoteController {
 			} else {
 				_note.setTitle(note.getTitle());
 				_note.setContent(note.getContent());
-				_note.setRating(note.getRating());
 				_note.setCourse(note.getCourse());
 				_note.setProfessor(note.getProfessor());
-				
-				return new ResponseEntity<>(noteRepo.save(_note), HttpStatus.OK);
+				// TODO add the file or do it another way that just doesn't update certain
+				// parts.
+				// TODO LOOKAT possibly making NoteUpdateRequest instead.
+
+				noteService.save(_note);
+				return new ResponseEntity<>(_note, HttpStatus.OK); // LOOKAT Might not want to send the note back. Might
+																					// just take up unnecessary bandwidth.
 			}
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
-	
-	
-	@DeleteMapping("note/{id}")
-//	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	@PreAuthorize("permitAll()")
+
+	@DeleteMapping("/note/{id}")
+	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<Note> removeNote(@PathVariable("id") ObjectId id, HttpServletRequest request) {
 		User clientUser = userService.find(request);
 		Note note = noteService.findByID(id);
-		
+
 		// Make sure that the current clientUser matches the owner of the note that's
 		// attempting to be deleted. Or, make sure the user is admin.
 		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(note.getOwner()))
@@ -142,7 +153,6 @@ public class NoteController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	
 	@GetMapping("/classes")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<List<String>> getClasses() {
@@ -153,7 +163,7 @@ public class NoteController {
 		return new ResponseEntity<>(classes, HttpStatus.OK);
 	}
 
-	@PostMapping("/getNameByUser")
+	@PostMapping("/getNoteByUser")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<List<String>> getNoteByUser(@RequestBody User user) {
 		List<String> notes = new LinkedList<String>();
@@ -168,8 +178,9 @@ public class NoteController {
 		}
 		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}
-	
-	// We use response objects because Spring turns the whole object (including methods) into JSON to be sent.
+
+	// We use response objects because Spring turns the whole object (including
+	// methods) into JSON to be sent.
 	@PostMapping("/search")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<List<SearchResponse>> search(@RequestBody SearchRequest searchRequest) {

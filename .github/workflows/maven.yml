@@ -70,7 +70,7 @@ jobs:
 
     # Thanks https://askubuntu.com/questions/100186/how-to-kill-only-if-process-is-running
     - name: Stop server.
-      run: ssh staging "if pgrep java; then pkill java; fi"
+      run: ssh staging "if pgrep java; then pkill java; fi; sleep 10"
 
     - name: Start server.
-      run: ssh staging "sleep 10; nohup java -jar CS4800-Project-0.0.1-SNAPSHOT.jar > CS4800.log &"
+      run: ssh staging "nohup java -jar CS4800-Project-0.0.1-SNAPSHOT.jar > CS4800.log &"

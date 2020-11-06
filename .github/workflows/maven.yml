@@ -40,17 +40,8 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
     - name: Build with Maven
       run: mvn package --file pom.xml
-        
-    - name: Copy single file to remote
-      uses: garygrossgarten/github-action-scp@release
-      with:
-        local: target/CS4800-Project-0.0.1-SNAPSHOT.jar
-        remote: CS4800-Project-0.0.1-SNAPSHOT.jar
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.SSH_USER }}
-        privateKey: ${{ secrets.KEY }}
-
-    # Thanks to https://blog.benoitblanchon.fr/github-action-run-ssh-commands/
+    
+      # Thanks to https://blog.benoitblanchon.fr/github-action-run-ssh-commands/
     - name: Configure SSH
       run: |
         mkdir -p ~/.ssh/
@@ -67,10 +58,19 @@ jobs:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.KEY }}
         SSH_HOST: ${{ secrets.HOST }}
-
+    
     # Thanks https://askubuntu.com/questions/100186/how-to-kill-only-if-process-is-running
     - name: Stop server.
-      run: ssh staging "if pgrep java; then pkill java; fi; sleep 10"
+      run: ssh staging "if pgrep java; then pkill -9 java; fi; sleep 5"
+        
+    - name: Copy single file to remote
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        local: target/CS4800-Project-0.0.1-SNAPSHOT.jar
+        remote: CS4800-Project-0.0.1-SNAPSHOT.jar
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.SSH_USER }}
+        privateKey: ${{ secrets.KEY }}
 
     - name: Start server.
       run: ssh staging "nohup java -jar CS4800-Project-0.0.1-SNAPSHOT.jar > CS4800.log &"

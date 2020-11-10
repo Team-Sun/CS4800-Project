@@ -28,6 +28,9 @@
                             class="form-control-file"
                             type="file"
                             name="file-note"
+                            ref = "file"
+                            id = "file"
+                            v-on:change="notechange()"
                             :disabled="noteType != 1"/>
                         </div>
                         <div class="row">
@@ -145,7 +148,8 @@
 </template>
 <script>
 import Note from '../models/note'
-// import noteService from '../services/note.service'
+import noteService from '../services/note.service'
+
 export default {
   name: 'UploadComponent',
   components:
@@ -165,7 +169,7 @@ export default {
       return this.isUploadingNewNote
     }
   },
-  data: function () {
+  data () {
     return {
       isUploadingNewNote: 3,
       note: new Note('', '', '', '', '', '', '')
@@ -174,7 +178,7 @@ export default {
   methods:
   {
     addNewNote () {
-      // noteService.upload
+      noteService.upload(this.note)
     },
     clearForm () {
       this.note.content = ''
@@ -183,8 +187,13 @@ export default {
       this.note.professor = ''
       this.note.semester = ''
       this.note.description = ''
+      this.note.file = null
       this.isUploadingNewNote = 3
-      // this.file = null || ''
+    },
+    // https://stackoverflow.com/questions/41803012/v-model-doesnt-support-input-type-file
+    // https://serversideup.net/uploading-files-vuejs-axios/
+    notechange (e) {
+      this.note.file = this.$refs.file.files[0]
     }
   }
 }

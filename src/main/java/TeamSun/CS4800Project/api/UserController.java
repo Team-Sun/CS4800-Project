@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author Andrew
  *
  */
+@CrossOrigin(origins = "*", maxAge = 3600) // THIS IS REQUIRED. DO NOT REMOVE
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

@@ -1,11 +1,14 @@
 package TeamSun.CS4800Project.api;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +23,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.model.User;
@@ -52,11 +57,26 @@ public class NoteController {
 
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<Note> addEntry(@RequestBody Note note, HttpServletRequest request) {
+	public ResponseEntity<Note> addEntry(@RequestPart Note note, @RequestPart(required = false) MultipartFile file,
+			HttpServletRequest request) {
+		if (file != null) {
+			try {
+				note.setFileType(file.getContentType()); // TODO validate PDF in frontend and backend here.
+				note.setFile(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println(note.getContent());
+		}
+
 		User clientUser = userService.find(request);
+
 		noteService.save(note);
-		clientUser.addNote(note.getId()); // ID is only created after it's inserted. WARN This might result in errors if
-														// DB runs concurrently.
+		// ID is only created after it's inserted. WARN This might result in errors if
+		// DB runs concurrently.
+		clientUser.addNote(note.getId());
 		return new ResponseEntity<>(note, HttpStatus.CREATED);
 
 		// TODO May need to catch an exception

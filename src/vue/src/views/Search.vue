@@ -4,50 +4,59 @@
       <form action="">
         <h1>
           Find Your Note Here
-          <div class="form-box">
             <div class="searchNote">
-              <!--the v-model populates the noteModel object for the later post-request -->
-              <input type="text" class="search-field note" placeholder="Notes.." v-model="noteModel.name">
-              <ul>
-                <li v-for="subject in queriedScienceSubjects" :key=subject>
-                  {{ subject }}
-                </li>
-              </ul>
-            </div>
-            <div class="searchClass">
-              <!--the v-model populates the noteModel object for the later post-request -->
-              <input type="text" class="search-field class" v-model="noteModel.className" placeholder="Class">
-              <ul>
-                <li v-for="subject in queriedClass" :key=subject>
-                  {{ subject }}
-                </li>
-              </ul>
-            </div>
-            <!-- <div class="searchProfessor">
-              <input type="text" class="search-field professor" v-model="searchProfessorInput"
-              placeholder="Professor">
-              <ul>
-                <li v-for="subject in queriedProfessor" :key=subject>
-                  {{ subject }}
-                </li>
-              </ul>
-            </div> -->
-            <button v-on:click="search" class="search-btn" type="button">Search</button>
+              <input type="text" class="search-field note" placeholder="Search by title" v-model="title">
+
+            <button @click="searchTitle" class="search-btn" type="button">Search</button>
           </div>
         </h1>
       </form>
     </div>
     <span class="border1"></span>
     <div class="result">
-      <div class="searchTitle">Search Results</div>
-      <div class="search-result" v-for="note in notes" :key="note">
+      <div class="searchTitle">Note List</div>
+      <div class="search-result">
         <div class="box">
-          <p class="noteTitle">
-            Title: {{ note.title }}  --  ||  --  Course: {{ note.course }}
-          </p>
+          <ul class="noteTitle">
+            <li class="list-group-item"
+              :class="{ active: index == currentIndex }"
+              v-for="(note, index) in  notes"
+              :key="index"
+              @click="setActiveNote(note, index)"
+            >
+              {{ note.title }}
+            </li>
+          </ul>
+
+          <button class="m-3 btn btn-sm btn-danger" @click="removeAllNotes">
+            Remove All
+          </button>
+
           <div class="noteContent">
-            {{ note.content }}
+            <div v-if="currentNote">
+              <h4>Note</h4>
+              <div>
+                <label><strong>Title:</strong></label> {{ currentNote.title }}
+              </div>
+              <div>
+                <label><strong>Description:</strong></label> {{ currentNote.description }}
+              </div>
+              <div>
+                <label><strong>Status:</strong></label> {{ currentNote.published ? "Published" : "Pending" }}
+              </div>
+
+              <a class="badge badge-warning"
+                :href="'/note/' + currentNote.id"
+              >
+                Edit
+              </a>
+            </div>
+            <div v-else>
+              <br />
+              <p>Please click on a Note...</p>
+            </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -55,44 +64,70 @@
 </template>
 <script>
 
-import Note from '../models/note'
-// TODO use a module instead, which can take care of errors and caching the response.
-import noteService from '../services/note.service'
+import NoteDataService from '../services/NoteDataService'
 
 export default {
-  name: 'Search',
-  data: () => {
+  name: 'notes-list',
+  data () {
     return {
-      notes: [
-        { title: 'Unit Testing', course: 'Software Engineer', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum" },
-        {
-          title: 'Back Tracking',
-          course: 'Design and Analysis Algorithm',
-          content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-        },
-        { title: '0-1 Knapsack', course: 'Design and Analysis Algorithm' },
-        { title: 'SQL', course: 'Database' }
-      ],
-      searchNoteInput: '',
-      scienceSubjects: ['Physics', 'Chemistry', 'Biology', 'Math', 'Computer Science'],
-      searchClassInput: '',
-      classSubjects: ['Database', 'Sofware Engineer', 'Data Structure', 'Computer Architecture'],
-      // searchProfessorInput: '',
-      // professorubjects: ['Josh Damon', 'Donnal Smith', 'Henry Tran', 'Michael Tam'],
-      noteModel: new Note()
+      notes: [],
+      currentNote: null,
+      currentIndex: -1,
+      title: ''
     }
   },
   methods: {
-    // Thanks to https://vuejs.org/v2/guide/events.html#Method-Event-Handlers
-    search: function () {
-      noteService.search(this.noteModel).then(result => {
-        this.notes = result
-        console.log(this.notes)
-      })
+    retrieveNotes () {
+      NoteDataService.getAll()
+        .then(response => {
+          this.notes = response.data
+          console.log(response.data)
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+
+    refreshList () {
+      this.retrieveNotes()
+      this.currentNote = null
+      this.currentIndex = -1
+    },
+
+    setActiveNote (note, index) {
+      this.currentNote = note
+      this.currentIndex = index
+    },
+
+    removeAllNotes () {
+      NoteDataService.deleteAll()
+        .then(response => {
+          console.log(response.data)
+          this.refreshList()
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+
+    searchTitle () {
+      NoteDataService.findByTitle(this.title)
+        .then(response => {
+          this.notes = response.data
+          console.log(response.data)
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
+  },
+  mounted () {
+    this.retrieveNotes()
   }
 }
+
 </script>
+
 <style scope>
 body{
     margin: 0;

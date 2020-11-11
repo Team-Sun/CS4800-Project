@@ -146,9 +146,10 @@
         </form>
     </div>
 </template>
+
 <script>
 import Note from '../models/note'
-import noteService from '../services/note.service'
+import UserService from '../services/NoteDataService'
 
 export default {
   name: 'UploadComponent',
@@ -169,7 +170,7 @@ export default {
       return this.isUploadingNewNote
     }
   },
-  data () {
+  data: function () {
     return {
       isUploadingNewNote: 3,
       note: new Note('', '', '', '', '', '', '')
@@ -178,7 +179,19 @@ export default {
   methods:
   {
     addNewNote () {
-      noteService.upload(this.note)
+      UserService.create(this.note)
+        .then(response => {
+          this.notes.id = response.notes.id
+          console.log(response.data)
+          this.submitted = true
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    newNote () {
+      this.submitted = false
+      this.note = {}
     },
     clearForm () {
       this.note.content = ''
@@ -187,17 +200,13 @@ export default {
       this.note.professor = ''
       this.note.semester = ''
       this.note.description = ''
-      this.note.file = null
       this.isUploadingNewNote = 3
-    },
-    // https://stackoverflow.com/questions/41803012/v-model-doesnt-support-input-type-file
-    // https://serversideup.net/uploading-files-vuejs-axios/
-    notechange (e) {
-      this.note.file = this.$refs.file.files[0]
+      // this.file = null || ''
     }
   }
 }
 </script>
+
 <style>
 #upload-component
 {

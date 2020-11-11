@@ -65,6 +65,16 @@ const routes = [
     path: '/user',
     name: 'User',
     component: () => import('../views/BoardUser.vue')
+  },
+  // {
+  //   path: '/notes',
+  //   name: 'notes',
+  //   component: () => import('../components/NotesList')
+  // },
+  {
+    path: '/note/:id',
+    name: 'note-details',
+    component: () => import('../components/Note')
   }
 ]
 

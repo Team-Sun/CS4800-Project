@@ -1,5 +1,6 @@
 package TeamSun.CS4800Project.api;
 
+import TeamSun.CS4800Project.response.PrivateUserResponse;
 import TeamSun.CS4800Project.response.UserResponse;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,38 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
-	@PostMapping("/find")
-	ResponseEntity<?> getUserInfo(@RequestBody User user) {
-		// TODO
-		return null;
+	@GetMapping("/getInfo")
+	@PreAuthorize("hasRole('USER') OR hasRole('MODERATOR') or hasRole('ADMIN')")
+	public ResponseEntity<UserResponse> getUserInfo(@RequestBody User user, HttpServletRequest request) {
+		User clientUser = userService.find(request);
+		if((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId()) || clientUser.hasRole("ROLE_ADMIN"))) {
+			User currentUser = userService.find(user.getId());
+
+			if(currentUser == null) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			UserResponse userResponse = new UserResponse(currentUser.getUsername(), currentUser.getNotes(), null);
+			return new ResponseEntity<>(userResponse, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+
+	@GetMapping("/getPrivateInfo")
+	@PreAuthorize("hasRole('USER') OR hasRole('MODERATOR') or hasRole('ADMIN')")
+	public ResponseEntity<PrivateUserResponse> getPrivateUserInfo(@RequestBody User user, HttpServletRequest request) {
+		User clientUser = userService.find(request);
+		if((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId()) || clientUser.hasRole("ROLE_ADMIN"))) {
+			User currentUser = userService.find(user.getId());
+
+			if(currentUser == null) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			PrivateUserResponse privateUserResponse = new PrivateUserResponse(currentUser.getEmail(), null);
+			return new ResponseEntity<>(privateUserResponse, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
 	@PutMapping("/update")

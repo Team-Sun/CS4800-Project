@@ -28,6 +28,9 @@
                             class="form-control-file"
                             type="file"
                             name="file-note"
+                            ref = "file"
+                            id = "file"
+                            v-on:change="notechange()"
                             :disabled="noteType != 1"/>
                         </div>
                         <div class="row">
@@ -143,9 +146,11 @@
         </form>
     </div>
 </template>
+
 <script>
 import Note from '../models/note'
-// import noteService from '../services/note.service'
+import UserService from '../services/NoteDataService'
+
 export default {
   name: 'UploadComponent',
   components:
@@ -174,7 +179,19 @@ export default {
   methods:
   {
     addNewNote () {
-      // noteService.upload
+      UserService.create(this.note)
+        .then(response => {
+          this.notes.id = response.notes.id
+          console.log(response.data)
+          this.submitted = true
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    newNote () {
+      this.submitted = false
+      this.note = {}
     },
     clearForm () {
       this.note.content = ''
@@ -189,6 +206,7 @@ export default {
   }
 }
 </script>
+
 <style>
 #upload-component
 {

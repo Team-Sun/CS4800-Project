@@ -8,13 +8,16 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import TeamSun.CS4800Project.dao.NoteDao;
 import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.response.NoteResponse;
+import TeamSun.CS4800Project.response.PDFMultipartFile;
 
 /**
  * Takes care of manipulating data and meshing with DAO.
+>>>>>>> master_temp1
  * @author Andrew
  *
  */
@@ -24,8 +27,10 @@ public class NoteService {
 	@Autowired
 	@Qualifier("mongodb_note")
 	NoteDao DB;
-	
-	//TODO change to 'save' instead so it's more intuitive.
+
+
+	// TODO change to 'save' instead so it's more intuitive.
+
 	public int save(Note note) {
 		return DB.save(note);
 	}
@@ -37,11 +42,11 @@ public class NoteService {
 		}
 		return temp.get();
 	}
-	
+
 	public int delete(Note note) {
-		return	 DB.delete(note);
+		return DB.delete(note);
 	}
-	
+
 	public int size() {
 		return DB.size();
 	}
@@ -54,11 +59,15 @@ public class NoteService {
 		return DB.findByTitle(title);
 	}
 	
+	public List<Note> findByTitleContaining(String title){
+		return DB.findByTitleContaining(title);
+	}
+	
 	public NoteResponse convertToResponse(Note note) {
 		NoteResponse response = new NoteResponse();
 		response.setContent(note.getContent());
 		response.setCourse(note.getCourse());
-		response.setFile(note.getFile());
+		response.setFile((MultipartFile) note.getFile());
 		response.setId(note.getId().toHexString());
 		response.setOwner(note.getOwner());
 		response.setProfessor(note.getProfessor());
@@ -66,8 +75,28 @@ public class NoteService {
 		response.setRating(note.getRating());
 		return response;
 	}
-	
-	//TODO maybe implement differently. Brutal when getting class string over and over.
+
+//	public List<Note> findByTitle(String title) {
+//		return DB.findByTitle(title);
+//	}
+//
+//	public NoteResponse convertToResponse(Note note) {
+//		NoteResponse response = new NoteResponse();
+//		response.setContent(note.getContent());
+//		response.setCourse(note.getCourse());
+//		if (note.getFile() != null) {
+//			response.setFile(new PDFMultipartFile(note.getFile().getData(), note.getFileType()));
+//		}
+//		response.setId(note.getId().toHexString());
+//		response.setOwner(note.getOwner());
+//		response.setProfessor(note.getProfessor());
+//		response.setTitle(note.getTitle());
+//		response.setRating(note.getRating());
+//		return response;
+//	}
+
+	// TODO maybe implement differently. Brutal when getting class string over and
+	// over.
 	public List<String> getClasses() {
 		List<String> output = new LinkedList<String>(); // TODO CHANGE TO SET
 		for (Note note : DB.getAll()) {
@@ -75,7 +104,7 @@ public class NoteService {
 		}
 		return output;
 	}
-	
+
 	public void delete(ObjectId id) throws IllegalArgumentException {
 		Note temp = findByID(id);
 		if (temp != null) {
@@ -84,5 +113,5 @@ public class NoteService {
 			throw new IllegalArgumentException("No note with given ObjectID");
 		}
 	}
-	
+
 }

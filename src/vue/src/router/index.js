@@ -6,7 +6,7 @@ import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import Search from '../views/Search.vue'
 import UploadPage from '../views/Upload.vue'
-
+import IndividualNote from '../views/IndividualNote.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -41,6 +41,11 @@ const routes = [
     component: UploadPage
   },
   {
+    path: '/individualNote/:id',
+    name: 'IndividualNote',
+    component: IndividualNote
+  },
+  {
     path: '/profile',
     name: 'Profile',
     component: () => import('../views/Profile.vue')
@@ -60,6 +65,16 @@ const routes = [
     path: '/user',
     name: 'User',
     component: () => import('../views/BoardUser.vue')
+  },
+  // {
+  //   path: '/notes',
+  //   name: 'notes',
+  //   component: () => import('../components/NotesList')
+  // },
+  {
+    path: '/note/:id',
+    name: 'note-details',
+    component: () => import('../components/Note')
   }
 ]
 

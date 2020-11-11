@@ -43,7 +43,6 @@ public class Cs4800ProjectApplication {
 		}
 		User user = new User("admin", "admin@admin.com", "admin");
 		user.addRole("ROLE_ADMIN");
-		System.out.println("Admin added");
 		userService.insert(user);
 	}
 

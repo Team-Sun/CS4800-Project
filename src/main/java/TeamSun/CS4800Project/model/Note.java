@@ -1,9 +1,9 @@
 package TeamSun.CS4800Project.model;
 
+import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.web.multipart.MultipartFile;
 
 @Document(collection = "notes")
 public class Note {
@@ -15,7 +15,8 @@ public class Note {
 	private String content;
 	private short rating;
 	private String course;
-	private MultipartFile file;
+	private Binary file;
+	private String fileType;
 	private ObjectId owner; // Must be ObjectId because people can change their username.
 	private String professor;
 
@@ -29,7 +30,7 @@ public class Note {
 		this.course = className;
 	}
 
-	public Note(String name, String message, short rating, String course, MultipartFile file) {
+	public Note(String name, String message, short rating, String course, Binary file) {
 		this.title = name;
 		this.content = message;
 		this.rating = rating;
@@ -77,12 +78,20 @@ public class Note {
 		this.course = course;
 	}
 
-	public MultipartFile getFile() {
+	public Binary getFile() {
 		return file;
 	}
 
-	public void setFile(MultipartFile file) {
+	public void setFile(Binary file) {
 		this.file = file;
+	}
+
+	public String getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
 	}
 
 	public ObjectId getOwner() {

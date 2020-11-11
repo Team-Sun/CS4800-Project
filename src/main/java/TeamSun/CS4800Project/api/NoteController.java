@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
@@ -80,6 +81,23 @@ public class NoteController {
 		return new ResponseEntity<>(note, HttpStatus.CREATED);
 
 		// TODO May need to catch an exception
+	}
+	
+	// Thanks to https://stackoverflow.com/questions/59686660/how-to-send-generated-pdf-document-to-frontend-in-restfull-way-in-spring-boot
+	@GetMapping("/file/{id:.+}")
+	//@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("permitAll()")
+	public void getFile(@PathVariable("id") ObjectId id, HttpServletRequest request, HttpServletResponse response) {
+		//User clientUser = userService.find(request);
+		Note note = noteService.findByID(id);
+		try {
+			response.setHeader("Content-Disposition", String.format("inline; filename=\"testnote.pdf" + "\""));
+			response.getOutputStream().write(note.getFile().getData());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	@GetMapping("find/{id}")

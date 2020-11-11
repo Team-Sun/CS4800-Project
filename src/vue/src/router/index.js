@@ -6,7 +6,7 @@ import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import Search from '../views/Search.vue'
 import UploadPage from '../views/Upload.vue'
-
+import IndividualNote from '../views/IndividualNote.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -39,6 +39,11 @@ const routes = [
     path: '/uploadPage',
     name: 'UploadPage',
     component: UploadPage
+  },
+  {
+    path: '/individualNote/:id',
+    name: 'IndividualNote',
+    component: IndividualNote
   },
   {
     path: '/profile',

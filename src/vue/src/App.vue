@@ -2,14 +2,18 @@
   <div id="app">
     <Header/>
     <router-view/>
+    <PDFViewer/>
   </div>
 </template>
 <script>
 import Header from './components/Header.vue'
+import PDFViewer from './components/PDFViewer.vue'
+
 export default {
   name: 'App',
   components: {
-    Header
+    Header,
+    PDFViewer
   }
 }
 </script>

@@ -181,15 +181,15 @@ public class NoteController {
 
 	// We use response objects because Spring turns the whole object (including
 	// methods) into JSON to be sent.
-	@PostMapping("/search")
-	@PreAuthorize("permitAll()")
-	public ResponseEntity<List<SearchResponse>> search(@RequestBody SearchRequest searchRequest) {
-		SearchResponse dummyNote1 = new SearchResponse("testName1", "className1", "testContent1");
-		SearchResponse dummyNote2 = new SearchResponse("testName2", "className2", "testContent2");
-		List<SearchResponse> dummyList = new LinkedList<>();
-		dummyList.add(dummyNote1);
-		dummyList.add(dummyNote2);
-		return ResponseEntity.ok(dummyList);
-	}
+//	@PostMapping("/search")
+//	@PreAuthorize("permitAll()")
+//	public ResponseEntity<List<SearchResponse>> search(@RequestBody SearchRequest searchRequest) {
+//		SearchResponse dummyNote1 = new SearchResponse("testName1", "className1", "testContent1");
+//		SearchResponse dummyNote2 = new SearchResponse("testName2", "className2", "testContent2");
+//		List<SearchResponse> dummyList = new LinkedList<>();
+//		dummyList.add(dummyNote1);
+//		dummyList.add(dummyNote2);
+//		return ResponseEntity.ok(dummyList);
+//	}
 
 }

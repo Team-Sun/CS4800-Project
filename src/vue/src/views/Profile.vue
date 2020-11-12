@@ -1,8 +1,14 @@
 <template>
   <div class="container">
-    <header class="jumbotron">
+    <header class="">
+      <img
+        id="profile-img"
+        src="//cdn0.iconfinder.com/data/icons/user-pictures/100/malecostume-512.png"
+        class="profile-img-card"
+        width="170"
+      />
       <h3>
-        <strong>{{currentUser.username}}</strong> Profile
+        Hello, <strong>{{currentUser.username}}</strong>
       </h3>
     </header>
     <p>

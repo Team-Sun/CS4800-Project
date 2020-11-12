@@ -33,5 +33,7 @@ public interface NoteDao {
 	List<Note> getAll();
 
 	List<Note> findByTitle(String title);
+	
+	List<Note> findByTitleContaining(String title);
 
 }

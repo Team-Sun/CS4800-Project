@@ -1,7 +1,9 @@
 package TeamSun.CS4800Project.api;
 
+import TeamSun.CS4800Project.response.PrivateUserResponse;
 import TeamSun.CS4800Project.response.UserResponse;
 import org.bson.types.ObjectId;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +12,18 @@ import org.springframework.web.bind.annotation.*;
 
 import TeamSun.CS4800Project.model.User;
 import TeamSun.CS4800Project.services.UserService;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 
  * For specifically dealing with users and viewing their data.
+ *
  * @author Andrew
  *
  */
@@ -32,16 +40,44 @@ public class UserController {
 		// TODO
 		return null;
 	}
-	
 	/**
 	 * Gets user by username.
+	 *
 	 * @param user
 	 * @return
 	 */
-	@PostMapping("/find")
-	ResponseEntity<?> getUserInfo(@RequestBody User user) {
-		// TODO
-		return null;
+	@GetMapping("/getInfo")
+	@PreAuthorize("hasRole('USER') OR hasRole('MODERATOR') or hasRole('ADMIN')")
+	public ResponseEntity<UserResponse> getUserInfo(@RequestBody User user, HttpServletRequest request) {
+		User clientUser = userService.find(request);
+		if((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId()) || clientUser.hasRole("ROLE_ADMIN"))) {
+			User currentUser = userService.find(user.getId());
+
+			if(currentUser == null) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			UserResponse userResponse = new UserResponse(currentUser.getUsername(), currentUser.getNotes(), null);
+			return new ResponseEntity<>(userResponse, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+
+	@GetMapping("/getPrivateInfo")
+	@PreAuthorize("hasRole('USER') OR hasRole('MODERATOR') or hasRole('ADMIN')")
+	public ResponseEntity<PrivateUserResponse> getPrivateUserInfo(@RequestBody User user, HttpServletRequest request) {
+		User clientUser = userService.find(request);
+		if((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId()) || clientUser.hasRole("ROLE_ADMIN"))) {
+			User currentUser = userService.find(user.getId());
+
+			if(currentUser == null) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			PrivateUserResponse privateUserResponse = new PrivateUserResponse(currentUser.getEmail(), null);
+			return new ResponseEntity<>(privateUserResponse, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
 	@PutMapping("/update")
@@ -86,6 +122,22 @@ public class UserController {
 			userService.delete(user);
 		}
 		else {
+//=======
+//	@DeleteMapping("/remove")
+//	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+//	ResponseEntity<String> removeUser(@RequestBody User userid, HttpServletRequest request) {
+//		User clientUser = userService.find(request);
+//		System.out.println(userid.getId());
+//		User user = userService.find(userid.getId());
+//		System.out.println(user);
+//		User testuser = userService.find("user");
+//		System.out.println(testuser.getId());
+//
+//		if (clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId())
+//				|| clientUser.hasRole("ROLE_ADMIN")) {
+//			userService.delete(user);
+//		} else {
+//>>>>>>> master_temp1
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 

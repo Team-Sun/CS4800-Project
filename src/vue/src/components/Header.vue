@@ -39,9 +39,9 @@
         </div>
 
         <!-- Temporary -->
-        <router-link v-if="showAdminBoard" to="/admin" class="nav-link">Admin</router-link>
+        <!-- <router-link v-if="showAdminBoard" to="/admin" class="nav-link">Admin</router-link>
         <router-link v-if="showModeratorBoard" to="/mod" class="nav-link">Moderator</router-link>
-        <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link>
+        <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link> -->
 
       </div>
     </div>

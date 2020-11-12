@@ -3,7 +3,7 @@
     <div class="card card-container">
       <img
         id="profile-img"
-        src="//cdn0.iconfinder.com/data/icons/user-pictures/100/malecostume-512.png"
+        src="@/assets/user-icon.png"
         class="profile-img-card"
       />
       <form name="form" @submit.prevent="handleLogin">

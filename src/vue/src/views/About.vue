@@ -7,7 +7,7 @@
         <a href="#p1"><img src="@/assets/mai_profile.jpeg" alt="" width="240" height="280"></a>
         <a href="#p2"><img src="@/assets/p1.jpeg" alt="" width="240" height="280"></a>
         <a href="#p3"><img src="@/assets/p1.jpeg" alt="" width="240" height="280"></a>
-        <a href="#p4"><img src="@/assets/p1.jpeg" alt="" width="240" height="280"></a>
+        <a href="#p4"><img src="@/assets/JasonHo.jpg" alt="" width="240" height="280"></a>
         <a href="#p5"><img src="@/assets/jonathan.jpg" alt="" width="240" height="280"></a>
       </div>
       <div class="section" id="p1">
@@ -19,8 +19,6 @@
           <div class="link">
             <a href="https://github.com/ximui23">GitHub</a>
             <br>
-            <br>
-            <a href="https://www.linkedin.com/in/mai-luu-80b447180/">LinkedIn</a>
           </div>
       </div>
       <div class="section" id="p2">
@@ -97,15 +95,16 @@ export default {
   font-family: sans-serif;
 }
 .team-section{
+    height: 570px;
     overflow: hidden;
     text-align: center;
-    background: darkgreen;
+    background: #0d3103;
     padding: 40px;
 }
 .team-section h2{
     text-transform: uppercase;
     margin-bottom: 20px;
-    color:gold;
+    color:lemonchiffon;
     font-size: 40px;
 }
 .border0{
@@ -113,7 +112,7 @@ export default {
     margin: auto;
     width: 500px;
     height: 2px;
-    background: gold;
+    background: lemonchiffon;
     margin-bottom: 40px;
 }
 .border{

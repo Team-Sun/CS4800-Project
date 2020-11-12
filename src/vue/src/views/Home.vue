@@ -2,6 +2,7 @@
   <div class="home">
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
     <h1>Welcome to Bronco Notes!</h1>
+    <!--<img src="@/assets/background.jpg" alt="background-image"> -->
     <UploadComponent/>
   </div>
 </template>
@@ -17,3 +18,18 @@
 //   }
 // }
 </script>
+
+<style>
+.home{
+  background-image: url('../assets/background2.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.home h1{
+  height: 900px;
+  font-size: 60px;
+  text-align: center;
+  padding: 10px;
+  color: darkgreen;
+}
+</style>

@@ -40,6 +40,7 @@
     <span class="border1"></span>
     <div class="result">
       <div class="searchTitle">Search Results</div>
+      <br>
       <div class="search-result" v-for="note in notes" :key="note">
         <div class="box">
           <p class="noteTitle">
@@ -99,8 +100,8 @@ body{
     padding: 0;
 }
 .header{
-    height: 280px;
-    background-image: linear-gradient(180deg, gold, lemonchiffon);
+    height: 380px;
+    background-color: #0d3103;
     background-size: cover;
     background-position: center;
     display: flex;
@@ -109,10 +110,12 @@ body{
     color: lemonchiffon;
 }
 h1{
-    color: darkgreen;
+    margin-top: 10px;
+    color: lemonchiffon;
     font-size: 50px;
     font-family: serif;
     letter-spacing: 2px;
+    padding-top: 20px;
 }
 .search-field{
     height: 40px;
@@ -122,7 +125,7 @@ h1{
     outline: none;
     font-size: 25px;
     margin-right: 10px;
-    margin-top: 50px;
+    margin-top: 30px;
 }
 .note{
     width: 500px;
@@ -130,17 +133,18 @@ h1{
 .class{
     width: 200px;
     padding-right: 10px;
+    margin-bottom: 20px;
 }
 .professor{
     width: 200px;
 }
 .search-btn{
-    height: 60px;
+    height: 50px;
     width: 150px;
-    background: darkgreen;
+    background: beige;
     border: none;
-    color: white;
-    font-size: 20px;
+    color: darkgoldenrod;
+    font-size: 25px;
     border-radius: 25px;
 }
 .search-btn:hover{
@@ -148,12 +152,12 @@ h1{
     cursor: pointer;
 }
 .result{
-    background-color: lemonchiffon;
+    background-color: beige;
     padding: 30px;
     height: auto;
 }
 .box{
-    background-color:white;
+    background-color:beige;
     max-width: 1000px;
     align-content: center;
     margin: auto;
@@ -161,15 +165,18 @@ h1{
 }
 .border1{
     display: block;
-    width: 1200px;
+    width: auto;
     height: 3px;
     margin: auto;
-    background: green;
+    background: darkgreen;
 }
 .searchTitle{
     color: darkgreen;
     font-size: 50px;
     font-family: serif;
+}
+.search-result .box{
+  background-color: beige;
 }
 .noteTitle{
     font-size: 20px;

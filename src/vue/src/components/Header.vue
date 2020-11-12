@@ -1,9 +1,11 @@
 <template>
   <div class="flex-header-container">
       <div id="nav">
+        <!--
         <router-link to="/">
           <img src="../assets/note-logo2.png" height="60" alt="Bronco Notes">
         </router-link>
+        -->
         <router-link to="/">
           <font-awesome-icon icon="home" />Home
         </router-link>

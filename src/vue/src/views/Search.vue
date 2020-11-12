@@ -14,14 +14,9 @@
     </div>
     <span class="border1"></span>
     <div class="result">
-<<<<<<< HEAD
       <div class="searchTitle">Search Results</div>
       <br>
       <div class="search-result" v-for="note in notes" :key="note">
-=======
-      <div class="searchTitle">Note List</div>
-      <div class="search-result">
->>>>>>> 4e7448f83c24384a9e828d7b04a64a5615963414
         <div class="box">
           <ul class="noteTitle">
             <li class="list-group-item"

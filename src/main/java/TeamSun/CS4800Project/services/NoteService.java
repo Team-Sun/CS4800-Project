@@ -13,11 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 import TeamSun.CS4800Project.dao.NoteDao;
 import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.response.NoteResponse;
-import TeamSun.CS4800Project.response.PDFMultipartFile;
 
 /**
- * Takes care of manipulating data and meshing with DAO.
->>>>>>> master_temp1
+ * Takes care of manipulating data and meshing with DAO. >>>>>>> master_temp1
+ * 
  * @author Andrew
  *
  */
@@ -27,7 +26,6 @@ public class NoteService {
 	@Autowired
 	@Qualifier("mongodb_note")
 	NoteDao DB;
-
 
 	// TODO change to 'save' instead so it's more intuitive.
 
@@ -50,7 +48,7 @@ public class NoteService {
 	public int size() {
 		return DB.size();
 	}
-	
+
 	public List<Note> getAll() {
 		return DB.getAll();
 	}
@@ -58,15 +56,20 @@ public class NoteService {
 	public List<Note> findByTitle(String title) {
 		return DB.findByTitle(title);
 	}
-	
-	public List<Note> findByTitleContaining(String title){
+
+	public List<Note> findByTitleContaining(String title) {
 		return DB.findByTitleContaining(title);
 	}
-	
+
 	public NoteResponse convertToResponse(Note note) {
 		NoteResponse response = new NoteResponse();
 		response.setContent(note.getContent());
 		response.setCourse(note.getCourse());
+		// Don't know if this will convert properly.
+		// Use this otherwise:
+		//	if (note.getFile() != null) {
+		//		response.setFile(new PDFMultipartFile(note.getFile().getData(), note.getFileType()));
+		//	}
 		response.setFile((MultipartFile) note.getFile());
 		response.setId(note.getId().toHexString());
 		response.setOwner(note.getOwner());
@@ -75,25 +78,6 @@ public class NoteService {
 		response.setRating(note.getRating());
 		return response;
 	}
-
-//	public List<Note> findByTitle(String title) {
-//		return DB.findByTitle(title);
-//	}
-//
-//	public NoteResponse convertToResponse(Note note) {
-//		NoteResponse response = new NoteResponse();
-//		response.setContent(note.getContent());
-//		response.setCourse(note.getCourse());
-//		if (note.getFile() != null) {
-//			response.setFile(new PDFMultipartFile(note.getFile().getData(), note.getFileType()));
-//		}
-//		response.setId(note.getId().toHexString());
-//		response.setOwner(note.getOwner());
-//		response.setProfessor(note.getProfessor());
-//		response.setTitle(note.getTitle());
-//		response.setRating(note.getRating());
-//		return response;
-//	}
 
 	// TODO maybe implement differently. Brutal when getting class string over and
 	// over.

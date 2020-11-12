@@ -30,9 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import TeamSun.CS4800Project.model.Note;
 import TeamSun.CS4800Project.model.User;
-import TeamSun.CS4800Project.request.SearchRequest;
 import TeamSun.CS4800Project.response.NoteResponse;
-import TeamSun.CS4800Project.response.SearchResponse;
 import TeamSun.CS4800Project.services.NoteService;
 import TeamSun.CS4800Project.services.UserService;
 
@@ -104,48 +102,16 @@ public class NoteController {
 	@GetMapping("note/{id}")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<Note> getNoteById(@PathVariable("id") ObjectId id) {
-//=======
-//	public ResponseEntity<Note> addEntry(@RequestBody Note note, HttpServletRequest request) {
-//		User clientUser = userService.find(request);
-//		noteService.save(note);
-//		clientUser.addNote(note.getId()); // ID is only created after it's inserted. WARN This might result in errors if
-//														// DB runs concurrently.
-//		return new ResponseEntity<>(note, HttpStatus.CREATED);
-//
-//		// TODO May need to catch an exception
-//	}
-//
-//	@GetMapping("/note/{id}")
-//	@PreAuthorize("permitAll()")
-//	public ResponseEntity<NoteResponse> getNoteById(@PathVariable("id") ObjectId id) {
-//		System.out.println("getting: " + id);
-//>>>>>>> master_temp1
 		Note note = noteService.findByID(id);
 
 		if (note == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
 			return new ResponseEntity<>(note, HttpStatus.OK);
-//=======
-//			return new ResponseEntity<>(noteService.convertToResponse(note), HttpStatus.OK);
-//>>>>>>> master_temp1
 		}
 
 	}
 
-	// Testing. TODO remove for deployment.
-//<<<<<<< HEAD
-//	@GetMapping("/all")
-//	@PreAuthorize("permitAll()")
-//	public ResponseEntity<List<Note>> getAllNotes(@RequestParam(required = false) String title) {
-//		try {
-//			List<Note> note = new ArrayList<Note>();
-//
-//			if (title == null)
-//				note = noteService.getAll();
-//			else
-//				noteService.findByTitle(title).forEach(note::add);
-//=======
 	@GetMapping("/note")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<List<NoteResponse>> getAllNotes(@RequestParam(required = false) String title) {
@@ -203,9 +169,6 @@ public class NoteController {
 	}
 
 	@DeleteMapping("/note/{id}")
-//=======
-//	@DeleteMapping("/note/{id}")
-//>>>>>>> master_temp1
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<Note> removeNote(@PathVariable("id") ObjectId id, HttpServletRequest request) {
 		User clientUser = userService.find(request);
@@ -249,21 +212,4 @@ public class NoteController {
 		}
 		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}
-
-	// We use response objects because Spring turns the whole object (including
-	// methods) into JSON to be sent.
-
-//=======
-////	@PostMapping("/search")
-////	@PreAuthorize("permitAll()")
-////	public ResponseEntity<List<SearchResponse>> search(@RequestBody SearchRequest searchRequest) {
-////		SearchResponse dummyNote1 = new SearchResponse("testName1", "className1", "testContent1");
-////		SearchResponse dummyNote2 = new SearchResponse("testName2", "className2", "testContent2");
-////		List<SearchResponse> dummyList = new LinkedList<>();
-////		dummyList.add(dummyNote1);
-////		dummyList.add(dummyNote2);
-////		return ResponseEntity.ok(dummyList);
-////	}
-//>>>>>>> master_temp1
-
 }

@@ -59,7 +59,7 @@
         </p>
         <div class="link">
             <a href="https://github.com/jonathan1118">GitHub</a>
-          </div>
+        </div>
       </div>
     </div>
     <div class="mission">
@@ -94,9 +94,11 @@ export default {
   padding: 0;
   font-family: sans-serif;
 }
+/* Thanks to https://stackoverflow.com/questions/30752049/fill-screen-horizontal-and-vertical-with-padding */
 .about-page{
+  height:100vh;
+  width:auto;
   background-color: beige;
-  min-height: 100%;
 }
 .team-section{
     height: 570px;
@@ -191,7 +193,7 @@ export default {
     text-align: center;
     background: beige;
     padding: 40px;
-    height: 500px;
+    height: min-content;
 }
 .mission p{
     text-transform: uppercase;

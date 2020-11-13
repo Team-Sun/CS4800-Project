@@ -1,24 +1,14 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
-import axios from 'axios'
+// import axios from 'axios'
 import authHeader from './auth-header'
+import http from '../http-common'
 // import authHeader from './auth-header'
 
-const API_URL = 'http://localhost:8080/api/note/'
+// const API_URL = 'http://localhost:8080/api'
 
 // Thankyou https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index
 class NoteService {
-  search (note) {
-    return axios.post(API_URL + 'search', {
-      title: note.title,
-      course: note.course,
-      professor: note.professor
-    }).then(response => {
-      return Promise.resolve(response.data) // Seems to be the same thing as without the Promise.resolve()?
-    })
-  }
-
   // Thanks https://stackoverflow.com/questions/21329426/spring-mvc-multipart-request-with-json/25183266#25183266
-  upload (note) {
+  create (note) {
     var data = new FormData()
     data.append('file', note.file)
     data.append('note', new Blob([JSON.stringify({
@@ -32,9 +22,36 @@ class NoteService {
     {
       type: 'application/json'
     }))
-    return axios.post(API_URL + 'add', data, { headers: authHeader(), 'Content-Type': undefined }).then(response => {
-      return Promise.resolve(response.data) // Seems to be the same thing as without the Promise.resolve()?
-    })
+    return http.post('/note', data, { headers: authHeader(), 'Content-Type': undefined })
+  }
+
+  getAll () {
+    return http.get('/note')
+  }
+
+  getPage (n) {
+    return http.get('/note', { page: n })
+  }
+
+  get (id) {
+    return http.get(`/note/${id}`)
+  }
+
+  // TODO FIX AS WELL
+  update (id, data) {
+    return http.put(`/note/${id}`, data)
+  }
+
+  delete (id) {
+    return http.delete(`/note/${id}`)
+  }
+
+  deleteAll () {
+    return http.delete('/note')
+  }
+
+  findByTitle (title) {
+    return http.get(`/note?title=${title}`)
   }
 }
 

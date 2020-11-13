@@ -18,6 +18,7 @@ public class NoteResponse {
 	private String content;
 	private short rating;
 	private String course;
+	private String semester;
 	private MultipartFile file;
 	private ObjectId owner; // Must be ObjectId because people can change their username.
 	private String professor;
@@ -60,6 +61,14 @@ public class NoteResponse {
 
 	public void setCourse(String course) {
 		this.course = course;
+	}
+
+	public String getSemester() {
+		return semester;
+	}
+
+	public void setSemester(String semester) {
+		this.semester = semester;
 	}
 
 	public MultipartFile getFile() {

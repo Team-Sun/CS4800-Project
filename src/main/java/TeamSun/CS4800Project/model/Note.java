@@ -15,6 +15,7 @@ public class Note {
 	private String content;
 	private short rating;
 	private String course;
+	private String semester;
 	private Binary file;
 	private String fileType;
 	private ObjectId owner; // Must be ObjectId because people can change their username.
@@ -76,6 +77,14 @@ public class Note {
 
 	public void setCourse(String course) {
 		this.course = course;
+	}
+
+	public String getSemester() {
+		return semester;
+	}
+
+	public void setSemester(String semester) {
+		this.semester = semester;
 	}
 
 	public Binary getFile() {

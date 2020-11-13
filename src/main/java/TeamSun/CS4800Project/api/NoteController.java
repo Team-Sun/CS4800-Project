@@ -57,8 +57,7 @@ public class NoteController {
 
 	@PostMapping("/note")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<Note> addEntry(@RequestPart Note note, @RequestPart(required = false) MultipartFile file,
-			HttpServletRequest request) {
+	public ResponseEntity<Note> addEntry(@RequestPart Note note, @RequestPart(required = false) MultipartFile file, HttpServletRequest request) {
 		if (file != null) {
 			try {
 				note.setFileType(file.getContentType()); // TODO validate PDF in frontend and backend here.
@@ -81,13 +80,14 @@ public class NoteController {
 
 		// TODO May need to catch an exception
 	}
-	
-	// Thanks to https://stackoverflow.com/questions/59686660/how-to-send-generated-pdf-document-to-frontend-in-restfull-way-in-spring-boot
+
+	// Thanks to
+	// https://stackoverflow.com/questions/59686660/how-to-send-generated-pdf-document-to-frontend-in-restfull-way-in-spring-boot
 	@GetMapping("/file/{id:.+}")
-	//@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	// @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	@PreAuthorize("permitAll()")
 	public void getFile(@PathVariable("id") ObjectId id, HttpServletRequest request, HttpServletResponse response) {
-		//User clientUser = userService.find(request);
+		// User clientUser = userService.find(request);
 		Note note = noteService.findByID(id);
 		try {
 			response.setHeader("Content-Disposition", String.format("inline; filename=\"testnote.pdf" + "\""));
@@ -96,44 +96,54 @@ public class NoteController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@GetMapping("note/{id}")
 	@PreAuthorize("permitAll()")
-	public ResponseEntity<Note> getNoteById(@PathVariable("id") ObjectId id) {
+	public ResponseEntity<NoteResponse> getNoteById(@PathVariable("id") ObjectId id) {
 		Note note = noteService.findByID(id);
 
 		if (note == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(note, HttpStatus.OK);
+			return new ResponseEntity<>(noteService.convertToFullResponse(note), HttpStatus.OK);
 		}
 
 	}
 
+	/**
+	 * Gets all notes or gets note by given title if provided.
+	 * 
+	 * @param title
+	 * @return
+	 */
 	@GetMapping("/note")
 	@PreAuthorize("permitAll()")
-	public ResponseEntity<List<NoteResponse>> getAllNotes(@RequestParam(required = false) String title) {
+	public ResponseEntity<List<NoteResponse>> getAllNotes(@RequestParam(required = false) String title, @RequestBody(required = false) Integer page) {
 		try {
-			List<NoteResponse> note = new ArrayList<NoteResponse>();
+			List<NoteResponse> noteList = new ArrayList<NoteResponse>();
 
-			if (title == null)
-				for (Note n : noteService.getAll()) {
-					note.add(noteService.convertToResponse(n));
+			if (title == null) {
+				if (page == null) {
+					for (Note note : noteService.getAll()) {
+						noteList.add(noteService.convertToSimpleResponse(note));
+					}
+				} else {
+					for (Note note : noteService.getPage(page)) {
+						noteList.add(noteService.convertToSimpleResponse(note));
+					}
 				}
-			else
-				for (Note n : noteService.findByTitleContaining(title)) {
-					note.add(noteService.convertToResponse(n));
+			} else {
+				for (Note note : noteService.findByTitleContaining(title)) {
+					noteList.add(noteService.convertToSimpleResponse(note));
 				}
-				
 
-			if (note.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				if (noteList.isEmpty()) {
+					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				}
 			}
-
-			return new ResponseEntity<>(note, HttpStatus.OK);
-
+			return new ResponseEntity<>(noteList, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -142,27 +152,29 @@ public class NoteController {
 
 	@PutMapping("/note/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<Note> updateNote(@PathVariable("id") ObjectId id, @RequestBody Note note,
-			HttpServletRequest request) {
+	public ResponseEntity<NoteResponse> updateNote(@PathVariable("id") ObjectId id, @RequestBody Note note, HttpServletRequest request) {
 		User clientUser = userService.find(request);
-		Note _note = noteService.findByID(id);
+		Note noteToEdit = noteService.findByID(id);
 
-		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(note.getOwner()))
-				|| clientUser.hasRole("ROLE_ADMIN")) {
-			if (_note == null) {
+		// If user and that user matches the note's owner or if user is admin then allow
+		// change.
+		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(note.getOwner())) || clientUser.hasRole("ROLE_ADMIN")) {
+			if (noteToEdit == null) {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			} else {
-				_note.setTitle(note.getTitle());
-				_note.setContent(note.getContent());
-				_note.setCourse(note.getCourse());
-				_note.setProfessor(note.getProfessor());
+				noteToEdit.setTitle(note.getTitle());
+				noteToEdit.setContent(note.getContent());
+				noteToEdit.setCourse(note.getCourse());
+				noteToEdit.setProfessor(note.getProfessor());
+				noteToEdit.setSemester(note.getSemester());
 				// TODO add the file or do it another way that just doesn't update certain
 				// parts.
 				// TODO LOOKAT possibly making NoteUpdateRequest instead.
 
-				noteService.save(_note);
-				return new ResponseEntity<>(_note, HttpStatus.OK); // LOOKAT Might not want to send the note back. Might
-																					// just take up unnecessary bandwidth.
+				noteService.save(noteToEdit);
+				// LOOKAT Might not want to send the note back. Might just take up unnecessary
+				// bandwidth.
+				return new ResponseEntity<>(noteService.convertToFullResponse(noteToEdit), HttpStatus.OK);
 			}
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -176,8 +188,7 @@ public class NoteController {
 
 		// Make sure that the current clientUser matches the owner of the note that's
 		// attempting to be deleted. Or, make sure the user is admin.
-		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(note.getOwner()))
-				|| clientUser.hasRole("ROLE_ADMIN")) {
+		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(note.getOwner())) || clientUser.hasRole("ROLE_ADMIN")) {
 			if (note != null) {
 				noteService.delete(id);
 			} else {

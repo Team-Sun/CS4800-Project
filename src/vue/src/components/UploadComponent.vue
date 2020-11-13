@@ -30,7 +30,7 @@
                             name="file-note"
                             ref = "file"
                             id = "file"
-                            v-on:change="notechange()"
+                            v-on:change="noteFileChange()"
                             :disabled="noteType != 1"/>
                         </div>
                         <div class="row">
@@ -149,7 +149,7 @@
 
 <script>
 import Note from '../models/note'
-import UserService from '../services/NoteDataService'
+import NoteService from '../services/note.service'
 
 export default {
   name: 'UploadComponent',
@@ -179,9 +179,9 @@ export default {
   methods:
   {
     addNewNote () {
-      UserService.create(this.note)
+      NoteService.create(this.note)
         .then(response => {
-          this.notes.id = response.notes.id
+          this.note.id = response.note.id
           console.log(response.data)
           this.submitted = true
         })
@@ -201,7 +201,10 @@ export default {
       this.note.semester = ''
       this.note.description = ''
       this.isUploadingNewNote = 3
-      // this.file = null || ''
+      this.note.file = null || ''
+    },
+    noteFileChange (event) {
+      this.note.file = this.$refs.file.files[0]
     }
   }
 }

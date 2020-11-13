@@ -1,5 +1,6 @@
 export default class Note {
-  constructor (content, title, course, professor, semester, description, file) {
+  constructor (id, content, title, course, professor, semester, description, file) {
+    this.id = id
     this.content = content
     this.title = title
     this.course = course

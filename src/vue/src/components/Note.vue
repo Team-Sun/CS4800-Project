@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import NoteDataService from '../services/NoteDataService'
+import NoteService from '../services/note.service'
 
 export default {
   name: 'note',
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     getNote (id) {
-      NoteDataService.get(id)
+      NoteService.get(id)
         .then(response => {
           this.currentNote = response.data
           console.log(response.data)
@@ -101,7 +101,7 @@ export default {
         published: status
       }
 
-      NoteDataService.update(this.currentNote.id, data)
+      NoteService.update(this.currentNote.id, data)
         .then(response => {
           this.currentNote.published = status
           console.log(response.data)
@@ -112,7 +112,7 @@ export default {
     },
 
     updateNote () {
-      NoteDataService.update(this.currentNote.id, this.currentNote)
+      NoteService.update(this.currentNote.id, this.currentNote)
         .then(response => {
           console.log(response.data)
           this.message = 'The note was updated successfully!'
@@ -123,7 +123,7 @@ export default {
     },
 
     deleteNote () {
-      NoteDataService.delete(this.currentNote.id)
+      NoteService.delete(this.currentNote.id)
         .then(response => {
           console.log(response.data)
           this.$router.push({ name: 'Search' })

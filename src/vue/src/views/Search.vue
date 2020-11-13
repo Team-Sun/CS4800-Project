@@ -1,61 +1,40 @@
 <template>
   <div>
     <div class="header">
-      <form action="">
-        <h1>
-          Find Your Note Here
-            <div class="searchNote">
-              <input type="text" class="search-field note" placeholder="Search by title" v-model="title">
+      <h1>
+        Find Your Note Here
+          <div class="searchNote">
+            <input type="text" class="search-field note" placeholder="Search by title" v-model="title">
 
-            <button @click="searchTitle" class="search-btn" type="button">Search</button>
-          </div>
-        </h1>
-      </form>
+          <button @click="searchTitle" class="search-btn" type="button">Search</button>
+        </div>
+      </h1>
     </div>
     <span class="border1"></span>
     <div class="result">
       <div class="searchTitle">Search Results</div>
       <br>
-      <div class="search-result" v-for="note in notes" :key="note">
+      <div class="search-result">
         <div class="box">
-          <ul class="noteTitle">
-            <li class="list-group-item"
-              :class="{ active: index == currentIndex }"
-              v-for="(note, index) in  notes"
-              :key="index"
-              @click="setActiveNote(note, index)"
+
+          <div class="accordion" role="tablist">
+            <b-card no-body class="mb-0 mt-0 p-2"
+            v-for="(note, index) in notes"
+            :key="index"
             >
-              {{ note.title }}
-            </li>
-          </ul>
+              <b-card-header header-tag="header" class="p-1" role="tab">
+                <b-button block v-b-toggle="'accordion-'+index" variant="info">{{ note.title }}</b-button>
+              </b-card-header>
+              <b-collapse :id="'accordion-'+index" visible accordion="my-accordion" role="tabpanel">
+                <b-card-body>
+                  <b-card-text class="p-0 mt-0 mb-0">Professor: {{ note.professor }}</b-card-text>
+                  <b-card-text class="p-0 mt-0 mb-0">Course: {{ note.course }}</b-card-text>
+                  <b-card-text class="p-0 mt-0 mb-0">Semester: {{ note.semester }}</b-card-text>
+                  <b-button :href="'/individualNote/'+note.id" class="float-right" variant="primary" squared>→</b-button>
 
-          <button class="m-3 btn btn-sm btn-danger" @click="removeAllNotes">
-            Remove All
-          </button>
-
-          <div class="noteContent">
-            <div v-if="currentNote">
-              <h4>Note</h4>
-              <div>
-                <label><strong>Title:</strong></label> {{ currentNote.title }}
-              </div>
-              <div>
-                <label><strong>Con:</strong></label> {{ currentNote.description }}
-              </div>
-              <div>
-                <label><strong>Status:</strong></label> {{ currentNote.published ? "Published" : "Pending" }}
-              </div>
-
-              <a class="badge badge-warning"
-                :href="'/note/' + currentNote.id"
-              >
-                Edit
-              </a>
-            </div>
-            <div v-else>
-              <br />
-              <p>Please click on a Note...</p>
-            </div>
+                </b-card-body>
+              </b-collapse>
+            </b-card>
           </div>
 
         </div>
@@ -65,13 +44,13 @@
 </template>
 <script>
 
-import NoteDataService from '../services/NoteDataService'
+import NoteService from '../services/note.service'
 
 export default {
   name: 'notes-list',
   data () {
     return {
-      notes: [],
+      notes: NoteService.getPage(1),
       currentNote: null,
       currentIndex: -1,
       title: ''
@@ -79,7 +58,7 @@ export default {
   },
   methods: {
     retrieveNotes () {
-      NoteDataService.getAll()
+      NoteService.getAll()
         .then(response => {
           this.notes = response.data
           console.log(response.data)
@@ -100,19 +79,19 @@ export default {
       this.currentIndex = index
     },
 
-    removeAllNotes () {
-      NoteDataService.deleteAll()
-        .then(response => {
-          console.log(response.data)
-          this.refreshList()
-        })
-        .catch(e => {
-          console.log(e)
-        })
-    },
+    // removeAllNotes () {
+    //   NoteService.deleteAll()
+    //     .then(response => {
+    //       console.log(response.data)
+    //       this.refreshList()
+    //     })
+    //     .catch(e => {
+    //       console.log(e)
+    //     })
+    // },
 
     searchTitle () {
-      NoteDataService.findByTitle(this.title)
+      NoteService.findByTitle(this.title)
         .then(response => {
           this.notes = response.data
           console.log(response.data)
@@ -133,9 +112,11 @@ export default {
 body{
     margin: 0;
     padding: 0;
+    height: 100vh;
 }
+
 .header{
-    height: 380px;
+    height: 200px;
     background-color: #0d3103;
     background-size: cover;
     background-position: center;
@@ -219,13 +200,17 @@ h1{
     padding: 10px;
     text-align: left;
 }
+.list-group-item{
+    color:black;
+}
 .noteCourse{
     font-size: 20px;
     font-weight: 500;
     padding: 10px;
     text-align: right;
 }
-.noteContent{
+div.noteContent{
+    color: black;
     font-size: 20px;
     font-weight: 300;
     text-align: left;

@@ -22,6 +22,8 @@ import TeamSun.CS4800Project.response.NoteResponse;
  */
 @Service("noteService")
 public class NoteService {
+	
+	final int PAGE_SIZE = 10;
 
 	@Autowired
 	@Qualifier("mongodb_note")
@@ -52,6 +54,15 @@ public class NoteService {
 	public List<Note> getAll() {
 		return DB.getAll();
 	}
+	
+	public List<Note> getPage(int page) {
+		List<Note> ret = new LinkedList<>();
+		List<Note> all = DB.getAll();
+		for (int i = PAGE_SIZE*(page-1); i < PAGE_SIZE*page; i++) {
+			ret.add(all.get(i));
+		}
+		return ret;
+	}
 
 	public List<Note> findByTitle(String title) {
 		return DB.findByTitle(title);
@@ -61,7 +72,12 @@ public class NoteService {
 		return DB.findByTitleContaining(title);
 	}
 
-	public NoteResponse convertToResponse(Note note) {
+	/**
+	 * For when specific notes are wanted.
+	 * @param note
+	 * @return
+	 */
+	public NoteResponse convertToFullResponse(Note note) {
 		NoteResponse response = new NoteResponse();
 		response.setContent(note.getContent());
 		response.setCourse(note.getCourse());
@@ -76,6 +92,22 @@ public class NoteService {
 		response.setProfessor(note.getProfessor());
 		response.setTitle(note.getTitle());
 		response.setRating(note.getRating());
+		response.setSemester(note.getSemester());
+		return response;
+	}
+	
+	/**
+	 * For when a lot of notes are wanted at the same time.
+	 * @param note
+	 * @return
+	 */
+	public NoteResponse convertToSimpleResponse(Note note) {
+		NoteResponse response = new NoteResponse();
+		response.setCourse(note.getCourse());
+		response.setId(note.getId().toHexString());
+		response.setProfessor(note.getProfessor());
+		response.setTitle(note.getTitle());
+		response.setSemester(note.getSemester());
 		return response;
 	}
 

@@ -1,55 +1,67 @@
 <template>
   <div v-if="currentNote" class="edit-form">
-    <h4>Note</h4>
     <form>
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" class="form-control" id="title"
-          v-model="currentNote.title"
-        />
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea
-          rows="20"
-          columns="50"
-          type="text"
-          class="form-control"
-          id="description"
-          v-model="currentNote.description"
-        />
+      <div class="row row-0">
+        <div class="col-7 note-col">
+          <div class="col-7 text-left attribute-col">
+              <div class="form-group">
+                  <div class="form-row">
+                      <div class="col">
+                          <label for="title"> Title </label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="title"
+                          v-model="currentNote.title"
+                        />
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+            <!-- <label for="description">Content</label> -->
+            <textarea
+              rows="12"
+              columns="30"
+              type="text"
+              class="form-control"
+              id="description"
+              v-model="currentNote.description"
+            />
+          </div>
+        </div>
       </div>
 
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label><strong>Status:</strong></label>
         {{ currentNote.published ? "Published" : "Pending" }}
-      </div>
+      </div> -->
     </form>
+      <div class="buttons">
+      <button type="submit" class="but"
+        v-if="currentNote.published"
+        @click="updatePublished(false)"
+      >
+        UnPublish
+      </button>
+      <button v-else type="submit" class="but"
+        @click="updatePublished(true)"
+      >
+        Publish
+      </button>
 
-    <button class="badge badge-primary mr-2"
-      v-if="currentNote.published"
-      @click="updatePublished(false)"
-    >
-      UnPublish
-    </button>
-    <button v-else class="badge badge-primary mr-2"
-      @click="updatePublished(true)"
-    >
-      Publish
-    </button>
+      <button type="submit" class="but"
+        @click="deleteNote"
+      >
+        Delete
+      </button>
 
-    <button class="badge badge-danger mr-2"
-      @click="deleteNote"
-    >
-      Delete
-    </button>
-
-    <button type="submit" class="badge badge-success"
-      @click="updateNote"
-    >
-      Update
-    </button>
-    <p>{{ message }}</p>
+      <button type="submit" class="but"
+        @click="updateNote"
+      >
+        Update
+      </button>
+      <p>{{ message }}</p>
+    </div>
   </div>
 
   <div v-else>
@@ -130,7 +142,23 @@ export default {
 
 <style>
 .edit-form {
-  max-width: 500px;
-  margin: auto;
+  background: rgba(42, 43, 42, 0.933);
+  color: white;
+  padding: 12px;
+  padding-left: 200px;
+  height: 1000px;
 }
+.col
+{
+    padding-top: 15px;
+}
+.buttons
+{
+  margin-left: -600px;
+}
+.but
+{
+  margin-left: 50px;
+}
+
 </style>

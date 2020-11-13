@@ -40,7 +40,7 @@
                 <label><strong>Title:</strong></label> {{ currentNote.title }}
               </div>
               <div>
-                <label><strong>Description:</strong></label> {{ currentNote.description }}
+                <label><strong>Con:</strong></label> {{ currentNote.description }}
               </div>
               <div>
                 <label><strong>Status:</strong></label> {{ currentNote.published ? "Published" : "Pending" }}

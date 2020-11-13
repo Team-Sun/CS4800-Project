@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="about-page">
     <div class="team-section">
       <h2>Team Sun - CS4800 Cal Poly Pomona</h2>
       <span class="border0"></span>
@@ -94,6 +94,9 @@ export default {
   padding: 0;
   font-family: sans-serif;
 }
+.about-page{
+  background-color: beige;
+}
 .team-section{
     height: 570px;
     overflow: hidden;
@@ -187,7 +190,7 @@ export default {
     text-align: center;
     background: beige;
     padding: 40px;
-    height: auto;
+    height: 400px;
 }
 .mission p{
     text-transform: uppercase;

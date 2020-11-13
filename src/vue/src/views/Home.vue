@@ -21,15 +21,19 @@
 
 <style>
 .home{
+  /*
   background-image: url('../assets/background2.jpg');
-  background-size: cover;
+  background-size: 100%;
+  background-position: center;
   background-repeat: no-repeat;
+  */
+  background-color: #0d3103;
 }
 .home h1{
   height: 900px;
   font-size: 60px;
   text-align: center;
   padding: 10px;
-  color: darkgreen;
+  color: beige;
 }
 </style>

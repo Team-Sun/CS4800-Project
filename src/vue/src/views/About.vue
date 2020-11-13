@@ -96,6 +96,7 @@ export default {
 }
 .about-page{
   background-color: beige;
+  min-height: 100%;
 }
 .team-section{
     height: 570px;
@@ -190,7 +191,7 @@ export default {
     text-align: center;
     background: beige;
     padding: 40px;
-    height: 400px;
+    height: 500px;
 }
 .mission p{
     text-transform: uppercase;

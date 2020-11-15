@@ -12,11 +12,11 @@
         <router-link to="/about">
           <font-awesome-icon icon="address-card" />About
         </router-link>
-
-        <div v-if="!currentUser">
-          <router-link to="/search">
+        <router-link to="/search">
             <font-awesome-icon icon="search-plus" />Search
           </router-link>
+
+        <div v-if="!currentUser">
           <router-link to="/register">
             <font-awesome-icon icon="user-plus" />Sign Up
           </router-link>
@@ -26,9 +26,6 @@
         </div>
 
         <div v-if="currentUser">
-          <router-link to="/search">
-            <font-awesome-icon icon="search-plus" />Search
-          </router-link>
           <router-link to="/uploadPage">
             <font-awesome-icon icon="upload" />Upload
           </router-link>

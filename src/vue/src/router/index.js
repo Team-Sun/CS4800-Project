@@ -7,6 +7,7 @@ import Login from '../views/Login.vue'
 import Search from '../views/Search.vue'
 import UploadPage from '../views/Upload.vue'
 import IndividualNote from '../views/IndividualNote.vue'
+import EditPage from '../views/Edit.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -39,6 +40,11 @@ const routes = [
     path: '/uploadPage',
     name: 'UploadPage',
     component: UploadPage
+  },
+  {
+    path: '/editPage/:id2',
+    name: 'EditPage',
+    component: EditPage
   },
   {
     path: '/individualNote/:id',

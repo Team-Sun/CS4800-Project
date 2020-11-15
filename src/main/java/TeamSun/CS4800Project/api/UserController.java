@@ -2,6 +2,7 @@ package TeamSun.CS4800Project.api;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,16 +10,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import TeamSun.CS4800Project.model.User;
-import TeamSun.CS4800Project.response.PrivateUserResponse;
 import TeamSun.CS4800Project.response.UserResponse;
 import TeamSun.CS4800Project.services.UserService;
-
 
 /**
  * 
@@ -29,53 +29,64 @@ import TeamSun.CS4800Project.services.UserService;
  */
 @CrossOrigin(origins = "*", maxAge = 3600) // THIS IS REQUIRED. DO NOT REMOVE
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 public class UserController {
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@GetMapping("/getAll")
 	ResponseEntity<?> getAllUsers() {
 		// TODO
 		return null;
 	}
+
 	/**
-	 * Gets user by username.
+	 * Gets user by id. Give only simple response (username, id)
 	 *
 	 * @param user
 	 * @return
 	 */
-	@GetMapping("/getInfo")
-	@PreAuthorize("hasRole('USER') OR hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<UserResponse> getUserInfo(@RequestBody User user, HttpServletRequest request) {
-		User clientUser = userService.find(request);
-		if((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId()) || clientUser.hasRole("ROLE_ADMIN"))) {
-			User currentUser = userService.find(user.getId());
-
-			if(currentUser == null) {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			}
-
-			UserResponse userResponse = new UserResponse(currentUser.getUsername(), currentUser.getNotes(), null);
-			return new ResponseEntity<>(userResponse, HttpStatus.OK);
+	@GetMapping("/user/{id}")
+	@PreAuthorize("permitAll()")
+	public ResponseEntity<UserResponse> getUserInfo(@PathVariable("id") ObjectId id, HttpServletRequest request) {
+		User currentUser = userService.find(id);
+		if (currentUser == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(userService.convertToSimpleResponse(currentUser), HttpStatus.OK);
+		// return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	/**
+	 * Gets user by id. Gives full public response (username, id, notes owned)
+	 * @param id
+	 * @param request
+	 * @return
+	 */
+	@GetMapping("/userProfile/{id}")
+	@PreAuthorize("permitAll()")
+	public ResponseEntity<UserResponse> getFullUserInfo(@PathVariable("id") ObjectId id, HttpServletRequest request) {
+		User currentUser = userService.find(id);
+		if (currentUser == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(userService.convertToResponse(currentUser), HttpStatus.OK);
+		// return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
 	@GetMapping("/getPrivateInfo")
 	@PreAuthorize("hasRole('USER') OR hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<PrivateUserResponse> getPrivateUserInfo(@RequestBody User user, HttpServletRequest request) {
+	public ResponseEntity<UserResponse> getPrivateUserInfo(@RequestBody User user, HttpServletRequest request) {
 		User clientUser = userService.find(request);
-		if((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId()) || clientUser.hasRole("ROLE_ADMIN"))) {
+		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId()) || clientUser.hasRole("ROLE_ADMIN"))) {
 			User currentUser = userService.find(user.getId());
 
-			if(currentUser == null) {
+			if (currentUser == null) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 
-			PrivateUserResponse privateUserResponse = new PrivateUserResponse(currentUser.getEmail(), null);
-			return new ResponseEntity<>(privateUserResponse, HttpStatus.OK);
+			return new ResponseEntity<>(userService.convertToPrivateResponse(currentUser), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
@@ -84,10 +95,10 @@ public class UserController {
 	@PreAuthorize("hasRole('USER') OR hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<UserResponse> updateUser(@RequestBody User user, HttpServletRequest request) {
 		User clientUser = userService.find(request);
-		if((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId()) || clientUser.hasRole("ROLE_ADMIN"))) {
+		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId()) || clientUser.hasRole("ROLE_ADMIN"))) {
 			User currentUser = userService.find(user.getId());
 
-			if(currentUser == null) {
+			if (currentUser == null) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 
@@ -106,8 +117,8 @@ public class UserController {
 			}
 
 		} else {
-		    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 
 		return new ResponseEntity<>(userService.convertToResponse(user), HttpStatus.OK);
 	}
@@ -118,10 +129,9 @@ public class UserController {
 		User clientUser = userService.find(request);
 		User user = userService.find(userId.getId());
 
-		if(clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId()) || clientUser.hasRole("ROLE_ADMIN")) {
+		if (clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(user.getId()) || clientUser.hasRole("ROLE_ADMIN")) {
 			userService.delete(user);
-		}
-		else {
+		} else {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 

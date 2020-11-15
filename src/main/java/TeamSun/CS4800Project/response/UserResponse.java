@@ -3,18 +3,34 @@ package TeamSun.CS4800Project.response;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bson.types.ObjectId;
-
 public class UserResponse {
 
+	private String id;
 	private String username;
-	private Set<ObjectId> notes = new HashSet<>();
+	private Set<String> notes = new HashSet<>();
 	private String email;
 
-	public UserResponse(String username, Set<ObjectId> notes, String email) {
+	public UserResponse(String username, Set<String> notes, String email, String id) {
 		this.username = username;
 		this.notes = notes;
 		this.email = email;
+		this.id = id;
+	}
+	
+	public UserResponse(String username) {
+		this.username = username;
+	}
+
+	public UserResponse() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
@@ -25,11 +41,11 @@ public class UserResponse {
 		this.username = username;
 	}
 
-	public Set<ObjectId> getNotes() {
+	public Set<String> getNotes() {
 		return notes;
 	}
 
-	public void setNotes(Set<ObjectId> notes) {
+	public void setNotes(Set<String> notes) {
 		this.notes = notes;
 	}
 

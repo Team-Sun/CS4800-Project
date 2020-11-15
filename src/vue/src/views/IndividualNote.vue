@@ -1,67 +1,101 @@
 <template>
   <div class="individualnote">
     <br>
-    <div class="note-info" v-for="note in singleNotes" :key="note">
-      <div class="box">
-        <h2 class="noteTitle">
-          Title: {{ note.title }}
-        </h2>
-        <p class="course">
-          Course: {{ note.course }}
-        </p>
-        <p class="professorName">
-          Professor: {{ note.professor }}
-        </p>
-        <p class="semester">
-          Semester: {{ note.semester }}
-        </p>
-        <p class="description">
-          Description: {{ note.description }}
-        </p>
-        <p class="file">
-          File: {{ note.file }}
-        </p>
-        <div class="noteContent">
-          Content: {{ note.content }}
-        </div>
-      </div>
-    </div>
-    <br>
-    <span class="border"></span>
-    <div class="pdf-display">
-      <p>PDF Displayer</p>
-      <iframe height="500" width="50%" src="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"></iframe>
-    </div>
-  </div>
+      <h2 class="noteTitle">
+        {{ singleNote.title }}
+      </h2>
+      <div class="container">
 
+          <p class="description" v-if="singleNote.description">
+            Description: {{ singleNote.description }}
+          </p>
+          <div class="row">
+            <!-- Thanks to https://stackoverflow.com/questions/38941074/how-can-i-ensure-a-bootstrap-column-expands-to-fit-the-width-of-its-content-when -->
+            <p class="col-sm-auto course">
+              Course<br>{{ singleNote.course }}
+            </p>
+            <p class="col-sm-auto professorName">
+              Professor<br>{{ singleNote.professor }}
+            </p>
+            <p class="col-sm-auto semester">
+              Semester<br>{{ singleNote.semester }}
+            </p>
+            <p class="col-sm-auto semester">
+              Uploader<br><a :href="'/profile/'+singleNote.owner.id">{{ singleNote.owner.username }}</a>
+            </p>
+          </div>
+          <div class="row-fluid justify-content-center">
+            <div class="box bg-light justify-content-center" v-if="singleNote.content">
+              <div class="noteContent">
+                {{ singleNote.content }}
+              </div>
+            </div>
+            <div class="embed-responsive embed-responsive-4by3" v-if="!singleNote.content">
+              <iframe class="embed-responsive-item" :src="'localhost:8080/api/file/'+this.$route.params.id"></iframe>
+            </div>
+            <b-button :href="'/editPage/'+singleNote.id" class="float-right" variant="primary" squared v-if="isOwner">Edit</b-button>
+          </div>
+
+      </div>
+  </div>
 </template>
 
 <script>
+
+import NoteService from '../services/note.service'
+
 export default {
   name: 'IndividualNote',
   data () {
     return {
-      singleNotes: [
-        {
-          title: 'Unit Testing',
-          course: 'Software Engineer',
-          content: 'A unit is the smallest testable part of any software. It usually has one or a few inputs and usually a single output. In procedural programming, a unit may be an individual program, function, procedure, etc. In object-oriented programming, the smallest unit is a method, which may belong to a base / super class, abstract class or derived / child class. (Some treat a module of an application as a unit. This is to be discouraged as there will probably be many individual units within that module.) Unit testing frameworks, drivers, stubs, and mock / fake objects are used to assist in unit testing.',
-          professor: 'Adam Smith',
-          semester: 'Spring 2019',
-          file: 'note.pdf',
-          description: 'A Unit Testing Note'
-        }
-      ]
+      singleNote: this.getNote(this.$route.params.id)
+    }
+  },
+  methods: {
+    getNote (id) {
+      NoteService.get(id)
+        .then(response => {
+          this.singleNote = response.data
+          console.log(response.data)
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
+
+  },
+  computed: {
+    isOwner () {
+      console.log(this.$store.state.auth.user.username)
+      console.log(this.singleNote.owner.username)
+      if (this.$store.state.auth.user.username === this.singleNote.owner.username) {
+        return true
+      } else {
+        return false
+      }
     }
   }
 }
 </script>
 <style>
+.description{
+  text-align: left;
+  font-size: 20px;
+  color: beige;
+}
 .individualnote{
-  background-color: #0d3103;
+  background-color: #1a5f06;
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+}
+.editButton{
+  text-align: center;
+  font-size: 20px;
+  color: beige;
 }
 .box{
-  background-color: #0d3103;
+  background-color: #1a5f06;
 }
 .noteTitle{
   font-size: 30px;
@@ -70,12 +104,12 @@ export default {
   font-weight: 700;
 }
 .course{
-  text-align: left;
+  text-align: center;
   font-size: 20px;
   color: beige;
 }
 .professorName{
-  text-align: left;
+  text-align: center;
   font-size: 20px;
   color: beige;
 }
@@ -85,7 +119,7 @@ export default {
   color: beige;
 }
 .semester{
-  text-align: left;
+  text-align: center;
   font-size: 20px;
   color: beige;
 }
@@ -98,14 +132,6 @@ export default {
   text-align: left;
   font-size: 18px;
   color: beige;
-}
-.border{
-  display: block;
-  margin: auto;
-  width: 500px;
-  height: 2px;
-  color: darkslategrey;
-  margin-bottom: 40px;
 }
 .pdf-display p{
   font-size: 30px;

@@ -34,6 +34,14 @@ public class Cs4800ProjectApplication {
 		}
 		Note note = new Note("testNoteName", "testNoteMessage", "testNoteClassName");
 		noteService.save(note);
+
+		for (Note n : noteService.findByTitle("Unit Testing")) {
+			noteService.delete(n);
+		}
+		note = new Note("Unit Testing",
+				"A unit is the smallest testable part of any software. It usually has one or a few inputs and usually a single output. In procedural programming, a unit may be an individual program, function, procedure, etc. In object-oriented programming, the smallest unit is a method, which may belong to a base / super class, abstract class or derived / child class. (Some treat a module of an application as a unit. This is to be discouraged as there will probably be many individual units within that module.) Unit testing frameworks, drivers, stubs, and mock / fake objects are used to assist in unit testing.",
+				"CS 4800", "Adam Smith", "Spring 2019", "A Unit Testing Note");
+		noteService.save(note);
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
@@ -61,7 +69,7 @@ public class Cs4800ProjectApplication {
 		if (userService.find("mod") != null) {
 			userService.delete(userService.find("mod"));
 		}
-		
+
 		User user = new User("mod", "mod@mod.com", "mod");
 		user.addRole("ROLE_MOD");
 		userService.insert(user);

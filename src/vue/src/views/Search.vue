@@ -30,6 +30,7 @@
                   <b-card-text class="p-0 mt-0 mb-0">Professor: {{ note.professor }}</b-card-text>
                   <b-card-text class="p-0 mt-0 mb-0">Course: {{ note.course }}</b-card-text>
                   <b-card-text class="p-0 mt-0 mb-0">Semester: {{ note.semester }}</b-card-text>
+                  <b-card-text class="p-0 mt-0 mb-0">Description: {{ note.description }}</b-card-text>
                   <b-button :href="'/individualNote/'+note.id" class="float-right" variant="primary" squared>→</b-button>
 
                 </b-card-body>

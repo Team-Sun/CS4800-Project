@@ -1,7 +1,6 @@
 package TeamSun.CS4800Project.response;
 
 import org.bson.types.ObjectId;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * This is for specifically sending data back to the frontend from the backend.
@@ -19,9 +18,9 @@ public class NoteResponse {
 	private short rating;
 	private String course;
 	private String semester;
-	private MultipartFile file;
-	private ObjectId owner; // Must be ObjectId because people can change their username.
+	private UserResponse owner; // owner == username
 	private String professor;
+	private String description;
 
 	public String getId() {
 		return id;
@@ -71,19 +70,11 @@ public class NoteResponse {
 		this.semester = semester;
 	}
 
-	public MultipartFile getFile() {
-		return file;
-	}
-
-	public void setFile(MultipartFile file) {
-		this.file = file;
-	}
-
-	public ObjectId getOwner() {
+	public UserResponse getOwner() {
 		return owner;
 	}
 
-	public void setOwner(ObjectId owner) {
+	public void setOwner(UserResponse owner) {
 		this.owner = owner;
 	}
 
@@ -93,6 +84,14 @@ public class NoteResponse {
 
 	public void setProfessor(String professor) {
 		this.professor = professor;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

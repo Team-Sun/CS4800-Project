@@ -20,6 +20,7 @@ public class Note {
 	private String fileType;
 	private ObjectId owner; // Must be ObjectId because people can change their username.
 	private String professor;
+	private String description;
 
 	public Note() {
 
@@ -31,12 +32,13 @@ public class Note {
 		this.course = className;
 	}
 
-	public Note(String name, String message, short rating, String course, Binary file) {
-		this.title = name;
-		this.content = message;
-		this.rating = rating;
+	public Note(String title, String content, String course, String professor, String semester, String description) {
+		this.title = title;
+		this.content = content;
 		this.course = course;
-		this.file = file;
+		this.professor = professor;
+		this.semester = semester;
+		this.description = description;
 	}
 
 	public Note(String name) {
@@ -117,5 +119,13 @@ public class Note {
 
 	public void setProfessor(String professor) {
 		this.professor = professor;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

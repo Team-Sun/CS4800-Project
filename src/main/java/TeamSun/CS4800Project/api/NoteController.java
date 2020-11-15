@@ -57,7 +57,7 @@ public class NoteController {
 
 	@PostMapping("/note")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<Note> addEntry(@RequestPart Note note, @RequestPart(required = false) MultipartFile file, HttpServletRequest request) {
+	public ResponseEntity<NoteResponse> addEntry(@RequestPart Note note, @RequestPart(required = false) MultipartFile file, HttpServletRequest request) {
 		if (file != null) {
 			try {
 				note.setFileType(file.getContentType()); // TODO validate PDF in frontend and backend here.
@@ -71,12 +71,13 @@ public class NoteController {
 		}
 
 		User clientUser = userService.find(request);
+		note.setOwner(clientUser.getId());
 
 		noteService.save(note);
 		// ID is only created after it's inserted. WARN This might result in errors if
 		// DB runs concurrently.
 		clientUser.addNote(note.getId());
-		return new ResponseEntity<>(note, HttpStatus.CREATED);
+		return new ResponseEntity<>(noteService.convertToFullResponse(note), HttpStatus.CREATED);
 
 		// TODO May need to catch an exception
 	}
@@ -99,7 +100,7 @@ public class NoteController {
 
 	}
 
-	@GetMapping("note/{id}")
+	@GetMapping("/note/{id}")
 	@PreAuthorize("permitAll()")
 	public ResponseEntity<NoteResponse> getNoteById(@PathVariable("id") ObjectId id) {
 		Note note = noteService.findByID(id);
@@ -145,6 +146,7 @@ public class NoteController {
 			}
 			return new ResponseEntity<>(noteList, HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -167,6 +169,7 @@ public class NoteController {
 				noteToEdit.setCourse(note.getCourse());
 				noteToEdit.setProfessor(note.getProfessor());
 				noteToEdit.setSemester(note.getSemester());
+				noteToEdit.setDescription(note.getDescription());
 				// TODO add the file or do it another way that just doesn't update certain
 				// parts.
 				// TODO LOOKAT possibly making NoteUpdateRequest instead.

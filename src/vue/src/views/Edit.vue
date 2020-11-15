@@ -1,6 +1,6 @@
 <template>
      <div id="upload-component">
-        <form class="form" @submit.prevent="addNewNote" role="form">
+        <form class="form" @submit.prevent="updateNote" role="form">
             <div class="container input-container">
                 <div class="row row-0">
                     <div class="col-7 note-col">
@@ -37,7 +37,6 @@
                             <select
                             class="form-group"
                             v-model="isUploadingNewNote">
-                                <option disabled value="3">Please select one</option>
                                 <option value="0"> Create New Note </option>
                                 <option value="1"> Upload Existing Note </option>
                         </select>
@@ -134,12 +133,12 @@
                         <!-- This button is disabled if a valid note type hasn't been chosen,
                             the title or class inputs are empty,
                             or if noteType == 0 and the textarea is empty-->
-                            <button type="submit"
-                            :disabled="(noteType == 3 || (noteType == 0 && note.content == '')) || note.title == '' || note.course == ''">
-                                <!--   :disabled="errors.any() || noteType == 3 || note.title == '' || note.course == ''">-->
-                            Add Note
-                            </button>
-                        <button @click="clearForm"> Clear </button>
+                        <button type="submit"
+                        :disabled="(noteType == 3 || (noteType == 0 && note.content == '')) || note.title == '' || note.course == ''">
+                             <!--   :disabled="errors.any() || noteType == 3 || note.title == '' || note.course == ''">-->
+                        Update Note
+                        </button>
+                        <button @click="deleteNote"> Delete </button>
                     </div>
                 </div>
             </div>
@@ -148,19 +147,11 @@
 </template>
 
 <script>
-import Note from '../models/note'
 import NoteService from '../services/note.service'
 
 export default {
-  name: 'UploadComponent',
-  components:
-  {
-  },
-  props:
-  {
-  },
-  computed:
-  {
+  name: 'EditPage',
+  computed: {
     /* Note type is set when an option is selected.
     0 - A new note will be created in the textarea
     1 - An existing note file will be uploaded
@@ -173,59 +164,71 @@ export default {
   data: function () {
     return {
       isUploadingNewNote: 3,
-      note: new Note('', '', '', '', '', '', '')
+      note: this.getNote(this.$route.params.id2),
+      message: ''
     }
   },
-  methods:
-  {
-    addNewNote () {
-      NoteService.create(this.note)
+  methods: {
+    getNote (id) {
+      NoteService.get(id)
         .then(response => {
-          this.note.id = response.data.id
+          this.note = response.data
+          if (response.data.content) {
+            this.isUploadingNewNote = 0
+          } else {
+            this.isUploadingNewNote = 1
+          }
           console.log(response.data)
-          this.$router.push({ path: `/individualNote/${response.data.id}` })
         })
         .catch(e => {
           console.log(e)
         })
     },
-    newNote () {
-      this.note = {}
+
+    updateNote () {
+      NoteService.update(this.note.id, this.note)
+        .then(response => {
+          console.log(response.data)
+          this.message = 'The note was updated successfully!'
+        })
+        .catch(e => {
+          console.log(e)
+        })
     },
-    clearForm () {
-      this.note.content = ''
-      this.note.title = ''
-      this.note.course = ''
-      this.note.professor = ''
-      this.note.semester = ''
-      this.note.description = ''
-      this.isUploadingNewNote = 3
-      this.note.file = null || ''
-    },
-    noteFileChange (event) {
-      this.note.file = this.$refs.file.files[0]
+
+    deleteNote () {
+      NoteService.delete(this.note.id)
+        .then(response => {
+          console.log(response.data)
+          this.$router.push({ name: 'Search' })
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   }
 }
 </script>
 
 <style>
-#upload-component
-{
-    background: rgba(42, 43, 42, 0.933);
-    color: white;
-    padding: 12px;
-    height: 1000px;
+.edit-form {
+  background: rgba(42, 43, 42, 0.933);
+  color: white;
+  padding: 12px;
+  padding-left: 200px;
+  height: 1000px;
 }
-.input-col
+.col
 {
     padding-top: 15px;
 }
-#note-col
+.buttons
 {
-    padding: 20px;
+  margin-left: -600px;
 }
-#label
+.but
 {
+  margin-left: 50px;
 }
+
 </style>

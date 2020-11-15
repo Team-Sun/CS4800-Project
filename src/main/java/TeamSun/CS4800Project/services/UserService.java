@@ -1,10 +1,11 @@
 package TeamSun.CS4800Project.services;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import TeamSun.CS4800Project.response.UserResponse;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,6 +19,7 @@ import TeamSun.CS4800Project.dao.UserDao;
 import TeamSun.CS4800Project.jwt.JwtUtils;
 import TeamSun.CS4800Project.model.User;
 import TeamSun.CS4800Project.request.SignupRequest;
+import TeamSun.CS4800Project.response.UserResponse;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -83,7 +85,29 @@ public class UserService implements UserDetailsService {
 	}
 
 	public UserResponse convertToResponse(User user) {
-		return new UserResponse(user.getUsername(), user.getNotes(), user.getEmail());
+		UserResponse response = new UserResponse();
+		response.setId(user.getId().toHexString());
+		response.setUsername(user.getUsername());
+		Set<String> notes = new HashSet<>();
+		for (ObjectId noteid : user.getNotes()) {
+			notes.add(noteid.toHexString());
+		}
+		response.setNotes(notes);
+		return response;
+	}
+	
+	public UserResponse convertToPrivateResponse(User user) {
+		UserResponse response = convertToResponse(user);
+		response.setEmail(user.getEmail());
+		return response;
+	}
+	
+	public UserResponse convertToSimpleResponse(User user) {
+		UserResponse response = new UserResponse();
+		System.out.println(user.getUsername());
+		response.setId(user.getId().toHexString());
+		response.setUsername(user.getUsername());
+		return response;
 	}
 
 	@Override

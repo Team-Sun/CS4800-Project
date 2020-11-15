@@ -8,11 +8,12 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import TeamSun.CS4800Project.dao.NoteDao;
 import TeamSun.CS4800Project.model.Note;
+import TeamSun.CS4800Project.model.User;
 import TeamSun.CS4800Project.response.NoteResponse;
+import TeamSun.CS4800Project.response.UserResponse;
 
 /**
  * Takes care of manipulating data and meshing with DAO. >>>>>>> master_temp1
@@ -22,12 +23,15 @@ import TeamSun.CS4800Project.response.NoteResponse;
  */
 @Service("noteService")
 public class NoteService {
-	
+
 	final int PAGE_SIZE = 10;
 
 	@Autowired
 	@Qualifier("mongodb_note")
 	NoteDao DB;
+
+	@Autowired
+	UserService userService;
 
 	// TODO change to 'save' instead so it's more intuitive.
 
@@ -54,11 +58,11 @@ public class NoteService {
 	public List<Note> getAll() {
 		return DB.getAll();
 	}
-	
+
 	public List<Note> getPage(int page) {
 		List<Note> ret = new LinkedList<>();
 		List<Note> all = DB.getAll();
-		for (int i = PAGE_SIZE*(page-1); i < PAGE_SIZE*page; i++) {
+		for (int i = PAGE_SIZE * (page - 1); i < PAGE_SIZE * page; i++) {
 			ret.add(all.get(i));
 		}
 		return ret;
@@ -74,6 +78,7 @@ public class NoteService {
 
 	/**
 	 * For when specific notes are wanted.
+	 * 
 	 * @param note
 	 * @return
 	 */
@@ -81,23 +86,29 @@ public class NoteService {
 		NoteResponse response = new NoteResponse();
 		response.setContent(note.getContent());
 		response.setCourse(note.getCourse());
-		// Don't know if this will convert properly.
-		// Use this otherwise:
-		//	if (note.getFile() != null) {
-		//		response.setFile(new PDFMultipartFile(note.getFile().getData(), note.getFileType()));
-		//	}
-		response.setFile((MultipartFile) note.getFile());
 		response.setId(note.getId().toHexString());
-		response.setOwner(note.getOwner());
+		if (note.getOwner() == null) {
+			response.setOwner(new UserResponse("Developers"));
+		} else {
+			if (userService.find(note.getOwner()) == null) {
+				//User was deleted
+				response.setOwner(new UserResponse("Deleted User"));
+			} else {
+				User owner = userService.find(note.getOwner());
+				response.setOwner(userService.convertToSimpleResponse(owner));
+			}
+		}
 		response.setProfessor(note.getProfessor());
 		response.setTitle(note.getTitle());
 		response.setRating(note.getRating());
 		response.setSemester(note.getSemester());
+		response.setDescription(note.getDescription());
 		return response;
 	}
-	
+
 	/**
 	 * For when a lot of notes are wanted at the same time.
+	 * 
 	 * @param note
 	 * @return
 	 */
@@ -108,6 +119,19 @@ public class NoteService {
 		response.setProfessor(note.getProfessor());
 		response.setTitle(note.getTitle());
 		response.setSemester(note.getSemester());
+		response.setDescription(note.getDescription());
+		if (note.getOwner() == null) {
+			response.setOwner(new UserResponse("Developers"));
+		} else {
+			if (userService.find(note.getOwner()) == null) {
+				//User was deleted
+				response.setOwner(new UserResponse("Deleted User"));
+			} else {
+				User owner = userService.find(note.getOwner());
+				response.setOwner(userService.convertToSimpleResponse(owner));
+			}
+		}
+
 		return response;
 	}
 

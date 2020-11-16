@@ -211,18 +211,19 @@ public class NoteController {
 		return new ResponseEntity<>(classes, HttpStatus.OK);
 	}
 
-	@PostMapping("/getNoteByUser")
+	@PostMapping("/getNotesByUser/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<List<String>> getNoteByUser(@RequestBody User user) {
-		List<String> notes = new LinkedList<String>();
-		for (ObjectId id : userService.find(user.getUsername()).getNotes()) {
-			Note temp = noteService.findByID(id);
-			if (temp != null) {
-				notes.add(temp.getTitle());
+	public ResponseEntity<List<NoteResponse>> getNoteByUser(@PathVariable("id") ObjectId id) {
+		List<NoteResponse> notes = new LinkedList<>();
+		User user = userService.find(id);
+		
+		if (user != null) {
+			notes = noteService.getOwnedNotes(user);
+			if (notes.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
-		}
-		if (notes.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}

@@ -67,6 +67,17 @@ public class NoteService {
 		}
 		return ret;
 	}
+	
+	public List<NoteResponse> getOwnedNotes(User user) {
+		List<NoteResponse> response = new LinkedList<>();
+		for (ObjectId id : user.getNotes()) {
+			Note note = findByID(id);
+			if (note != null) {
+				response.add(convertToSimpleResponse(note));
+			}
+		}
+		return response;
+	}
 
 	public List<Note> findByTitle(String title) {
 		return DB.findByTitle(title);

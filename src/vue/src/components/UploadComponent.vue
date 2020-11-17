@@ -188,6 +188,7 @@ export default {
         .catch(e => {
           console.log(e)
         })
+      this.clearForm()
     },
     newNote () {
       this.note = {}
@@ -212,10 +213,12 @@ export default {
 <style>
 #upload-component
 {
-    background: rgba(42, 43, 42, 0.933);
-    color: white;
-    padding: 12px;
-    height: 1000px;
+    color: rgba(42, 43, 42, 0.933);
+    background-color: #7b7c7e;
+    padding: 50px;
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
 }
 .input-col
 {
@@ -224,8 +227,5 @@ export default {
 #note-col
 {
     padding: 20px;
-}
-#label
-{
 }
 </style>

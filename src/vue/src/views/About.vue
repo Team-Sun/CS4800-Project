@@ -98,7 +98,7 @@ export default {
 .about-page{
   height:100vh;
   width:auto;
-  background-color: beige;
+  background-color: #7b7c7e;
 }
 .team-section{
     height: 570px;
@@ -198,12 +198,12 @@ export default {
 .mission p{
     text-transform: uppercase;
     font-size: 36px;
-    color: darkgreen;
+    color:  #0d3103;
     margin-bottom: 10px;
 }
 .mission h1{
     font-size: 22px;
-    color: darkgreen;
-    font-family: cursive;
+    color:  #0d3103;
+    font-family: sans-serif;
 }
 </style>

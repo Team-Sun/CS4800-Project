@@ -19,7 +19,7 @@
           <b-list-group>
             <b-list-group-item v-for="(note, index) in notes"
             :key="index">
-            Title: {{note.title}}
+            <div id="note-title">{{note.title}}</div>
             <br>
             Professor: {{ note.professor }}
             <br>
@@ -28,7 +28,7 @@
             Semester: {{ note.semester }}
             <br>
             Description: {{ note.description }}
-            <b-button :href="'/individualNote/'+note.id" class="float-right" variant="primary" squared>→</b-button>
+            <b-button :href="'/individualNote/'+note.id" class="float-right" variant="primary" squared style="background: #0d3103;">→</b-button>
             </b-list-group-item>
           </b-list-group>
 
@@ -237,5 +237,11 @@ div.noteContent{
 }
 .searchNote{
    font-size: 15px;
+}
+#note-title
+{
+  font-weight: bold;
+  text-align: center;
+  font-size: 18px;
 }
 </style>

@@ -6,7 +6,7 @@
           <img src="../assets/note-logo2.png" height="60" alt="Bronco Notes">
         </router-link>
         -->
-        <div id="Titile">
+        <div id="Title">
           Best College Notes
         </div>
         <router-link to="/">
@@ -108,6 +108,6 @@ export default {
 }
 #title
 {
-  font-size: 10%;
+  font-size: 12%;
 }
 </style>

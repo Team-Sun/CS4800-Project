@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div id="login">
     <div class="card card-container">
       <img
         id="profile-img"
@@ -7,7 +7,7 @@
         class="profile-img-card"
       />
       <form name="form" @submit.prevent="handleLogin">
-        <div class="form-group">
+        <div class="form-group text-left">
           <label for="username">Username</label>
           <input
             v-model="user.username"
@@ -22,7 +22,7 @@
             role="alert"
           >Username is required!</div>
         </div>
-        <div class="form-group">
+        <div class="form-group text-left">
           <label for="password">Password</label>
           <input
             v-model="user.password"
@@ -108,7 +108,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+#login
+{
+  background: #7b7c7e;
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  padding: 50px;
+}
 label {
   display: block;
   margin-top: 10px;
@@ -123,7 +131,7 @@ label {
   background-color: #f7f7f7;
   padding: 20px 25px 30px;
   margin: 0 auto 25px;
-  margin-top: 50px;
+  margin-top: 0px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   border-radius: 2px;

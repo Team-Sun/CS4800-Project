@@ -98,7 +98,7 @@ export default {
 .about-page{
   height:100vh;
   width:auto;
-  background-color: beige;
+  background-color:  #7b7c7e;
 }
 .team-section{
     height: 570px;
@@ -110,7 +110,7 @@ export default {
 .team-section h2{
     text-transform: uppercase;
     margin-bottom: 20px;
-    color:lemonchiffon;
+    color: #7b7c7e;
     font-size: 40px;
 }
 .border0{
@@ -118,7 +118,7 @@ export default {
     margin: auto;
     width: 500px;
     height: 2px;
-    background: lemonchiffon;
+    background:  #7b7c7e;
     margin-bottom: 40px;
 }
 .border{
@@ -162,7 +162,7 @@ export default {
   width: 600px;
   margin: auto;
   font-size: 20px;
-  color: lemonchiffon;
+  color:  #7b7c7e;
   text-align: justify;
   height: 0;
   overflow: hidden;
@@ -176,7 +176,7 @@ export default {
 }
 .section a{
   text-align: center;
-  color: lemonchiffon;
+  color:  #7b7c7e;
 }
 .link{
   text-align: center;
@@ -191,19 +191,19 @@ export default {
 .mission{
     overflow: hidden;
     text-align: center;
-    background: beige;
+    background:  #7b7c7e;
     padding: 40px;
     height: min-content;
 }
 .mission p{
     text-transform: uppercase;
     font-size: 36px;
-    color: darkgreen;
+    color:  #0d3103;
     margin-bottom: 10px;
 }
 .mission h1{
     font-size: 22px;
-    color: darkgreen;
-    font-family: cursive;
+    color:  #0d3103;
+    font-family: sans-serif;
 }
 </style>

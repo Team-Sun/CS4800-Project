@@ -6,6 +6,9 @@
           <img src="../assets/note-logo2.png" height="60" alt="Bronco Notes">
         </router-link>
         -->
+        <div id="Title">
+          Best College Notes
+        </div>
         <router-link to="/">
           <font-awesome-icon icon="home" />Home
         </router-link>
@@ -102,5 +105,9 @@ export default {
   padding: 10px 20px;
   text-align: center;
   display: flex;
+}
+#title
+{
+  font-size: 12%;
 }
 </style>

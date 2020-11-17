@@ -1,5 +1,5 @@
 <template>
-  <div class="register">
+  <div id="register">
     <div class="card card-container">
       <img
         id="profile-img"
@@ -8,7 +8,7 @@
       />
       <form name="form" @submit.prevent="handleRegister">
         <div v-if="!successful">
-          <div class="form-group">
+          <div class="form-group text-left">
             <label for="username">Username</label>
             <input
               v-model="user.username"
@@ -22,7 +22,7 @@
               class="alert-danger"
             >{{errors.first('username')}}</div>
           </div>
-          <div class="form-group">
+          <div class="form-group text-left">
             <label for="email">Email</label>
             <input
               v-model="user.email"
@@ -36,7 +36,7 @@
               class="alert-danger"
             >{{errors.first('email')}}</div>
           </div>
-          <div class="form-group">
+          <div class="form-group text-left">
             <label for="password">Password</label>
             <input
               v-model="user.password"
@@ -114,7 +114,14 @@ export default {
 </script>
 
 <style>
-
+#register
+{
+  background: #7b7c7e;
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  padding: 50px;
+}
 label {
   display: block;
   margin-top: 10px;
@@ -127,7 +134,7 @@ label {
   background-color: #f7f7f7;
   padding: 20px 25px 30px;
   margin: 0 auto 25px;
-  margin-top: 50px;
+  margin-top: 0px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   border-radius: 2px;

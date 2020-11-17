@@ -15,9 +15,24 @@
       <div class="searchTitle">Search Results</div>
       <br>
       <div class="search-result">
-        <div class="box">
+        <div class="box text-left">
+          <b-list-group>
+            <b-list-group-item v-for="(note, index) in notes"
+            :key="index">
+            <div id="note-title">{{note.title}}</div>
+            <br>
+            Professor: {{ note.professor }}
+            <br>
+            Course: {{ note.course }}
+            <br>
+            Semester: {{ note.semester }}
+            <br>
+            Description: {{ note.description }}
+            <b-button :href="'/individualNote/'+note.id" class="float-right" variant="primary" squared style="background: #0d3103;">→</b-button>
+            </b-list-group-item>
+          </b-list-group>
 
-          <div class="accordion" role="tablist">
+          <!--div class="accordion" role="tablist">
             <b-card no-body class="mb-0 mt-0 p-2"
             v-for="(note, index) in notes"
             :key="index"
@@ -36,7 +51,7 @@
                 </b-card-body>
               </b-collapse>
             </b-card>
-          </div>
+          </div>-->
 
         </div>
       </div>
@@ -169,7 +184,7 @@ h1{
     cursor: pointer;
 }
 .result{
-    background-color: beige;
+    background-color: #7b7c7e;
     padding: 30px;
     height: auto;
 }
@@ -185,10 +200,10 @@ h1{
     width: auto;
     height: 3px;
     margin: auto;
-    background: darkgreen;
+    background:  #0d3103;
 }
 .searchTitle{
-    color: darkgreen;
+    color:  #0d3103;
     font-size: 50px;
     font-family: serif;
 }
@@ -222,5 +237,11 @@ div.noteContent{
 }
 .searchNote{
    font-size: 15px;
+}
+#note-title
+{
+  font-weight: bold;
+  text-align: center;
+  font-size: 18px;
 }
 </style>

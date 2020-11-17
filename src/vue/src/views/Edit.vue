@@ -133,6 +133,7 @@
                         <!-- This button is disabled if a valid note type hasn't been chosen,
                             the title or class inputs are empty,
                             or if noteType == 0 and the textarea is empty-->
+
                         <button type="submit"
                         :disabled="(noteType == 3 || (noteType == 0 && note.content == '')) || note.title == '' || note.course == ''">
                              <!--   :disabled="errors.any() || noteType == 3 || note.title == '' || note.course == ''">-->
@@ -190,6 +191,7 @@ export default {
         .then(response => {
           console.log(response.data)
           this.message = 'The note was updated successfully!'
+          this.$router.push({ name: 'IndividualNote', params: { id: this.note.id } })
         })
         .catch(e => {
           console.log(e)
@@ -212,11 +214,12 @@ export default {
 
 <style>
 .edit-form {
-  background: rgba(42, 43, 42, 0.933);
-  color: white;
-  padding: 12px;
-  padding-left: 200px;
-  height: 1000px;
+  color: rgba(42, 43, 42, 0.933);
+    background-color: #7b7c7e;
+    padding: 50px;
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
 }
 .col
 {

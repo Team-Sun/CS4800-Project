@@ -6,7 +6,7 @@
       <div class="ps">
         <a href="#p1"><img src="@/assets/mai_profile.jpeg" alt="" width="240" height="280"></a>
         <a href="#p2"><img src="@/assets/p1.jpeg" alt="" width="240" height="280"></a>
-        <a href="#p3"><img src="@/assets/p1.jpeg" alt="" width="240" height="280"></a>
+        <a href="#p3"><img src="@/assets/andrew.jpg" alt="" width="240" height="280"></a>
         <a href="#p4"><img src="@/assets/JasonHo.jpg" alt="" width="240" height="280"></a>
         <a href="#p5"><img src="@/assets/jonathan.jpg" alt="" width="240" height="280"></a>
       </div>

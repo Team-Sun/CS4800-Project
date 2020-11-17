@@ -29,6 +29,10 @@ class NoteService {
     return http.get('/note')
   }
 
+  getByUser (id) {
+    return http.get(`/getNotesByUser/${id}`)
+  }
+
   getPage (n) {
     return http.get('/note', { page: n })
   }

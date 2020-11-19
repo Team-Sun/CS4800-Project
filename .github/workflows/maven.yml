@@ -4,6 +4,9 @@
 name: Java Github Actions Test
 
 on:
+  push:
+    branches: 
+      - releases/**
   release:
     types: [published]
 

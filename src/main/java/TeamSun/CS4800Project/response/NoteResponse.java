@@ -1,7 +1,5 @@
 package TeamSun.CS4800Project.response;
 
-import org.bson.types.ObjectId;
-
 /**
  * This is for specifically sending data back to the frontend from the backend.
  * Allows methods currently in Note class to not be sent, saving resources and

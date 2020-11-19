@@ -64,6 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/api/test/**","/api/note/**","/admin/**","/**", "/api/**").permitAll()
 			.antMatchers("/","/js/**","/css/**", "/img/**", "/favicon.ico").anonymous()
 			.anyRequest().authenticated();
+		// Thanks to https://stackoverflow.com/questions/28647136/how-to-disable-x-frame-options-response-header-in-spring-security
+		http.headers().frameOptions().sameOrigin();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}

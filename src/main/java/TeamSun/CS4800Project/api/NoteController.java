@@ -90,8 +90,6 @@ public class NoteController {
 	@PreAuthorize("permitAll()")
 	public void getFile(@PathVariable("id") ObjectId id, HttpServletRequest request, HttpServletResponse response) {
 		// User clientUser = userService.find(request);
-		System.out.println("fileid: ");
-		System.out.println(id);
 		Note note = noteService.findByID(id);
 		try {
 			response.setHeader("Content-Disposition", String.format("inline; filename=\"testnote.pdf" + "\""));

@@ -6,7 +6,7 @@ name: Java Github Actions Test
 on:
   push:
     branches: 
-      - 'release/**'
+      - release/**
   release:
     types: [published]
 

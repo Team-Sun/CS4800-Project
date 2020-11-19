@@ -22,40 +22,40 @@ class NoteService {
     {
       type: 'application/json'
     }))
-    return http.post('/note', data, { headers: authHeader(), 'Content-Type': undefined })
+    return http.getInstance().post('/note', data, { headers: authHeader(), 'Content-Type': undefined })
   }
 
   getAll () {
-    return http.get('/note')
+    return http.getInstance().get('/note')
   }
 
   getByUser (id) {
-    return http.get(`/getNotesByUser/${id}`)
+    return http.getInstance().get(`/getNotesByUser/${id}`)
   }
 
   getPage (n) {
-    return http.get('/note', { page: n })
+    return http.getInstance().get('/note', { page: n })
   }
 
   get (id) {
-    return http.get(`/note/${id}`)
+    return http.getInstance().get(`/note/${id}`)
   }
 
   // TODO FIX AS WELL
   update (id, data) {
-    return http.put(`/note/${id}`, data)
+    return http.getInstance().put(`/note/${id}`, data)
   }
 
   delete (id) {
-    return http.delete(`/note/${id}`)
+    return http.getInstance().delete(`/note/${id}`)
   }
 
   deleteAll () {
-    return http.delete('/note')
+    return http.getInstance().delete('/note')
   }
 
   findByTitle (title) {
-    return http.get(`/note?title=${title}`)
+    return http.getInstance().get(`/note?title=${title}`)
   }
 }
 

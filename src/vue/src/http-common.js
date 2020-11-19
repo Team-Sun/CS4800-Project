@@ -1,10 +1,17 @@
 import axios from 'axios'
 import authHeader from './services/auth-token-header'
 
-export default axios.create({
-  baseURL: 'http://localhost:8080/api',
-  headers: {
-    Authorization: authHeader(),
-    'Content-type': 'application/json'
+// Had to be changed to this, which is also most definitely not correct. Too late to change for potential final deployment though.
+// TODO LOOKAT and fix
+const http = {
+  getInstance () {
+    return axios.create({
+      baseURL: 'http://localhost:8080/api',
+      headers: {
+        Authorization: authHeader(),
+        'Content-Type': 'application/json'
+      }
+    })
   }
-})
+}
+export default http

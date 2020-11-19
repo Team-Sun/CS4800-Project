@@ -77,6 +77,7 @@ public class NoteController {
 		// ID is only created after it's inserted. WARN This might result in errors if
 		// DB runs concurrently.
 		clientUser.addNote(note.getId());
+		userService.update(clientUser);
 		return new ResponseEntity<>(noteService.convertToFullResponse(note), HttpStatus.CREATED);
 
 		// TODO May need to catch an exception
@@ -211,7 +212,7 @@ public class NoteController {
 		return new ResponseEntity<>(classes, HttpStatus.OK);
 	}
 
-	@PostMapping("/getNotesByUser/{id}")
+	@GetMapping("/getNotesByUser/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<List<NoteResponse>> getNoteByUser(@PathVariable("id") ObjectId id) {
 		List<NoteResponse> notes = new LinkedList<>();

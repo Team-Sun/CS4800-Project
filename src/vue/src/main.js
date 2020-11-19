@@ -25,6 +25,7 @@ library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt,
   faSearchPlus, faAddressCard, faUpload)
 
 Vue.config.productionTip = false
+Vue.prototype.$store = store
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)

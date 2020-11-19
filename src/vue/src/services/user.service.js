@@ -9,10 +9,25 @@ class UserService {
     return axios.get(API_URL + 'all')
   }
 
-  getUserBoard () {
-    return axios.get(API_URL + 'user', { headers: authHeader() })
+  updateUser (id, user) {
+    return http.getInstance().post(`/user/update/${id}`, user, { headers: authHeader() }).then(response => {
+      return response.data
+    })
   }
 
+  deleteUser (id) {
+    return http.getInstance().delete(`/user/delete/${id}`)
+      .then(response => {
+        console.log(response.status)
+        if (response.status === 401) {
+          return Promise.reject(response.data)
+        } else if (response.status === 200) {
+          return Promise.resolve()
+        }
+      })
+  }
+
+  // TODO change to point to actual data usable by these users.
   getModeratorBoard () {
     return axios.get(API_URL + 'mod', { headers: authHeader() })
   }
@@ -22,7 +37,7 @@ class UserService {
   }
 
   getUsername (id) {
-    return http.get(`/user/${id}`)
+    return http.getInstance().get(`/user/${id}`)
   }
 }
 

@@ -71,7 +71,7 @@ public class Cs4800ProjectApplication {
 		}
 
 		User user = new User("mod", "mod@mod.com", "mod");
-		user.addRole("ROLE_MOD");
+		user.addRole("ROLE_MODERATOR");
 		userService.insert(user);
 	}
 

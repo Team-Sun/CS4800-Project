@@ -60,7 +60,8 @@
               </div>
             </div>
           </div>
-          <b-button :href="'/editPage/'+singleNote.id" class="float-right" variant="primary" squared v-if="isOwner">Edit</b-button>
+          <b-button :href="'/editPage/'+singleNote.id" class="float-right" v-if="isOwner" style="background: #0d3103;">Edit</b-button>
+
           <!--div class="row-fluid justify-content-center">
             <div class="box bg-light justify-content-center" v-if="singleNote.content">
               <div class="noteContent">

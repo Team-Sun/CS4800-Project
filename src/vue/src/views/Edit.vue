@@ -134,12 +134,12 @@
                             the title or class inputs are empty,
                             or if noteType == 0 and the textarea is empty-->
 
-                        <button type="submit"
+                        <b-button type="submit" style="background: #0d3103;"
                         :disabled="(noteType == 3 || (noteType == 0 && note.content == '')) || note.title == '' || note.course == ''">
                              <!--   :disabled="errors.any() || noteType == 3 || note.title == '' || note.course == ''">-->
                         Update Note
-                        </button>
-                        <button @click="deleteNote"> Delete </button>
+                        </b-button>
+                        <button class="btn btn-danger" @click="deleteNote"> Delete </button>
                     </div>
                 </div>
             </div>

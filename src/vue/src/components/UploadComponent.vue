@@ -134,12 +134,12 @@
                         <!-- This button is disabled if a valid note type hasn't been chosen,
                             the title or class inputs are empty,
                             or if noteType == 0 and the textarea is empty-->
-                            <b-button type="submit"  style=""
+                            <b-button type="submit"  style="background: #0d3103;"
                             :disabled="(noteType == 3 || (noteType == 0 && note.content == '')) || note.title == '' || note.course == ''">
                                 <!--   :disabled="errors.any() || noteType == 3 || note.title == '' || note.course == ''">-->
                             Add Note
                             </b-button>
-                        <button @click="clearForm"> Clear </button>
+                        <b-button @click="clearForm" style="background: #0d3103;"> Clear </b-button>
                     </div>
                 </div>
             </div>

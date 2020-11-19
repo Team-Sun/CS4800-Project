@@ -143,7 +143,7 @@ body{
 }
 h1{
     margin-top: 10px;
-    color: lemonchiffon;
+    color: white;
     font-size: 50px;
     font-family: serif;
     letter-spacing: 2px;
@@ -173,9 +173,9 @@ h1{
 .search-btn{
     height: 50px;
     width: 150px;
-    background: beige;
+    background: #7b7c7e;
     border: none;
-    color: darkgoldenrod;
+    color: white;
     font-size: 25px;
     border-radius: 25px;
 }

@@ -6,7 +6,7 @@ import authHeader from './services/auth-token-header'
 const http = {
   getInstance () {
     return axios.create({
-      baseURL: 'http://localhost:8080/api',
+      baseURL: '/api',
       headers: {
         Authorization: authHeader(),
         'Content-Type': 'application/json'

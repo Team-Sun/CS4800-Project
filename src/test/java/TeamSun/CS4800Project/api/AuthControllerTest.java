@@ -29,25 +29,25 @@ class AuthControllerTest {
 	@Autowired
 	UserService userService;
 
-	@Test
-	void testLoginAuthentication() throws Exception {
-		LoginRequest test = new LoginRequest();
-		test.setPassword("admin");
-		test.setUsername("admin");
-		Assertions.assertFalse(userService.find("admin").isAuthenticated(), "User admin isn't authenticated?");
-		template.postForObject("/api/auth/signin", test, String.class);
-		Assertions.assertTrue(userService.find("admin").isAuthenticated(), "User admin is authenticated?");
-	}
-	
-	@Test
-	void testFailAuthentication() throws Exception {
-		Assertions.assertTrue(userService.find("doesntexist1") == null, "User 'doesntexist' exists?");
-		LoginRequest test = new LoginRequest();
-		test.setPassword("doesntexist1");
-		test.setUsername("doesntexist1");
-		String response = template.postForObject("/api/auth/signin", test, String.class);
-		Assertions.assertTrue(response.equals("Incorrect Username or Password."), "User 'doesntexist' exists?");
-	}
+//	@Test
+//	void testLoginAuthentication() throws Exception {
+//		LoginRequest test = new LoginRequest();
+//		test.setPassword("admin");
+//		test.setUsername("admin");
+//		Assertions.assertFalse(userService.find("admin").isAuthenticated(), "User admin isn't authenticated?");
+//		template.postForObject("/api/auth/signin", test, String.class);
+//		Assertions.assertTrue(userService.find("admin").isAuthenticated(), "User admin is authenticated?");
+//	}
+//	
+//	@Test
+//	void testFailAuthentication() throws Exception {
+//		Assertions.assertTrue(userService.find("doesntexist1") == null, "User 'doesntexist' exists?");
+//		LoginRequest test = new LoginRequest();
+//		test.setPassword("doesntexist1");
+//		test.setUsername("doesntexist1");
+//		String response = template.postForObject("/api/auth/signin", test, String.class);
+//		Assertions.assertTrue(response.equals("Incorrect Username or Password."), "User 'doesntexist' exists?");
+//	}
 
 
 

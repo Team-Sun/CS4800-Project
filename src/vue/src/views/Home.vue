@@ -4,8 +4,8 @@
       <h1>Best College Notes</h1>
       <p>An easy way to organize, find and share notes!</p>
       <div id="button">
-        <b-button :href="'/register'" style="background: #0d3103;"> Sign up</b-button>
-        <b-button :href="'/login'" style="background: #0d3103;"> Log in </b-button>
+        <b-button :href="'/register'" style="background: #0d3103;" v-if="!loggedIn"> Sign up</b-button>
+        <b-button :href="'/login'" style="background: #0d3103;" v-if="!loggedIn"> Log in </b-button>
       </div>
     </div>
    <div class="container text-left">
@@ -63,6 +63,9 @@ export default {
   computed: {
     currentUser () {
       return this.$store.state.auth.user
+    },
+    loggedIn () {
+      return this.$store.state.auth.status.loggedIn
     }
   },
   mounted () {

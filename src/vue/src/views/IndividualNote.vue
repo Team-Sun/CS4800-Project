@@ -69,7 +69,7 @@
               </div>
             </div>
             <div class="embed-responsive embed-responsive-4by3" v-if="!singleNote.content">
-              <iframe class="embed-responsive-item" :src="'localhost:8080/api/file/'+this.$route.params.id"></iframe>
+              <iframe class="embed-responsive-item" :src="'localhost:8080/api/file/'+this.$route.params.id+'.pdf'"></iframe>
             </div>
             <b-button :href="'/editPage/'+singleNote.id" class="float-right" variant="primary" squared v-if="isOwner">Edit</b-button>
           </div>-->

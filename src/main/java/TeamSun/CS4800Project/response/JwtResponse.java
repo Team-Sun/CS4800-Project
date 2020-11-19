@@ -5,29 +5,31 @@ import java.util.Set;
 import org.bson.types.ObjectId;
 
 public class JwtResponse {
-	private String token;
+	private String accessToken;
 	private String type = "Bearer";
 	private ObjectId id;
+	private String hexId;
 	private String username;
 	private String email;
 	private Set<String> roles;
 
 	public JwtResponse(String accessToken, ObjectId id, String username, String email, Set<String> roles) {
-		this.token = accessToken;
+		this.accessToken = accessToken;
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.roles = roles;
+		this.hexId = id.toHexString();
 	}
 
 	public String getAccessToken() {
-		return token;
+		return accessToken;
 	}
 
 	public void setAccessToken(String accessToken) {
-		this.token = accessToken;
+		this.accessToken = accessToken;
 	}
-
+	
 	public String getTokenType() {
 		return type;
 	}
@@ -42,6 +44,14 @@ public class JwtResponse {
 
 	public void setId(ObjectId id) {
 		this.id = id;
+	}
+
+	public String getHexId() {
+		return hexId;
+	}
+
+	public void setHexId(String hexId) {
+		this.hexId = hexId;
 	}
 
 	public String getEmail() {

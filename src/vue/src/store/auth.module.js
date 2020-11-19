@@ -23,8 +23,17 @@ export const auth = {
       )
     },
     logout ({ commit }) {
-      AuthService.logout()
-      commit('logout')
+      return AuthService.logout().then(
+        response => {
+          localStorage.removeItem('user')
+          commit('logoutSuccess')
+          return Promise.resolve(response)
+        })
+    },
+    clearAuth ({ commit }) {
+      localStorage.removeItem('user')
+      commit('logoutSuccess')
+      return Promise.resolve()
     },
     register ({ commit }, user) {
       return AuthService.register(user).then(
@@ -48,7 +57,7 @@ export const auth = {
       state.status.loggedIn = false
       state.user = null
     },
-    logout (state) {
+    logoutSuccess (state) {
       state.status.loggedIn = false
       state.user = null
     },

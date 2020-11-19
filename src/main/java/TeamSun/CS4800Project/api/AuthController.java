@@ -77,12 +77,15 @@ public class AuthController {
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
-
+	
 	@PostMapping("/logout")
 	public ResponseEntity<String> logoutUser(HttpServletRequest request) {
 		User clientUser = userService.find(request);
+		if (clientUser == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		userService.setAuth(clientUser.getUsername(), false);
-		return new ResponseEntity<>("User logged out successfully!", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }

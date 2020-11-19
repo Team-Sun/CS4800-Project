@@ -27,7 +27,7 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	@Qualifier("mongodb_user")
 	UserDao DB;
-	
+
 	@Autowired
 	JwtUtils jwtUtils;
 
@@ -38,15 +38,15 @@ public class UserService implements UserDetailsService {
 		user.setPassword(encoder.encode(user.getPassword()));
 		return DB.save(user);
 	}
-	
-	public int update(User user) { //TODO determine if needed (insert might work better)
+
+	public int update(User user) { // TODO determine if needed (insert might work better)
 		return DB.save(user);
 	}
 
 	public int insert(SignupRequest request) {
-		User user = new User(request.getUsername(), request.getEmail(), encoder.encode(request.getPassword()));	
+		User user = new User(request.getUsername(), request.getEmail(), encoder.encode(request.getPassword()));
 		user.addRole("ROLE_USER");
-		
+
 		return DB.save(user);
 	}
 
@@ -57,19 +57,20 @@ public class UserService implements UserDetailsService {
 		}
 		return temp.get();
 	}
-	
+
 	public User find(String username) {
 		return DB.findByUsername(username);
 	}
-	
+
 	public User find(HttpServletRequest request) {
 		String token = jwtUtils.parseJwt(request);
+		System.out.println("Token: " + token);
 		if (jwtUtils.validateJwtToken(token)) {
 			return DB.findByUsername(jwtUtils.getUserNameFromJwtToken(token));
 		}
 		return null;
 	}
-	
+
 	public void setAuth(String username, boolean authenticated) {
 		User temp = find(username);
 		temp.setAuthenticated(authenticated);
@@ -95,13 +96,13 @@ public class UserService implements UserDetailsService {
 		response.setNotes(notes);
 		return response;
 	}
-	
+
 	public UserResponse convertToPrivateResponse(User user) {
 		UserResponse response = convertToResponse(user);
 		response.setEmail(user.getEmail());
 		return response;
 	}
-	
+
 	public UserResponse convertToSimpleResponse(User user) {
 		UserResponse response = new UserResponse();
 		System.out.println(user.getUsername());

@@ -103,9 +103,7 @@ export default {
   },
   computed: {
     isOwner () {
-      console.log(this.$store.state.auth.user.username)
-      console.log(this.singleNote.owner.username)
-      if (this.$store.state.auth.user.username === this.singleNote.owner.username) {
+      if (this.$store.state.auth.user !== null && this.$store.state.auth.user.username === this.singleNote.owner.username) {
         return true
       } else {
         return false

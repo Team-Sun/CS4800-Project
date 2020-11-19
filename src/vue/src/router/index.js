@@ -56,6 +56,11 @@ const routes = [
     name: 'Profile',
     component: () => import('../views/Profile.vue')
   },
+  {
+    path: '/profile/:id',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue')
+  },
   // Temporary
   {
     path: '/admin',

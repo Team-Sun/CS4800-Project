@@ -1,18 +1,18 @@
-import axios from 'axios'
-
-const API_URL = 'http://localhost:8080/api/auth/'
-//  http://ec2-3-101-72-142.us-west-1.compute.amazonaws.com
+import http from '../http-common'
 
 class AuthService {
   login (user) {
-    return axios
-      .post(API_URL + 'signin', {
+    return http.getInstance()
+      .post('/auth/signin', {
         username: user.username,
         password: user.password
       })
       .then(response => {
+        console.log('Logging in')
+        console.log(response.data.accessToken)
         if (response.data.accessToken) {
           localStorage.setItem('user', JSON.stringify(response.data))
+          console.log('Access token set')
         }
 
         return response.data
@@ -20,11 +20,14 @@ class AuthService {
   }
 
   logout () {
-    localStorage.removeItem('user')
+    return http.getInstance().post('/auth/logout')
+      .then(response => {
+        return response.data
+      })
   }
 
   register (user) {
-    return axios.post(API_URL + 'signup', {
+    return http.getInstance().post('/auth/signup', {
       username: user.username,
       email: user.email,
       password: user.password

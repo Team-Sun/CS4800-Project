@@ -85,11 +85,13 @@ public class NoteController {
 
 	// Thanks to
 	// https://stackoverflow.com/questions/59686660/how-to-send-generated-pdf-document-to-frontend-in-restfull-way-in-spring-boot
-	@GetMapping("/file/{id:.+}")
+	@GetMapping("/file/{id}.pdf")
 	// @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	@PreAuthorize("permitAll()")
 	public void getFile(@PathVariable("id") ObjectId id, HttpServletRequest request, HttpServletResponse response) {
 		// User clientUser = userService.find(request);
+		System.out.println("fileid: ");
+		System.out.println(id);
 		Note note = noteService.findByID(id);
 		try {
 			response.setHeader("Content-Disposition", String.format("inline; filename=\"testnote.pdf" + "\""));

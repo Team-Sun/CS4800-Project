@@ -7,8 +7,11 @@
           src="@/assets/user-icon.png"
           class="profile-img-card"
         />
-        <h3>
+        <h3 v-if="owner">
           Hello, <strong>{{currentUser.username}}</strong>
+        </h3>
+        <h3 v-if="!owner">
+          <strong>{{currentUser.username}}</strong>
         </h3>
       </header>
       <!--p>
@@ -16,7 +19,7 @@
         {{currentUser.email}}
       </p>-->
       <div>
-        <b-button v-b-toggle.collapse-1 style="background: #0d3103;">View Profile Info</b-button>
+        <b-button v-if="owner" v-b-toggle.collapse-1 style="background: #0d3103;">View Profile Info</b-button>
         <b-collapse id="collapse-1" class="mt-2">
           <b-card>
             <!--p class="card-text">Collapse contents Here</p>-->
@@ -32,7 +35,7 @@
                   {{currentUser.email}}
                 </div>
               </div>
-            <b-button :v-if="owner" v-b-toggle.collapse-1-inner size="sm">Edit Profile</b-button>
+            <b-button v-b-toggle.collapse-1-inner size="sm">Edit Profile</b-button>
             <b-collapse id="collapse-1-inner" class="mt-2">
               <!--b-card>Hello!</b-card>-->
               <div id="edit-profile">
@@ -55,9 +58,9 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <div class="col-sm-10">
-                    <button @click="updateUser" type="submit" class="btn btn-primary">Submit</button>
-                    <button @click="deleteUser" type="submit" class="btn btn-danger">Delete Account</button>
+                  <div class="col-sm-12">
+                    <button @click="deleteUser" type="submit" class="btn btn-danger float-right">Delete Account</button>
+                    <button @click="updateUser" type="submit" class="btn btn-primary float-right">Submit</button>
                   </div>
                 </div>
               </div>
@@ -66,7 +69,7 @@
         </b-collapse>
       </div>
       <div class="container text-left">
-        <strong>Your Notes:</strong>
+        <strong>Notes:</strong>
            <div class="accordion" role="tablist">
             <b-card no-body class="mb-0 mt-0 p-2"
             v-for="(note, index) in notes"
@@ -104,12 +107,8 @@ export default {
       newPassword: '',
       newUsername: '',
       newEmail: '',
-      owner: false
-    }
-  },
-  computed: {
-    currentUser () {
-      return this.$store.state.auth.user
+      owner: false,
+      currentUser: null
     }
   },
   methods: {
@@ -155,7 +154,13 @@ export default {
       this.$router.push('/login')
     }
     if (this.$route.params.id === undefined) {
-      this.owner = false
+      this.owner = true
+      this.currentUser = this.$store.state.auth.user
+    } else {
+      UserService.getPublicContent(this.$route.params.id).then(
+        result => {
+          this.currentUser = result.data
+        })
     }
     this.retrieveNotes()
   }

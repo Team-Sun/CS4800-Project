@@ -5,8 +5,8 @@ import http from '../http-common'
 const API_URL = 'http://localhost:8080/api/test/'
 
 class UserService {
-  getPublicContent () {
-    return axios.get(API_URL + 'all')
+  getPublicContent (id) {
+    return http.getInstance().get(`/user/userProfile/${id}`)
   }
 
   updateUser (id, user) {

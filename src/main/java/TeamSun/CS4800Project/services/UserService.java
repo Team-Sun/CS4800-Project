@@ -64,7 +64,6 @@ public class UserService implements UserDetailsService {
 
 	public User find(HttpServletRequest request) {
 		String token = jwtUtils.parseJwt(request);
-		System.out.println("Token: " + token);
 		if (jwtUtils.validateJwtToken(token)) {
 			return DB.findByUsername(jwtUtils.getUserNameFromJwtToken(token));
 		}

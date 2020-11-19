@@ -56,7 +56,7 @@
                 {{ singleNote.content }}
               </div>
               <div class="embed-responsive embed-responsive-4by3" v-if="!singleNote.content">
-                <iframe class="embed-responsive-item" :src="'localhost:8080/api/file/'+this.$route.params.id"></iframe>
+                <iframe class="embed-responsive-item" :src="'/api/file/'+this.$route.params.id"></iframe>
               </div>
             </div>
           </div>

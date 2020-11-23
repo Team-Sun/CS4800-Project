@@ -104,7 +104,6 @@ public class UserController {
 			if (currentUser == null) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
-			System.out.println("through auth");
 			System.out.println(user.getUsername());
 			if (!user.getUsername().isBlank()) {
 				currentUser.setUsername(user.getUsername());
@@ -114,7 +113,6 @@ public class UserController {
 			}
 
 			if (!user.getPassword().isBlank()) {
-				System.out.println("password change");
 				currentUser.setPassword(user.getPassword());
 				userService.insert(currentUser);
 			} else {

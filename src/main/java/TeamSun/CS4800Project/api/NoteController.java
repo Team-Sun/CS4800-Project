@@ -159,27 +159,27 @@ public class NoteController {
 		User clientUser = userService.find(request);
 		Note noteToEdit = noteService.findByID(id);
 
+		if (noteToEdit == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
 		// If user and that user matches the note's owner or if user is admin then allow
 		// change.
-		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(note.getOwner())) || clientUser.hasRole("ROLE_ADMIN")) {
-			if (noteToEdit == null) {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			} else {
-				noteToEdit.setTitle(note.getTitle());
-				noteToEdit.setContent(note.getContent());
-				noteToEdit.setCourse(note.getCourse());
-				noteToEdit.setProfessor(note.getProfessor());
-				noteToEdit.setSemester(note.getSemester());
-				noteToEdit.setDescription(note.getDescription());
-				// TODO add the file or do it another way that just doesn't update certain
-				// parts.
-				// TODO LOOKAT possibly making NoteUpdateRequest instead.
+		if ((clientUser.getId().equals(noteToEdit.getOwner())) || clientUser.hasRole("ROLE_ADMIN")) {
+			noteToEdit.setTitle(note.getTitle());
+			noteToEdit.setContent(note.getContent());
+			noteToEdit.setCourse(note.getCourse());
+			noteToEdit.setProfessor(note.getProfessor());
+			noteToEdit.setSemester(note.getSemester());
+			noteToEdit.setDescription(note.getDescription());
+			// TODO add the file or do it another way that just doesn't update certain
+			// parts.
+			// TODO LOOKAT possibly making NoteUpdateRequest instead.
 
-				noteService.save(noteToEdit);
-				// LOOKAT Might not want to send the note back. Might just take up unnecessary
-				// bandwidth.
-				return new ResponseEntity<>(noteService.convertToFullResponse(noteToEdit), HttpStatus.OK);
-			}
+			noteService.save(noteToEdit);
+			// LOOKAT Might not want to send the note back. Might just take up unnecessary
+			// bandwidth.
+			return new ResponseEntity<>(noteService.convertToFullResponse(noteToEdit), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
@@ -189,15 +189,15 @@ public class NoteController {
 	public ResponseEntity<Note> removeNote(@PathVariable("id") ObjectId id, HttpServletRequest request) {
 		User clientUser = userService.find(request);
 		Note note = noteService.findByID(id);
+		
+		if (note == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 
 		// Make sure that the current clientUser matches the owner of the note that's
 		// attempting to be deleted. Or, make sure the user is admin.
-		if ((clientUser.hasRole("ROLE_USER") && clientUser.getId().equals(note.getOwner())) || clientUser.hasRole("ROLE_ADMIN")) {
-			if (note != null) {
-				noteService.delete(id);
-			} else {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			}
+		if ((clientUser.getId().equals(note.getOwner())) || clientUser.hasRole("ROLE_ADMIN")) {
+			noteService.delete(id);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -217,7 +217,7 @@ public class NoteController {
 	public ResponseEntity<List<NoteResponse>> getNoteByUser(@PathVariable("id") ObjectId id) {
 		List<NoteResponse> notes = new LinkedList<>();
 		User user = userService.find(id);
-		
+
 		if (user != null) {
 			notes = noteService.getOwnedNotes(user);
 			if (notes.isEmpty()) {

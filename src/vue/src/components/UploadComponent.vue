@@ -213,8 +213,7 @@ export default {
 <style>
 #upload-component
 {
-    color: rgba(42, 43, 42, 0.933);
-    background-color: #7b7c7e;
+    background-color: #cacbcc;
     padding: 50px;
     height: 100%;
     min-height: 100vh;

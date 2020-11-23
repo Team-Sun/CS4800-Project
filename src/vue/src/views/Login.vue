@@ -111,7 +111,7 @@ export default {
 <style>
 #login
 {
-  background: #7b7c7e;
+  background:  #cacbcc;
   height: 100%;
   min-height: 100vh;
   width: 100%;

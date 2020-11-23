@@ -28,7 +28,7 @@
             Semester: {{ note.semester }}
             <br>
             Description: {{ note.description }}
-            <b-button :href="'/individualNote/'+note.id" class="float-right" variant="primary" squared style="background: #0d3103;">→</b-button>
+            <b-button :href="'/individualNote/'+note.id" class="float-right" style="background: #0d3103;">→</b-button>
             </b-list-group-item>
           </b-list-group>
 
@@ -180,13 +180,16 @@ h1{
     border-radius: 25px;
 }
 .search-btn:hover{
-    background: grey;
+    background: lightskyblue;
     cursor: pointer;
 }
 .result{
-    background-color: #7b7c7e;
+    background-color: #cacbcc;
     padding: 30px;
-    height: auto;
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+    padding: 50px;
 }
 .box{
     background-color:beige;

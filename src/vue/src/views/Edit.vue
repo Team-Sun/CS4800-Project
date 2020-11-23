@@ -214,12 +214,10 @@ export default {
 
 <style>
 .edit-form {
-  color: rgba(42, 43, 42, 0.933);
-    background-color: #7b7c7e;
-    padding: 50px;
-    height: 100%;
-    min-height: 100vh;
-    width: 100%;
+  background: #cacbcc;
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
 }
 .col
 {

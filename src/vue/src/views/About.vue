@@ -96,9 +96,10 @@ export default {
 }
 /* Thanks to https://stackoverflow.com/questions/30752049/fill-screen-horizontal-and-vertical-with-padding */
 .about-page{
-  height:100vh;
-  width:auto;
-  background-color:  #7b7c7e;
+  background:  #cacbcc;
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
 }
 .team-section{
     height: 570px;
@@ -110,7 +111,7 @@ export default {
 .team-section h2{
     text-transform: uppercase;
     margin-bottom: 20px;
-    color: #7b7c7e;
+    color: white;
     font-size: 40px;
 }
 .border0{
@@ -191,7 +192,7 @@ export default {
 .mission{
     overflow: hidden;
     text-align: center;
-    background:  #7b7c7e;
+    background:   #cacbcc;
     padding: 40px;
     height: min-content;
 }
